@@ -26,6 +26,7 @@
 
 \usepackage{mflogo}
 \usepackage{xltxtra}
+\newcommand*\ConTeXt{Con\TeX{}t}
 
 \usepackage{longtable}
 
@@ -67,7 +68,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.73}
+\newcommand\asyversion{1.75}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -749,7 +750,7 @@ void draw(picture pic=currentpicture, path[] g, pen[] p);
 \includegraphics[height=\ht0]{Coons.pdf}\box0}。
 
 \index{渐变!函数式渐变}
-用 pdf\LaTeX, \XeTeX{} 和 pdf\TeX{} 的 \TeX{} 引擎可得到更一般的渐变的可能：
+用 pdf\LaTeX, \ConTeXt{} 和 pdf\TeX{} 的 \TeX{} 引擎可得到更一般的渐变的可能：
 过程
 \index{functionshade@\inlinecode=functionshade=}
 \begin{lstlisting}
@@ -2365,7 +2366,7 @@ import fontsize;
 \item 使用特定 \LaTeX\ NFSS 字体的画笔可调用函数
 \index{font@\inlinecode=font=}
 \begin{lstlisting}
-pen font(string encoding, string family, string series="m", string shape="n")
+pen font(string encoding, string family, string series, string shape)
 \end{lstlisting}
   返回。默认设置为 |font("OT1","cmr","m","n")|，对应 12\,pt Computer Modern
   Roman 字体；它可用 |defaultpen(pen)| 改变。画笔的字体设置由
