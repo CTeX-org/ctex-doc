@@ -1,4 +1,4 @@
 #!/bin/sh
-rm main-??.pdf
+rm main-??.pdf main.asy
 rm *.bak *.???~
 rm *.log *.aux *.toc *.out *.ilg *.ind *.idx *.bbl *.blg

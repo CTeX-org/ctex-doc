@@ -3,13 +3,9 @@
 %%% Modified by John Bowman
 %%% Adapted from comment.sty (Under GPL v2)
 
-% again modified by milksea
-
-\ProvidesPackage{asymptote}[2009/05/12 v1.06 Asymptote style file for LaTeX, modified by milksea]
+\ProvidesPackage{asymptote}[2009/06/18 v1.08 Asymptote style file for LaTeX]
 \RequirePackage{keyval}
 \RequirePackage{ifthen}
-\RequirePackage{ifpdf}
-\RequirePackage{ifxetex}
 \newif\ifASYinline
 \DeclareOption{inline}{\ASYinlinetrue}
 \ProcessOptions*
@@ -44,13 +40,20 @@
 \newif\ifASYtex
 
 \newif\ifASYPDF
-\ifpdf
-  \ASYPDFtrue
-  \immediate\write\AsyStream{settings.tex="pdflatex";}%
+\ifx\pdfoutput\undefined
+\else
+\ifcase\pdfoutput
+\else
+\ASYPDFtrue
 \fi
-\ifxetex
-  \ASYPDFtrue
-  \immediate\write\AsyStream{settings.tex="xelatex";}%
+\fi
+\ifx\XeTeXversion\undefined
+\else
+\ASYPDFtrue
+\immediate\write\AsyStream{settings.texcommand="xelatex";}%
+\fi
+\ifASYPDF
+\immediate\write\AsyStream{settings.tex="pdflatex";}%
 \fi
 
 \ifASYinline
@@ -179,12 +182,12 @@
     \else
       \ifASYattach
         \ifASYPDF
-          \openin\AsyTestStream=\Jobname-\the\c@asy-0.pdf
+          \openin\AsyTestStream=\Jobname-\the\c@asy+0.pdf
         \fi
         \ifeof\AsyTestStream
-          \setbox\ASYbox=\hbox{\includegraphics{\Jobname-\the\c@asy}}%
+          \setbox\ASYbox=\hbox{\includegraphics[hiresbb]{\Jobname-\the\c@asy}}%
         \else
-          \setbox\ASYbox=\hbox{\includegraphics{\Jobname-\the\c@asy-0}}%
+         \setbox\ASYbox=\hbox{\includegraphics[hiresbb]{\Jobname-\the\c@asy+0}}%
         \fi
         \textattachfile{\Jobname-\the\c@asy.pdf}{\phantom{\copy\ASYbox}}%
         \vskip-\ht\ASYbox%
@@ -192,7 +195,7 @@
         \box\ASYbox%
         \closein\AsyTestStream%
       \else
-        \includegraphics{\Jobname-\the\c@asy}%
+        \includegraphics[hiresbb]{\Jobname-\the\c@asy}%
       \fi
     \fi
   \fi
@@ -238,6 +241,7 @@
      \immediate\write\AsyStream{settings.embed=true;}%
      \immediate\write\AsyStream{settings.outformat='';}%
      \immediate\write\AsyStream{settings.toolbar=false;}%
+     \immediate\write\AsyStream{viewportmargin=(1,1);}%
    \fi
   \immediate\write\AsyStream{\globalASYdefs}%
   \let\ThisAsymptote\WriteAsyLine%

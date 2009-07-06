@@ -66,12 +66,12 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.77}
+\newcommand\asyversion{1.79}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
   pdftitle={Asymptote \asyversion{} 手册节译},
-  pdfauthor={milksea},
+  pdfauthor={刘海洋},
   pdfsubject={Asymptote 手册},
   pdfcreator={XeLaTeX + xeCJK},
   pdfkeywords={Asymptote, Manual, 手册, 绘图},
@@ -107,7 +107,7 @@
 条款下（见源文件目录顶层的 \prgname{LICENSE} 文件）授予复制、发布和/或修改此
 文档的许可。\par}
 
-翻译：milksea\qquad\today
+翻译：刘海洋（\nolinkurl{leoliu.pku@gmail.com}）\qquad\today
 \end{titlepage}
 
 \section*{翻译说明}
@@ -3499,35 +3499,37 @@ void write(file file=stdout, string s="", cputime c,
 函数的定义，或许 \inlinecode{_f(parent obj=this, int)} 比
 \inlinecode{virtual(int)} 的写法更好，因为虚函数可能不只一个，并且很可能会
 用到 \inlinecode{this} 变量引用。}：
-\begin{lstlisting}
+\begin{lstlisting}[escapechar=`]
 struct parent {
-  real x=1;
-  void virtual(int) {write (0);}
+  real x;
+  void operator init(int x) {this.x=x;}
+  void virtual(int) {write(0);}
   void f() {virtual(1);}
 }
 
 void write(parent p) {write(p.x);}
-
+  
 struct child {
   parent parent;
-  real y=2;
-  void virtual(int x) {write (x);}
+  real y=3;
+  void operator init(int x) {parent.operator init(x);}
+  void virtual(int x) {write(x);}
   parent.virtual=virtual;
   void f()=parent.f;
 }
 
 parent operator cast(child child) {return child.parent;}
+  
+parent p=parent(1);
+child c=child(2);
 
-parent p;
-child c;
+write(c);                       // `输出` 2;
 
-write(c);                 // 输出 1;
+p.f();                          // `输出` 0;
+c.f();                          // `输出` 1;
 
-p.f();                    // 输出 0;
-c.f();                    // 输出 1;
-
-write(c.parent.x);        // 输出 1;
-write(c.y);               // 输出 2;
+write(c.parent.x);              // `输出` 2;
+write(c.y);                     // `输出` 3;
 \end{lstlisting}
 
 更多结构体的例子，见 \prgname{Asymptote} 基础模块 \prgname{plain} 中的

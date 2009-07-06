@@ -8,4 +8,4 @@ xelatex main
 makeindex main
 xelatex main
 xelatex main
-ren main.pdf asymptote-zh.pdf
+move /y main.pdf asymptote-zh.pdf
