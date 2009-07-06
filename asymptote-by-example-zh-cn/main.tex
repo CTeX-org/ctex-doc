@@ -1,9 +1,9 @@
 %# -*- coding: utf-8 -*-
-\input{ctex4xetex.cfg}
-\documentclass[cs4size,oneside,openany]{ctexbook}
+\documentclass[cs4size,oneside,openany,nofonts,UTF8,CJKnormalspaces]
+  {ctexbook}[2009/05/20]
 \linespread{1.0}
 
-%\includeonly{xiantu}
+%\includeonly{tiling}
 
 \usepackage{amsmath}
 
@@ -101,9 +101,11 @@
 \endgroup
 \newpage
 
-\mainmatter
+\tableofcontents
 
+\mainmatter
 \include{xiantu}
+\include{tiling}
 
 \appendix
 \include{gpl-3.0}

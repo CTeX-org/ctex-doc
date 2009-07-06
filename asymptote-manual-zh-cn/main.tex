@@ -1,12 +1,10 @@
-\input{ctex4xetex.cfg}
-\documentclass{ctexbook}
+\documentclass[nofonts,CJKnormalspaces]{ctexbook}[2009/05/20]
+\input{fzfonts.tex}    % 方正字体设置
+% 要用 Windows 预装字体，给 ctexbook 用 winfonts 选项
+% 要用 Adobe 字体，给 ctexbook 用 adobefonts 选项
 
 \usepackage[pdftex]{geometry}
 \geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
-
-\input{fzfonts.tex}    % 方正字体
-%\input{winfonts.tex}   % Windows 预装字体
-%\input{adobefonts.tex}  % Adobe 字体混合 Windows 字体
 
 \usepackage{makeidx}
 \makeindex
@@ -68,7 +66,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.75}
+\newcommand\asyversion{1.77}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -1389,20 +1387,24 @@ length(z);
   \inlinecode{format("\%"+string(4)+"d", 3)} 这种用法代替）。}；
 
 \index{format@\inlinecode=format=}
-\item |string format(string s, real x, string locale="")| \go
+\item |string format(string s=defaultformat, real x, string locale="")| \go
   返回使用区域设置 |locale|（或当前区域设置，如果设定为空串），按照 C 函数
   |fprintf| 的行为方式用 C 风格格式化串格式化 |x| 得到的字符串，除了只允许
-  一个数据域时，末尾的零默认会被删去（除非设定了 |#|），\TeX{} 将用于排版科学
+  一个数据域时，末尾的零默认会被删去（除非设定了 |#|），并且（若格式串设定
+  了数学模式）\TeX{} 将用于排版科学
   计数法\transnote{\prgname{Asymptote} 中数字没有千分位，区域设置通常主要会
   影响小数点（有些区域设置使用逗号），不过译者在 \prgname{Windows} 版本下没能
   成功改变这个设置。表示双精度的 \inlinecode{L} 是无用的。可用的格式化符主要
   为 \inlinecode{\%f}（纯小数形式）、\inlinecode{\%e}（科学计数法）、
   \inlinecode{\%g}（自动选取纯小数和科学计数法中相对较简短的形式），字符前
   可用最小宽度、精度、前导零、\inlinecode{\#} 和正负号（作用与整数
-  \inlinecode{format(string, int)} 的参数相同）来修饰。例如：
+  \inlinecode{format(string, int)} 的参数相同）来修饰。注意从 1.77 版开始引入
+  的对数学模式的判断并不准确，函数只是简单地搜索格式串中是否有字符
+  \texttt{\$}。使用格式串修饰符的例子如：
   \inlinecode{format("\%010.5f", pi)} 得到字符串 \inlinecode{0003.14159}，
-  \inlinecode{format("\%+.3g", 0.00001234)} 则得到
-  \inlinecode{+1.23\\!\\times\\!10\^\{-5\}}。}；
+  \inlinecode{format("\%+.3g", 0.00001234)} 得到字符串
+  \inlinecode{+1.23e-05}，而 \inlinecode{format("\$\%+.3g\$", 0.00001234)} 则
+  得到 \inlinecode{\$+1.23\\!\\times\\!10\^\{-5\}\$}。}；
 
 \index{hex@\inlinecode=hex=}
 \item |int hex(string s)| \go
@@ -1846,6 +1848,14 @@ struct slice {
   ($t\in[0,t_0]$) 为复平面上的闭曲线，$z-a$ 的极坐标表示为 $(\tilde{r}(t),
   \tilde\theta(t))$。}。若路径以逆时针方向环绕 |z|，则卷绕数是正数。如果 |z|
   在路径 |p| 上，则返回常数 |undefined|（定义为最大的奇数）。
+
+\index{interior@\inlinecode=interior=}
+\item |bool interior(int windingnumber, pen fillrule);| \go
+  据填充规则 |fillrule|，当 |windingnumber| 对应一个内点时，返回 |true|%
+  \transnote{这是一个简单的函数，当 \inlinecode{fillrule} 为
+  \inlinecode{zerowinding} 时，返回值等价于 \inlinecode{windingnumber != 0}；
+  当 \inlinecode{fillrule} 为 \inlinecode{evenodd} 时，返回值等价于
+  \inlinecode{windingnumber\%2 != 0} 即 \inlinecode{windingnumber} 是奇数。}。
 
 \index{inside@\inlinecode=inside=}
 \item |bool inside(path p, pair z, pen fillrule=currentpen);| \go
@@ -2748,6 +2758,7 @@ transform fixedscaling(picture pic=currentpicture, pair min,
 调用函数 |shipout|，可以将图 |pic| 装入帧，并使用图像格式 |format| 输出到文件
 \verb=prefix.fotmat=：
 \index{shipout@\inlinecode=shipout=}
+\index{outprefix@\inlinecode=outprefix=}
 \begin{lstlisting}
 void shipout(string prefix=defaultfilename, picture pic=currentpicture,
              orientation orientation=orientation,
@@ -2757,7 +2768,9 @@ void shipout(string prefix=defaultfilename, picture pic=currentpicture,
 \end{lstlisting}
 默认的输出格式为 \prgname{PostScript}，可用命令行选项 \verb=-f= 或
 \verb=-tex= 改变。参数 |options|, |script| 与 |projection| 仅与 3D 图相关。如
-果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加上一条 |shipout()| 
+果 |defaultfilename| 为空串，则将使用前缀 |outprefix()|。
+
+如果之前没有执行过 |shipout()| 命令，在文件末尾将会隐式地加上一条 |shipout()|
 命令。
 
 \index{orientation@\inlinecode=orientation=}

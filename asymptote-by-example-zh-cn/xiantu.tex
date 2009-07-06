@@ -3,6 +3,7 @@
 % asymptotebyexample 的一章，最基础的画图知识
 
 \chapter{赵爽的弦图}
+\label{chap:xiantu}
 \nocite{quanjing}
 
 赵爽博士是位老知识分子，研究兴趣是天文历法与算学，一生精研《周髀算经》。不过
@@ -69,6 +70,7 @@ draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
 
 
 \section{直线与绘图命令}
+\label{sec:linedraw}
 
 弦图的图形其实很简单，都是直线、方块、三角形这些，而且为了计算的简便，所有长
 度也都是整数值。那么，首先就是在 \Asy{} 中来画直线。
@@ -87,7 +89,7 @@ draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) );
 \end{asy}
 \end{figure}
 
-像这样把坐标用 |--| 连缀起来的，就叫做一条路径\index{路径}。把直线而稍做修改
+像这样把坐标用 |--| 连结起来的，就成为一条路径\index{路径}。把直线而稍做修改
 ，在后面连上一个特殊的坐标 |cycle|\index{cycle@\lstinline=cycle=}，就可以得到
 一条首尾相接的闭路径\index{路径!闭路径}。如：
 \begin{lstlisting}
