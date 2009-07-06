@@ -1,0 +1,10 @@
+This is an introductory tutorial on ConTeXt in Chinese written by Yanrui Li.
+
+ConTeXt installation, fonts, layout design, cross-reference, project structure, metafun, presentation design are covered in this tutorial.
+
+If you are interested in the process of development you may observe
+
+    http://code.google.com/p/ctex-doc/updates/list
+
+Report feedback in the Issues section of ctex-doc project,
+or in http://bbs.ctex.org forum.

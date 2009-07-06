@@ -1,0 +1,20 @@
+This is an introductory document on ConTeXt (www.pragma-ade.nl) frequently used commands written by Corsair <chris.corsair@gmail.com>. 
+
+In the beginning of the ConTEXt manual (see cont-eni.pdf on ConTeXt official site), Hans Hagen listed ten groups of them which are considered most frequently used,  and this short document tries to explain these commands in detail.
+1. \starttext, stoptext 
+2. \chapter, \section, \title, \subject, \setuphead, \completecontent 
+3. \em, \bf, \cap 
+4. \startitemize, \stopitemize, \item, \head 
+5. \abbreviation, \infull, \completelistofabbreviations 
+6. \placefigure, \externalfigure, \useexternalfigures 
+7. \placetable, \starttable, \stoptable 
+8. \definedescription, \defineenumeration 
+9. \index, \completeindex 
+10. \setuplayout, \setupfootertexts, \setupheadertexts 
+
+If you are interested in the process of development you may observe
+
+    http://code.google.com/p/ctex-doc/updates/list
+
+Report feedback in the Issues section of ctex-doc project,
+or in http://bbs.ctex.org forum.
