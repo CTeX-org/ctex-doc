@@ -4,6 +4,7 @@
 // 2009-02-20
 
 // XeLaTeX 中文设置
+usepackage("xeCJK");
 texpreamble("\input{fzfonts.tex}");
 
 // pdfTeX 中文设置

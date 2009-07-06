@@ -11,6 +11,7 @@ import fontsize;
 defaultpen(linewidth(1.5));
 
 // XeLaTeX 设置
+usepackage("xeCJK");
 texpreamble("\input{fzfonts.tex}");
 
 // pdfTeX 设置

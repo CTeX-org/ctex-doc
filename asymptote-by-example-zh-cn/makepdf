@@ -6,3 +6,4 @@ makeindex main
 bibtex main
 xelatex main
 xelatex main
+mv main.pdf AsymptoteByExample.pdf

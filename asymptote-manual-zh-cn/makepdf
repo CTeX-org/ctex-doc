@@ -5,3 +5,4 @@ xelatex main
 makeindex main
 xelatex main
 xelatex main
+mv main.pdf asymptote-zh.pdf
