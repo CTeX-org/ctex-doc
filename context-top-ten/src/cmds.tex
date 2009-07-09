@@ -1,4 +1,4 @@
-%% Time-stamp: <corsair 2008-11-12 14:01:28>
+%% Time-stamp: <corsair 2009-07-09 12:06:01>
 %% 
 %% Author: Corsair <chris.corsair@gmail.com>
 %% Released under GNU FDL v1.3 (http://www.gnu.org/copyleft/fdl.html)
@@ -39,12 +39,12 @@
   [prof,14.4pt]
 \setuphead
   [section]
-  [numberstyle=\ss\bf,
-    textstyle=\ss\bf,
+  [numberstyle=\ssbf,
+    textstyle=\ssbf,
     page=yes]
 \setuphead
   [subject]
-  [textstyle=\ss\bf,color=sub]
+  [textstyle=\ssbf,color=sub]
 \setupcaptions[style=\ss]
 \setuptyping
   [before=\startbackground,
@@ -204,7 +204,7 @@ Some of the structure elements are listed in table~\in[tab:strele].
 \startTEX
 \setuphead
   [section,subsection,subsubsection]
-  [numberstyle=\ss\bf, textstyle=\ss\bf]
+  [numberstyle=\ssbf, textstyle=\ssbf]
 \stopTEX
 
 Put this block of code before \type{\starttext}, and boom, we're
@@ -227,33 +227,34 @@ Why do we use different fonts in the main text?  Well, we have our
 reasons.  The most common one is to emphasize something.  In \CONTEXT\
 (actually in plain \TeX) we use \type{\em} to do it.  It does various
 things in different environment.  Normally, it
-toggles “italicity” of the text (or make slanted when the text is
-already italic?), while in quoted text, it might underline it.
+toggles “slant-ish-ness” of the text, while in quoted text, it might
+underline it.
 
 \startTEX
 Once there was a {\em mountain}, 
-in the mountain there {\it was a {\em temple}},
+in the {\sl mountain {\em there} was a temple},
 in which a {\bf {\em monk} was telling a story}.
 \stopTEX
 
 \startframedtext[middle]
 Once there was a {\em mountain}, 
-in the {\it mountain {\em there} was a temple},
+in the {\sl mountain {\em there} was a temple},
 in which a {\bf {\em monk} was telling a story}.
 \stopframedtext
 
-So why bother using \type{\em} instead of \type{\it}?  Simple.
-\type{\em} tells us the text there is important while \type{\it} does
-not.  If we use \type{\it} in all cases, what so important about a
+So why bother using \type{\em} instead of \type{\sl}?  Simple.
+\type{\em} tells us the text there is important while \type{\sl} does
+not.  If we use \type{\sl} in all cases, what so important about a
 important block of text comparing to a book's name?
 
-Besides italic and bold fonts, \TeX\ make heavy use of \cap{small cap}
+Besides italic and bold fonts, \TeX\ make heavy use of {\sc small cap}
 characters which are look like small upper-cased characters, though in
 theory they are {\em not} upper-cased characters in small size.  \TeX
-ers love small cap font because it looks really nice in some font
-families that come with their \TeX\ distributions.  In fact, small cap
-face in those families are separately designed just like italic and
-bold faces.
+ers love small cap fonts because they look really nice in some font
+families that come with their \TeX\ distributions (and small cap is
+one of the many traditions in typography).  In fact, small cap faces
+in those families are separately designed just like italic and bold
+faces.
 
 \pagereference[page:sc]
 Generally, small cap is used to indicate that a word is an
@@ -544,7 +545,7 @@ Let's go through an example first.
 \stoptable
 
 As one can see, the formatting string which enclosed in the pair of
-square brace tells \CONTEXT\ only the align of the tabel, though we
+square brace tells \CONTEXT\ only the align of the table, though we
 use \type{|} to seperate the three charactors.  In \CONTEXT, we apply
 a more flexible scheme to typeset vertical lines in tables in
 comparison to that in \LaTeX\ that we use \type{\VL} to separate two
@@ -702,12 +703,12 @@ one. \par
 \section{Build a Dictionary}
 
 \ldots\ or not.  Ok, this section is not about how to build a
-dictionary, though the underlying principle is no different --
-indexing.  This is not a feature that every book needs.  But when
-provided in a proper book, it is usually coming handy.  In \CONTEXT,
-indexing is really made easy.  All you have to do is inserting a
-\type{\index} at wherever the phrase you want to index is, and
-placeing a \type{\placeindex} where you want the glossary be.  For
+dictionary, though the underlying principle is no
+different---indexing.  This is not a feature that every book needs.
+But when provided in a proper book, it is usually coming handy.  In
+\CONTEXT, indexing is really made easy.  All you have to do is
+inserting a \type{\index} at wherever the phrase you want to index is,
+and placeing a \type{\placeindex} where you want the glossary be.  For
 example
 
 \startTEX
