@@ -1,4 +1,4 @@
-%% Time-stamp: <corsair 2009-07-09 12:06:01>
+%% Time-stamp: <corsair 2009-07-12 22:48:27>
 %% 
 %% Author: Corsair <chris.corsair@gmail.com>
 %% Released under GNU FDL v1.3 (http://www.gnu.org/copyleft/fdl.html)
@@ -65,11 +65,17 @@
 
 \setupcolors[state=start]
 \setupbackgrounds[page][background=color,backgroundcolor=]
-\setupinteraction[state=start,color=middlered]
+\setupinteraction
+  [state=start,
+%     color=middlered,
+    style=\rm
+]
 \useURL [garden][http://contextgarden.net][][Context garden]
 \useURL [wiki][http://wiki.contextgarden.net/Main_Page][][\CONTEXT\
   wiki]
-\useURL [wiki_table][http://wiki.contextgarden.net/Table][][table page]
+\useURL [wiki_table][http://wiki.contextgarden.net/Table][][table
+  page]
+\useURL [ctexbbs][http://bbs.ctex.org/][][CTeX BBS]
 \definetyping[TEX][option=TEX,style=type]
 
 \defineoverlay
@@ -553,9 +559,10 @@ cells so that \CONTEXT\ will add a vertical line between them.
 
 If you do not prefer a vertical line there, use \type{\NC} instead of
 \type{\VL}.  All these “two-cap-lettered” macros for typesetting
-tables are listed in table.  To end a row, we usually use a \type{\AR}
-macro or, instead, \type{\LR} if it is either the last row or followed
-by a \type{\HL} that draw a horizontal line across the table.
+tables are listed in table \in[tab:cell-def].  To end a row, we
+usually use a \type{\AR} macro or, instead, \type{\LR} if it is either
+the last row or followed by a \type{\HL} that draw a horizontal line
+across the table.
 
 \CONTEXT\ provides a whole bunch of macros and options for column and
 cell definition.  See a full list of them at the \from[wiki],
@@ -602,7 +609,7 @@ writer is without sufficient training on typesetting.  \CONTEXT\
 enables us to make it more fancy.  To start with, we first use
 \type{\definedescription} macro:
 \startTEX
-\definedescription[Fractal][]
+\definedescription[definition][]
 \stopTEX
 which defines a stuff we would like to describe in default style.
 Then we can describe it like this
@@ -825,6 +832,10 @@ and the second one right.
 \section{Conclusion}
 
 \CONTEXT\ rocks!
+
+Oh, one more thing.  I thank {\it kmc} on \from[ctexbbs] and {\it
+  Otared Kavian} for helping me improve this document, and {\it
+  yulewang} on \from[ctexbbs] for submitting it to CTAN.
 
 \stoptext
 
