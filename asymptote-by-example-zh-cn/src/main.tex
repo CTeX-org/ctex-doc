@@ -36,7 +36,10 @@
 \usepackage{caption}
 \captionsetup{skip=6pt} % default 10pt
 
+\usepackage{amssymb}
+\usepackage{upgreek}
 \usepackage{xltxtra}
+\usepackage{mflogo}
 \usepackage{myfonts}
 
 \usepackage{multicol}
@@ -54,6 +57,7 @@
   pdfborder=0 0 0
 }
 \renewcommand\figureautorefname{图}
+\renewcommand\sectionautorefname{\S}
 
 \usepackage{asysyntex}
 \usepackage{listings}
@@ -63,7 +67,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand*\Asy{\textsf{Asymptote}}
-\newcommand*\asyversion{1.79}
+\newcommand*\asyversion{1.88}
 \begin{document}
 
 \frontmatter
@@ -106,6 +110,7 @@
 \mainmatter
 \include{xiantu}
 \include{tiling}
+\include{stars}
 
 \appendix
 \include{gpl-3.0}

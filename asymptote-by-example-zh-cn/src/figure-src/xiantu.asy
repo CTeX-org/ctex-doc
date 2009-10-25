@@ -1,3 +1,7 @@
+// xiantu.asy
+// 弦图
+// by milksea
+
 //pen operator %(pen p, real x) {return interp(white, p, x/100);}
 pen operator %(pen p, real x) {return p + opacity(x/100);}
 

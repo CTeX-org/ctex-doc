@@ -4,7 +4,6 @@
 
 \chapter{赵爽的弦图}
 \label{chap:xiantu}
-\nocite{quanjing}
 
 赵爽博士是位老知识分子，研究兴趣是天文历法与算学，一生精研《周髀算经》。不过
 赵老爷子年轻的时候书籍都是手写，最近才紧跟时代潮流用上了电脑。现在他要修订他
@@ -195,15 +194,16 @@ fill( box((3cm,3cm), (4cm,4cm)), yellow );
 这个填充的命令应该放在画线之前（以免覆盖描的红线）。
 
 回顾前面的代码，赵博士觉得连续地写四个 |filldraw| 命令太重复了。他读了 \Asy{}
-的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^@\lstinline=^^=} 
+的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^^@\lstinline=^^=} 
 连起来，一起使用，于是立即着手改进原来的代码。
 
 而且，由于还打算在图的后面画出参考网格，图形的颜色还应该设置为半透明\index{透
 明}的。好在这并不难实现，只要稍稍改动一下填充的画笔，使用
 \lstinline[mathescape]|opacity($\text{数值}$)|
 \index{opacity@\lstinline=opacity=}
-来设定有一定不透明度（取值为 $0\sim1$）的画笔，并把它加在原来的画笔上。于是赵
-博士最后写出了这样的代码：
+来设定有一定不透明度（取值为 $0\sim1$）的画笔，并把它加在原来的画笔上
+\footnote{\Asy{} 的 EPS 格式输出看不到透明效果，必须输出为 PDF 格式或从 PDF 
+格式转化为其他格式才能有透明效果。}。于是赵博士最后写出了这样的代码：
 \begin{lstlisting}
 fill( box((3cm,3cm), (4cm,4cm)), opacity(0.5)+yellow );
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
@@ -228,6 +228,7 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
 
 
 \section{图形变换与功能模块的使用}
+\label{sec:transformmodule}
 
 然后是画作为长度参考的网格。其实网格一开始就该在图中画出来，这样后面画图准确
 与否才能看得清楚。不过现在赵博士是重作旧图，图样已定，网格就搁在弦图的主要图
@@ -373,8 +374,11 @@ add( scale(5mm) * grid(4, 4, gray) );
 的位置很明显，但旋转仍然需要一些计算。当然这难不倒精研天文算学多年的赵博士，
 这里弦实（$5\times5$ 的正方形）可以看作是顺时针旋转得到的，从朱实的三角形容易
 看出旋转的角度正好是 $\arctan(3/4)$。\Asy{} 中也可以方便地调用返回角度的反三
-角函数 |aTan|\index{aTan@\lstinline=aTan=} 来计算这个角度。更详细的数学函数列
-表，参看 \cite{asyman}。
+角函数 |aTan|\index{aTan@\lstinline=aTan=} 来计算这个角度\footnote{也可以使用
+atan2 函数，但注意返回值是弧度。}。更详细的数学函数列表，参看 \cite{asyman}。
+（注意：C/C++ 中 |3/4| 表示求带余除法 $3\div 4$ 的商，得到 $0$；但在 \Asy{} 中
+|3/4| 的结果是实数 $0.75$，整数的带余除法则用 |quotient(a,b)|
+\index{quotient@\lstinline=quotient=} 函数。）
 
 于是，赵博士弦图中的网格，就可以这样方便地画出来了
 （\autoref{fig:xiantugrid}）：
@@ -503,7 +507,7 @@ label(`标签`, `路径`)
 这里默认会在路径中间的右侧（沿着路径行进方向）加标签。例如：
 \begin{lstlisting}
 draw( (0,0) -- (4cm,2cm), linewidth(0.5mm) );
-label("粗线条", (0,0) -- (4cm,2cm));
+label("`\color{string}粗线条`", (0,0) -- (4cm,2cm));
 \end{lstlisting}
 （其中的 |linewidth|\index{linewidth@\lstinline=linewidth=} 函数用来表示具有
 一定线宽\index{线宽}的画笔）这段代码将得到
@@ -523,9 +527,9 @@ label("粗线条", (0,0) -- (4cm,2cm));
 \begin{lstlisting}
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
-label( "勾三", (4cm,3cm) -- (4cm,0) );
-label( "股四", (0,3cm) -- (4cm,3cm) );
-label( "弦五", (4cm,0) -- (0,3cm) );
+label( "`\color{string}勾三`", (4cm,3cm) -- (4cm,0) );
+label( "`\color{string}股四`", (0,3cm) -- (4cm,3cm) );
+label( "`\color{string}弦五`", (4cm,0) -- (0,3cm) );
 \end{lstlisting}
 \begin{figure}[H]
 \centering
@@ -634,12 +638,12 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
     ^^ (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
 
-label("朱实", (2cm,4cm));
-label("黄实", (3.5cm,3.5cm));
-label("弦实", (5cm,4cm));
-label( Label("勾三",Rotate(S)), (4cm,0)--(4cm,3cm), LeftSide );
-label( Label("股四",Rotate(E)), (4cm,3cm)--(0,3cm), LeftSide );
-label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
+label("`\color{string}朱实`", (2cm,4cm));
+label("`\color{string}黄实`", (3.5cm,3.5cm));
+label("`\color{string}弦实`", (5cm,4cm));
+label( Label("`\color{string}勾三`",Rotate(S)), (4cm,0)--(4cm,3cm), LeftSide );
+label( Label("`\color{string}股四`",Rotate(E)), (4cm,3cm)--(0,3cm), LeftSide );
+label( Label("`\color{string}弦五`",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 \end{lstlisting}
 \begin{figure}[htbp]
 \centering
@@ -671,7 +675,7 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 \end{figure}
 
 
-\section*{习题}
+\section{习题和评注}
 
 \begin{enumerate}
   \item 查阅参考手册 \cite{asyman}，看看都有哪些颜色可用。看看你的系统中安装
@@ -683,23 +687,29 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 
   \item 代码
 \begin{lstlisting}
-path zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
+guide zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
 \end{lstlisting}
     可以把一个三角形的路径保存在变量 |zhushi| 中，以后就可以使用
-    |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{关于变量定义和使用的
-    详细内容，参考后面的章节或手册 \cite{asyman}。}。
+    |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{这里定义了一个
+    \lstinline=guide= 类型的变量，我们译之为“路向”，以区别于“路径”
+    （\lstinline=path=）。两个概念在 \Asy{} 中同源而有别，但本章中二者可以互
+    换并无区别，因此为方便我们也不区别而通称为路径。有关 \Asy{} 语言中路径与
+    路向的区别，以及关于变量定义和使用的详细内容，请参考后续的章节及手册
+    \cite{asyman}。}。
 
     考虑如何利用平移和旋转变换，只定义一个三角形的路径，就把弦图中的四个红色
     三角形都画出来。
 
-  \item 查阅手册 \cite{asyman} 和 \Asy{} 自带的例子，研究模块
-    \prgname{roundedpath} 的用法。并利用它尝试画出下面的图形：
+  \item\label{ex:roundedpath} 查阅手册 \cite{asyman} 和 \Asy{} 自带的例子，研
+    究模块
+    \prgname{roundedpath}\index{模块 !roundedpath@\prgname{roundedpath}} 的用
+    法。并利用它尝试画出下面的图形：
 \begin{figure}[H]
 \centering
 \begin{asy}
 import roundedpath;
 pen thick = linewidth(0.8pt);
-path p = (0,0) -- (0,2cm) -- (1cm,3.25cm) -- (2cm,2cm) -- (2cm,0)
+guide p = (0,0) -- (0,2cm) -- (1cm,3.25cm) -- (2cm,2cm) -- (2cm,0)
 	-- (0,2cm) -- (2cm, 2cm) -- (0,0) -- (2cm,0);
 draw(roundedpath(p, 8pt), thick);
 \end{asy}
@@ -710,6 +720,23 @@ draw(roundedpath(p, 8pt), thick);
   \item （较难）研究在 \LaTeX{} 里中文直排的方法，尽量精确地复现出赵博士理想
     中的弦图效果（\autoref{fig:xiantu}）。
 \end{enumerate}
+
+本章的素材源自有关我国古代对勾股定理证明的一篇介绍性论文 \cite{quanjing}。本
+章的主要内容是 \Asy{} 中直线几何图形的基本绘制方法。有关平面几何的数学图形是
+\Asy{} 以及 \MP{} 的传统长项和最重要的应用范围之一。不过 \Asy{} 默认自动加载
+的 \prgname{plain} 模块功能比较原始，用来绘制平面几何图形往往比较麻烦，使用
+由 Philippe Ivaldi 开发的专门模块 \prgname{geometry}
+\index{模块!geometry@\prgname{geometry}}可以更容易地画出各种 Euclid 平面几何
+的数学图形来，可参考此模块的英文文档 \cite{geometry}。
+
+熟悉 C/C++ 语言的读者须注意，为了方便 \TeX{} 指令在 \Asy{} 中的书写，\Asy{} 
+中的字符串内可以直接使用换行符，而不必手工使用转义符；另外，双引号内的字符串
+只有 |\\| 和 |\"| 两种转义符，单引号也用来表示字符串，使用的转才与 C/C++ 语言
+相同。
+
+习题 \ref{ex:roundedpath} 的素材源自 \prgname{\textsc{pgf}/Ti\emph{k}Z} 宏包
+的文档 \cite{pgfman}。\prgname{\textsc{pgf}/Ti\emph{k}Z} 宏包是基于 \TeX{} 的
+绘图宏包，功能强大，一些方面更胜于老牌的 \prgname{PSTricks} 宏包。
 
 \endinput
 

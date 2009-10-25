@@ -1,70 +1,90 @@
-settings.tex = "xelatex";
-
+// # -*- coding:utf-8 -*-
+// 星空图
+// 刘海洋
 srand(seconds());
-
+// 随机实数
+real random(real a, real b=0)
+{
+    return (b-a) * unitrand() + a;
+}
+// 随机整数
+int rand(int a, int b=0)
+{
+    if (a > b) {
+        int t = a;
+        a = b;
+        b = t;
+    }
+    real r;
+    do {
+        r = random(a, b+1.0);
+    } while (r == b+1);
+    return floor(r);
+}
+// 半径为 1 的 n 角星形路向
+guide star(int n = 5, real r = 0, real angle = 90)
+{
+    guide unitstar;
+    if (n < 2) return nullpath;
+    real theta = 180/n;
+    if (r == 0) {
+        if (n < 5)
+            r = 1/4;
+        else
+            r = Cos(2theta) / Cos(theta);
+    }
+    for (int k = 0; k < n; ++k)
+        unitstar = unitstar -- dir(angle+2k*theta) -- r * dir(angle+(2k+1)*theta);
+    unitstar = unitstar -- cycle;
+    return unitstar;
+}
+// 全局定义
+size(15cm);
+real xmin=0, ymin=0, xmax=40, ymax=30, sizemin=0.3, sizemax=0.8;
+pen[] colors = {palered, paleblue, lightyellow, pink};
+// 夜空
+fill(box((xmin-1,ymin-1), (xmax+1,ymax+1)), darkblue);
+// 星星
+for (int i = 0; i < 100; ++i) {
+    real shape = unitrand();
+    pair pos = (random(xmin, xmax), random(ymin, ymax));
+    real size = random(sizemin, sizemax);
+    pen color = colors[rand(colors.length-1)];
+    if (shape < 1/3)
+        fill(shift(pos)*scale(size)*star(4), color);
+    else if (shape < 2/3)
+        fill(shift(pos)*scale(size)*star(5), color);
+    else
+        draw(pos, white+1bp);
+}
+// 彗星
+picture comet;
+radialshade(comet, unitcircle,
+            yellow, (0,0), 0.2,
+            darkblue, (0,0), 1);
+path tail = (0,0){NW} .. {W}(-20,10);
+for (real t = 0; t < 1; t += 1/1000) {
+    real r = 0.2 + 2*t^3;
+    draw(comet, point(tail,t^3) + (random(-r,r), random(-r,r)),
+         lightyellow+1bp);
+}
+add(shift(30,3) * comet);
+// 月亮
+picture moon_nobg, moon;
+fill(moon_nobg, unitcircle, lightyellow);
+unfill(moon_nobg, shift(-0.5,-0.2)*unitcircle);
+fill(moon, unitcircle, darkblue);
+add(moon, moon_nobg);
+add(shift(5, 25) * scale(2) * moon);
+// 文字
+settings.tex = "xelatex";
 usepackage("xeCJK");
-texpreamble(
-"\setCJKmainfont{FZSongHeiTi_GB18030}");
-
-Label L =
-"\fontsize{16bp}{20bp}\selectfont
-\begin{minipage}{3em}
+texpreamble("\setCJKmainfont{FZSongHeiTi_GB18030}"); // 方正宋黑体
+string text = "\begin{minipage}{3em}
 天上星\par
 亮晶晶\par
 永燦爛\par
 長安寧
 \end{minipage}";
-
-path unitstar(int n = 5, real r = 0, real angle = 90)
-{
-    guide g;
-    if (n < 2) return nullpath;
-    real rot = 180/n;
-    if (r == 0) {
-	if (n < 5)
-	    r = 1/4;
-	else
-	    r = Cos(2rot) / Cos(rot);
-    }
-    for (int k = 0; k < n; ++k)
-	g = g -- dir(angle+2k*rot) -- r * dir(angle+(2k+1)*rot);
-    g = g -- cycle;
-    return g;
-}
-
-pen operator %(pen p, real x) {return interp(white, p, x/100);}
-pen[] colors = {blue%50, yellow%50, red%50, orange%50};
-for (int i = 0; i < 100; ++i)
-{
-    pair pos = (unitrand() * 12cm, unitrand()*9cm);
-    int r = rand();
-    if (r < randMax/3)
-	fill(shift(pos) * scale(2+unitrand()*3) * unitstar(4),
-	    colors[rand()%colors.length]);
-    else if (r < 2/3*randMax)
-	fill(shift(pos) * scale(2+unitrand()*3) * unitstar(5),
-	    colors[rand()%colors.length]);
-    else
-	draw(pos, white+1bp);
-}
-
-
-fill(circle((2cm,8cm),0.5cm), paleyellow);
-unfill(circle((1.7cm,7.9cm), 0.5cm));
-
-pair orig=(9cm,0.5cm), end=(1cm,4cm);
-path tail = orig{NW} .. {W}end;
-path tailN = orig{NW} .. {W}(end+N);
-path tailS = orig{NW} .. {W}(end+S);
-
-radialshade(circle(orig, 0.5cm), yellow, orig, 0.1cm, darkblue, orig, 0.5cm);
-for (int i = 0; i < 1000; ++i) {
-	real t = unitrand()^3;
-	real r = (0.2 + t)*cm;
-	pair z = point(tail, t) + r*(unitrand()-1/2, unitrand()-1/2);
-	draw(z,interp(yellow,white,unitrand())+1bp);
-}
-
-label(L, (12cm,9cm), align=SW, yellow, Fill(darkblue+opacity(0.5)));
-
-shipout(bbox(Fill(darkblue)));
+label(text, (xmax,ymax), align=SW, yellow+fontsize(0.7cm),
+      Fill(darkblue+opacity(0.5)));
