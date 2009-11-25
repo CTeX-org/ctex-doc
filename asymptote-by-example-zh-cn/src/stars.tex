@@ -6,10 +6,19 @@
 \label{chap:stars}
 
 令狐庸是大学概率统计专业的学生，因为酷爱金庸的武侠小说，便给自己起了个“令狐
-庸”的网名。这日他读到《天龙八部》的一段，便打算把“天上星，亮晶晶，永灿烂，
-长安宁”这几句画成一幅插图。最近他在学习 \Asy{}，尽管他清楚这种工作应该使用
-Inkscape 之类的图形界面软件来做，但本来艺术修养不高的他还是决定直接用 \Asy{} 
-编程画图。
+庸”的网名。这日他读到《天龙八部》的一段：
+\begin{quotation}
+\itshape
+阿朱道：“本来我不知道，看到阿紫肩头刺的字才知。她还有一个金锁片，跟我那个金
+锁片，也是一样的，上面也铸着十二个字。她的字是：‘湖边竹，盈盈绿，报平安，多
+喜乐。’我锁片上的字是：‘天上星，亮晶晶，永灿烂，长安宁。’我……我从前不知
+道是什么意思，只道是好口采，却原来嵌着我妈妈的名字。我妈妈便是那女子阮……阮
+星竹。这对锁片，是我爹爹送给我妈妈的，她生了我姊妹俩，给我们一个人一个，带在
+颈里。”
+\end{quotation}
+便打算把“天上星，亮晶晶，永灿烂，长安宁”这几句画成一幅插图。最近他在学习
+\Asy{}，尽管他清楚这种工作应该使用 Inkscape 之类的图形界面软件来做，但本来艺
+术修养不高的他还是决定直接用 \Asy{} 编程画图。
 
 令狐庸心目中的插图就像\autoref{fig:stars} 一样。
 \begin{figure}[htpb]
@@ -133,13 +142,13 @@ add(star(6).fit(), 0, align=10E);
 现在令狐庸已经成功地算出了 $n$, $\theta$, $R$, $r$ 的关系式，于是 $n$ 角星上
 的任一个点都容易算出。不妨设 $R = 1$，利用 \Asy{} 的 |dir| 函数，则容易在
 \Asy{} 中计算出 $n = 5$ 时 $A$, $B$ 两点的坐标：
-\begin{lstlisting}
+\begin{asycode}
 int n = 5;
 real theta = 180 / n;
 real r = Cos(2theta) / Cos(theta);
 pair a = dir(90);
 pair b = r * dir(90+theta);
-\end{lstlisting}
+\end{asycode}
 而五角星上的其他点就可以直接由 $A$, $B$ 两点坐标绕原点旋转 $2\theta$ 的整数倍
 得到，再注意到 $A$, $B$ 都是由 |dir| 函数的倍数定义的，所以这个旋转变换可以直
 接写进 |dir| 函数的参数，即 |dir(90+i*2theta)|, |r*dir(90+theta+i*2theta)|（%
@@ -148,7 +157,7 @@ pair b = r * dir(90+theta);
 现在，令狐庸已经得到所有的点坐标，剩下的问题就是把这些点连接为星形的路向。$n$
 角星形的路向是由 $n$ 组相同的点连接得到的，很自然地，就可以使用循环语句来逐步
 地构造路向：
-\begin{lstlisting}
+\begin{asycode}
 int n = 5;          // `\color{comment}五角星`
 real theta = 180 / n;
 real r = Cos(2theta) / Cos(theta);
@@ -162,7 +171,7 @@ unitstar = unitstar -- cycle;
 // `\color{comment}测试`
 size(5cm);
 filldraw(unitstar, lightblue, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -206,7 +215,7 @@ filldraw(unitstar, lightblue, gray+2mm);
 不过，令狐庸发现，如果需要同时使用各种不同的星形，就不得不重复书写构造星形路
 向的代码——但这些代码除了 |n| 的取值外是完全一样的。这就需要使用 \Asy{} 的函
 数定义，把构造星形路向的过程进行抽象。令狐庸这样定义他的函数：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}返回半径为 1 的星形路向`
 guide star(int n)
 {
@@ -218,26 +227,26 @@ guide star(int n)
     unitstar = unitstar -- cycle;
     return unitstar;
 }
-\end{lstlisting}
+\end{asycode}
 于是要画一个五角星，只需要再用
-\begin{lstlisting}
+\begin{asycode}
 size(5cm);
 draw(star(5));
-\end{lstlisting}
+\end{asycode}
 调用这个函数即可。\index{函数!调用}而同时画五角星和六角星也可以方便地做到：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm);
 draw(star(5));
 draw(shift(2) * star(6));
-\end{lstlisting}
+\end{asycode}
 
 \index{函数!定义}
 \index{函数!原型}\index{函数!体}
 函数的定义分成两个部分：函数原型和函数体。在上面星形路向的函数中，函数原型部
 分是
-\begin{lstlisting}
+\begin{asycode}
 guide star(int n)
-\end{lstlisting}
+\end{asycode}
 它表示一个名字是 |star| 的函数，接受一个 |int| 类型名为 |n| 的整数参数，返回
 值的类型是 |guide|（路向）。而后面括在花括号中的部分则是函数体，表示整个函数
 进行的操作。在函数体中可以使用在函数原型中声明的所有参变量，就如同这些变量是
@@ -246,13 +255,13 @@ guide star(int n)
 语句后面的表达式作为这个函数的返回值。\index{函数!返回值}一般地，函数的定义形
 如：
 \index{函数!参数}
-\begin{lstlisting}
+\begin{asycode}
 `返回类型` `函数名`(`参数类型$_1$` `参数$_1$`, `参数类型$_2$` `参数$_2$`, ……)
 {
     `各种语句`
     return `返回值`;
 }
-\end{lstlisting}
+\end{asycode}
 在函数体的内部是一个独立的环境（叫做作用域\index{作用域}），函数的参数和函数
 体内新定义的变量都只在函数体内部这个作用域有效，而不会影响作用域之外的内容。
 这就使得代码可以分成函数一块一块互不影响地分别设计，而不必担心在这里的变量
@@ -266,24 +275,24 @@ guide star(int n)
 返回类型为 |void|\index{void@\lstinline=void=}——即空类型\index{空类型}。和
 数学中的函数不同，\Asy{} 中一个函数有用不仅因为它可以计算出一个返回值，还在于
 它能进行许多操作，比如画图。所以令狐庸写了这样一个画星形的函数：
-\begin{lstlisting}
+\begin{asycode}
 void drawstar(int n, pen drawpen)
 {
     draw(star(n), drawpen);
 }
-\end{lstlisting}
+\end{asycode}
 这样，|drawstar(7, red)| 就可以画出一个红色的七角星。
 
 \index{函数!默认参数}
 \index{函数!缺省参数|see{默认参数}}
 像在 C++ 中一样，在定义函数时，函数原型中函数参数还可以有一个默认值，这样调用
 函数的时候就可以省略这个参数。例如，令狐庸的画星形函数可以改为
-\begin{lstlisting}
+\begin{asycode}
 void drawstar(int n = 5, pen drawpen = currentpen)  // currentpen `\color{comment}是当前画笔`
 {
     draw(star(n), drawpen);
 }
-\end{lstlisting}
+\end{asycode}
 于是，如果没有改变当前画笔，只要用 |drawstar()| 就可以画出一个黑色的五角星轮
 廓；而用 |drawstar(red)| 则画出红色五角星；用 |drawstar(6)| 画出黑色六角星
 \footnote{C++ 的参数可以有缺省值，但允许从最后一个参数开始从后向前省略，不能
@@ -305,15 +314,15 @@ void drawstar(int n = 5, pen drawpen = currentpen)  // currentpen `\color{commen
 的参数）：
 \index{函数!函数作为参数}
 \index{graph@\lstinline=graph=}
-\begin{lstlisting}
+\begin{asycode}
 guide graph(real f(real), real a, real b);
-\end{lstlisting}
+\end{asycode}
 因而可以用
-\begin{lstlisting}
+\begin{asycode}
 import graph;
 size(5cm);
 draw(graph(sin, 0, 2pi));
-\end{lstlisting}
+\end{asycode}
 画出正弦函数的图像来：
 \begin{figure}[H]
   \centering
@@ -327,21 +336,21 @@ draw(graph(sin, 0, 2pi));
 因为函数也是一种数据类型，所以一个函数并不必须有名字。使用 |new|
 \index{new@\lstinline=new=} 表达式可以构造匿名函数\index{函数!匿名函数}。如计
 算 $f(x) = x^2$ 的函数：
-\begin{lstlisting}
+\begin{asycode}
 new real (real x)  { return x^2; }
-\end{lstlisting}
+\end{asycode}
 匿名函数可以直接求值或赋给一个函数变量名，但这都没有什么实际意义：
-\begin{lstlisting}
+\begin{asycode}
 (new real (real x)  { return x^2; })(5);    // `\color{comment}直接求值得 25`
 real f(real x) = new real (real x)  { return x^2; };    `\color{comment}// 赋值`
-\end{lstlisting}
+\end{asycode}
 匿名函数实际的作用，是在调用另一函数时作为参数传递，或作为另一函数的返回值。
 例如，要画出 $f(x) = x^2$ 的函数图像，就可以用：
-\begin{lstlisting}
+\begin{asycode}
 import graph;
 size(5cm);
 draw(graph(new real(real x) {return x^2;}, -1, 1));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -380,7 +389,7 @@ filldraw(star(4), lightblue, linewidth(2));
 时，就必须单独给四角星设定半径。另外，令狐庸还想要四角星并不是“正”的（一个
 角向正上方向），也需要设定一个初始的角度。因此，经过反复修改，令狐庸最后写出
 了这样的函数：
-\begin{lstlisting}
+\begin{asycode}
 guide star(int n = 5, real r = 0, real angle = 90)
 {
     guide unitstar;
@@ -397,15 +406,15 @@ guide star(int n = 5, real r = 0, real angle = 90)
     unitstar = unitstar -- cycle;
     return unitstar;
 }
-\end{lstlisting}
+\end{asycode}
 它对任何 $n \ge 3$ 都能得出星形路向，而且所有的参数都给出了一个合理的默认值。
 而当 $n < 2$ 时，函数返回空路向 |nullpath|
 \index{nullpath@\lstinline=nullpath=}（这也是 |guide| 类型的默认初始化值）。
 上面的四角星就是用
-\begin{lstlisting}
+\begin{asycode}
 size(3cm);
 filldraw(star(4), lightblue, linewidth(2));
-\end{lstlisting}
+\end{asycode}
 画出来的。
 
 \section{随机数和数组}
@@ -418,21 +427,22 @@ filldraw(star(4), lightblue, linewidth(2));
 \index{rand@\lstinline=rand=}
 \index{unitrand@\lstinline=unitrand=}
 \index{randMax@\lstinline=randMax=}
-\begin{lstlisting}
+\begin{asycode}
 int rand();         // `\color{comment}返回 [0, randMax] 之间的随机整数`
 int unitrand();     // `\color{comment}返回 [0, 1] 之间的随机实数`
-\end{lstlisting}
+\end{asycode}
 |rand()| 函数自源于 C 语言，它的返回值比较特别，是 $0$ 到一个大整数 |randMax|
-之间的一个随机整数，一般不方便直接使用\footnote{常数 \lstinline=randMax= 对应
-于 C 语言的 \lstinline=RAND_MAX= 宏，其取值不确定，与具体实现环境有关。如官方
-在 Windows 平台发布的 $1.88$ 版本中，\lstinline=randMax= 值为 $2^{31}-1$，即
-32 位带符号整数的最大值。\lstinline=unitrand()= 实际就是由
+之间的一个随机整数，一般都会经过变换后使用\footnote{常数 \lstinline=randMax= 
+对应于 C 语言的 \lstinline=RAND_MAX= 宏，其取值不确定，与具体实现环境有关。如
+官方在 Windows 平台发布的 $1.88$ 版本中，\lstinline=randMax= 值为
+$2^{31}-1$，即 32 位带符号整数的最大值。\lstinline=unitrand()= 实际就是由
 \lstinline=rand()/randMax= 得到的。}。通常需要
 的是特定区间的随机整数或实数，都由 |unitrand()| 函数变换得到。任意区间的随机
 实数，可以对 |unitrand()| 的返回值作线性变换得到：|(b-a)*unitrand()+a| 就是
-$a$ 到 $b$ 之间的随机数。而任意区间的随机整数稍微麻烦一些，其基本的思想是对区
-间内的随机实数取整。为此概率统计专业出身的令狐庸写了下面的函数：
-\begin{lstlisting}
+$a$ 到 $b$ 之间的随机数。注意到对随机整数取余数的结果 |rand() % n| 正是 $0$
+到 $n-1$ 之间的随机整数（$n>0$），任意区间的随机整数能类似地变换得到。为此概
+率统计专业出身的令狐庸写了下面的函数：
+\begin{asycode}
 // `\color{comment}随机实数`
 real random(real a, real b=0)
 {
@@ -441,43 +451,14 @@ real random(real a, real b=0)
 // `\color{comment}随机整数`
 int randomInteger(int a, int b=0)
 {
-    if (a > b) {                // `\color{comment}确保 a <= b`
+    if (a > b) {
         int t = a;
         a = b;
         b = t;
     }
-    real r;
-    do {
-        r = random(a, b+1.0);   // `\color{comment} r 为 [a, b+1] 间随机实数`
-    } while (r == b+1);         // `\color{comment} 确保 r 不为 b+1`
-    return floor(r);
+    return a + rand() % (b-a+1);
 }
-\end{lstlisting}
-在定义随机整数函数的时候，令狐庸用到了下取整函数 |floor|
-\index{floor@\lstinline=floor=}（即 $\lfloor x\rfloor$）和
-|do|\index{do@\lstinline=do=} 循环语句，这使得随机整数的函数看起来相当复杂。
-|do| 循环语句形如
-\begin{lstlisting}
-do
-    `循环体`
-while(`条件`);
-\end{lstlisting}
-它是 |for| 循环之外的另一种循环语句。它先执行一遍 |do| 循环的循环体，之后判断
-|while| 后括号里的条件来决定是否重复执行循环体。与之类似的还有直接判断是否执
-行循环体语句的 |while|\index{while@\lstinline=while=} 循环：
-\begin{lstlisting}
-while(`条件`)
-    `循环体`
-\end{lstlisting}
-令狐庸为了正确生成 $[a,b]$ 区间的随机整数，作了多方面的考虑：首先他判断 $a$,
-$b$ 两数的大小，如果 $a>b$ 就交换两个变量；其次他生成了在 $[a, b+1]$ 区间的随
-机实数 $r$，于是 $r$ 在 $(b-a)$ 段长度为 $1$ 的小区间内等概率地均匀取值；但他
-注意到还有非常小的概率 $r=b+1$，因此还需要一个 |do| 循环排除掉这种可能；最后
-，令狐庸就可以放心地返回 $r$ 的下取整值 $\lfloor r\rfloor$，它正是 $[a,b]$ 区
-间内均匀分布的随机整数\footnote{现实中，经常有人会在生成任意区间随机整数时出
-错。一种典型的做法是直接对 \lstinline=rand()= 函数得到的随机整数取余数，但这
-并不是均匀分布的；而前述 $r=b+1$ 的小概率情况也很容易忽略。尽管很多时候这种错
-误并不明显，但对于一些要求准确的 Monte Carlo 算法这点十分重要。}。
+\end{asycode}
 
 令狐庸给他的生成随机整数的函数起了一个很长的名字 |randomInteger|，一个更简洁
 的名字（如原来的 |rand|）用起来会方便得多。事实上，确实可以把前面的
@@ -485,24 +466,24 @@ $b$ 两数的大小，如果 $a>b$ 就交换两个变量；其次他生成了在
 \Asy{} 可以在定义和使用时都清楚地区分二者，而对令狐庸来说，这只是相当于给
 |rand| 函数增加了一个功能。这种用一个名字给不同参数的函数命名的定义方式叫做函
 数的重载\index{重载}\index{函数!重载}。于是 |randomInteger| 可以重定义为
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}随机整数`
 int rand(int a, int b=0)
 {
     // `\color{comment}原 randomInteger 的定义……`
 }
-\end{lstlisting}
+\end{asycode}
 
 生成随机数的函数是比较特别的，每次调用时的参数是相同的，而返回值则是一个随机
 数列。下面这段代码显示随机数的使用：
-\begin{lstlisting}
+\begin{asycode}
 size(15cm);
 for (int i = 0; i < 15; ++i) {
     int r = rand(3, 7);
     filldraw(shift(2i,0)*star(r), lightblue, linewidth(2));
     label(string(r), (2i,-1), align=S);
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -517,11 +498,7 @@ int rand(int a, int b=0)
         a = b;
         b = t;
     }
-    real r;
-    do {
-        r = random(a, b+1.0);
-    } while (r == b+1);
-    return floor(r);
+    return a + rand() % (b-a+1);
 }
 guide star(int n = 5, real r = 0, real angle = 90)
 {
@@ -560,16 +537,16 @@ for (int i = 0; i < 15; ++i) {
 数作为初始值——这是可以做到的。给伪随机数序列赋初值（这个初值通常被称为种子
 ［seed］）的函数是：
 \index{srand@\lstinline=srand=}
-\begin{lstlisting}
+\begin{asycode}
 void srand(int seed);
-\end{lstlisting}
+\end{asycode}
 而由于令狐庸本人使用 \Asy{} 编译代码的时间是随机选取的，因而可以把系统的当前
 时间设定为伪随机序列的种子。系统时间可以用 |seconds()|
 \index{seconds@\lstinline=seconds=} 函数读入，它返回一个整数，表示从 1970 年
 1 月 1 日零点整到现在的秒数。于是，只要在使用随机数前加上
-\begin{lstlisting}
+\begin{asycode}
 srand(seconds());
-\end{lstlisting}
+\end{asycode}
 就可以保证生成的图形是真正随机的（相反，当需要调试使用伪随机数的程序时，使用
 |srand(0);| 语句则可以使程序变成确定的）。
 
@@ -579,7 +556,7 @@ srand(seconds());
 决定星形形状；星形大小就是一个区间内的随机实数；而星形的位置可以用两个随机实
 数构成的坐标来表示；最后，通过生成一个 $[0,k-1]$ 之间的随机整数，令狐庸可以确
 定出 $k$ 种颜色中的一种。他很快写出了下面的代码框架：
-\begin{lstlisting}
+\begin{asycode}
 srand(seconds());
 for (int i = 0; i < 100; ++i) {                         // `\color{comment}100 颗星`
     real shape = unitrand();                            // `\color{comment}控制形状`
@@ -593,7 +570,7 @@ for (int i = 0; i < 100; ++i) {                         // `\color{comment}100 �
     else
         `画点`;
 }
-\end{lstlisting}
+\end{asycode}
 只要补全所有的代码，所有的星星就画出来了。
 
 不过，令狐庸在这里又遇到了一个问题：如何选择 $k$ 种颜色中的一种？因为已经有了
@@ -604,15 +581,15 @@ for (int i = 0; i < 100; ++i) {                         // `\color{comment}100 �
 数组是 \Asy{} 中的一类数组类型，任何一个类型都对应有这个类型的数组类型，表示
 这种类型的序列。数组类型用类型名后面加上方括号表示，如定义一个画笔数组类型的
 变量：
-\begin{lstlisting}
+\begin{asycode}
 pen[] pen_arr;
-\end{lstlisting}
+\end{asycode}
 数组变量在定义时可以用花括号括起一列数据来对变量赋初值（即初始化）。
 \index{数组!初始化}例如：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}红橙黄绿青蓝紫`
 pen[] pen_arr = {red, orange, yellow, green, cyan, blue, purple};
-\end{lstlisting}
+\end{asycode}
 使用数组变量时，则可以在变量名后用方括号括起的下标来表示序列中的一个元素。下
 标从 0 开始，到元素个数减 1。如对上面定义的 |pen_arr| 数组，|pen_arr[0]| 就是
 红色 |red|，而赋值 |pen_arr[6] = pink| 则把数组末尾的紫色 |purple| 改为粉色。
@@ -624,9 +601,10 @@ pen[] pen_arr = {red, orange, yellow, green, cyan, blue, purple};
 对数组元素插入、删除、查找、筛选、排序、数值计算等等，这些内容可以参看
 \cite{asyman}。而对令狐庸的要求来说，简单地定义、使用数组就已经足够了。
 
-随机颜色就是用随机整数作为下标来访问数组得到的。这样，令狐庸就画出了他纷繁的
-星空：
-\begin{lstlisting}
+随机颜色就是用随机整数作为下标来访问数组得到的。由于数组的下标是从 $0$ 开始，
+到数组长度减 $1$，因此其实并不需要再定义任意区间的随机整数函数，只要简单地对
+|rand()| 的结果取余数就行了。这样，令狐庸就画出了他纷繁的星空：
+\begin{asycode}
 srand(seconds());   // `\color{comment}放在程序所有随机函数出现之前`
 size(0,6cm);        // `\color{comment}较小的画面`
 real xmin=0, ymin=0, xmax=40, ymax=30, sizemin=0.5, sizemax=1;
@@ -636,7 +614,7 @@ for (int i = 0; i < 100; ++i) {
     real shape = unitrand();
     pair pos = (random(xmin, xmax), random(ymin, ymax));
     real size = random(sizemin, sizemax);
-    pen color = colors[rand(colors.length-1)];
+    pen color = colors[rand() % colors.length];
     if (shape < 1/3)
         fill(shift(pos)*scale(size)*star(4), color);    // `\color{comment}四角星`
     else if (shape < 2/3)
@@ -644,7 +622,7 @@ for (int i = 0; i < 100; ++i) {
     else
         draw(pos, white+1bp);   // `\color{comment}1bp 大小的白点`
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -652,19 +630,6 @@ srand(seconds());
 real random(real a, real b=0)
 {
     return (b-a) * unitrand() + a;
-}
-int rand(int a, int b=0)
-{
-    if (a > b) {
-        int t = a;
-        a = b;
-        b = t;
-    }
-    real r;
-    do {
-        r = random(a, b+1.0);
-    } while (r == b+1);
-    return floor(r);
 }
 guide star(int n = 5, real r = 0, real angle = 90)
 {
@@ -691,7 +656,7 @@ for (int i = 0; i < 100; ++i) {
     real shape = unitrand();
     pair pos = (random(xmin, xmax), random(ymin, ymax));
     real size = random(sizemin, sizemax);
-    pen color = colors[rand(colors.length-1)];
+    pen color = colors[rand() % colors.length];
     if (shape < 1/3)
         fill(shift(pos)*scale(size)*star(4), color);
     else if (shape < 2/3)
@@ -707,13 +672,13 @@ for (int i = 0; i < 100; ++i) {
 
 令狐庸下面的难点是那个看起来特别复杂的彗星。彗星的头只是一个圆形，但使用了放
 射形状的渐变色填充：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm,0);
 fill(box((-7,-2), (3,2)), darkblue);    // `\color{comment}背景`
 radialshade(circle((0,0), 1),           // `\color{comment}彗星头`
             yellow, (0,0), 0.2,         // `\color{comment}彗核`
             darkblue, (0,0), 1);        // `\color{comment}彗头边缘`
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -727,11 +692,11 @@ radialshade(circle((0,0), 1),
 放射渐变填充函数的原型是：
 \index{渐变!放射渐变}
 \index{radialshade@\lstinline=radialshade=}
-\begin{lstlisting}
+\begin{asycode}
 void radialshade(picture pic=currentpicture, path g, bool stroke=false,
                  pen pena, pair a, real ra,
                  pen penb, pair b, real rb);
-\end{lstlisting}
+\end{asycode}
 这个函数在图 |pic| 上对路径 |g| 内部的区域作放射渐变填充，从以 |a| 为圆心
 |ra| 为半径的圆上的颜色 |pena|，到以 |b| 为圆心 |rb| 为半径的圆上的颜色
 |penb| 进行放射梯度光滑渐变。而如果 |stroke| 为真，表示填充路径 |g| 本身（一
@@ -747,7 +712,7 @@ void radialshade(picture pic=currentpicture, path g, bool stroke=false,
 的办法：在边长为 $2r$ 的小正方形区域内随机取点，移动这个方形区域的同时不断改
 变 $r$ 的大小，就可以得到不均匀的、大量随机点扫过的轨迹。让小正方形从彗核沿彗
 尾移动，半径不断增大，就得到这样的效果：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm,0);
 fill(box((-2,-2), (8,2)), darkblue);
 radialshade(circle((0,0), 1),
@@ -759,7 +724,7 @@ for (int i = 0; i < 1000; ++i) {        // `\color{comment}1000 个点`
     real r = 0.2 + 0.8*i/1000;          // `\color{comment}方形半径从 0.2 到 1`
     draw((x,0)+(random(-r,r), random(-r,r)), lightyellow+1bp);  // `\color{comment}画点`
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -795,14 +760,14 @@ for (int i = 0; i < 1000; ++i) {
 \qquad t \in [0,1).
 \]
 那么，就可以用
-\begin{lstlisting}
+\begin{asycode}
 size(5cm,0);
 for (real t = 0; t < 1; t += 1/1000) {      // `\color{comment}1000 个点`
     pair c = 5(cos(2pi*t), sin(2pi*t));     // `\color{comment}半径为 5`
     real r = 0.2 + 0.8t;
     draw(c+(random(-r,r), random(-r,r)), black+1bp);
 }
-\end{lstlisting}
+\end{asycode}
 得到环形彗尾：
 \begin{figure}[H]
   \centering
@@ -851,7 +816,7 @@ for (real t = 0; t < 1; t += 1/1000) {
 正因为路向在转化为路径时形状会固定下来，所以在循环中使用曲线连接符逐步连接曲
 线时，就必须使用路向即 |guide| 类型，而不能用 |path| 类型，否则可能因为
 |path| 的刚性而产生意想不到的结果。试看下面的例子：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm);
 pair[] arr = {(0,0), (1,1), (2,0), (3,1), (4,0)};
 guide g;
@@ -862,7 +827,7 @@ for (int i = 0; i < arr.length; ++i) {
 }
 draw("guide", g, heavyblue+1mm);
 draw("path", shift(5,0)*p, heavygreen+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -907,7 +872,7 @@ $z_1$ 和两个控制点 $c_0$, $c_1$ 决定：
 \index{路径!intersectionpoints@\lstinline=intersectionpoints=}
 \index{intersectionpoint@\lstinline=intersectionpoint=}
 \index{路径!intersectionpoint@\lstinline=intersectionpoint=}
-\begin{lstlisting}
+\begin{asycode}
 int length(path p);         // `\color{comment}路径 p 的 Bézier 曲线段数`
 int size(path p);           // `\color{comment}路径 p 的结点数（闭路径与 length(p) 相同）`
 pair point(path p, int t);  // `\color{comment}时刻（参数） t 处的点`
@@ -919,11 +884,11 @@ path subpath(path p, int a, int b);     // `\color{comment}时刻 a、b 之间�
 path subpath(path p, real a, real b);
 pair[] intersectionpoints(path p, path q);  // `\color{comment}p 与 q 的交点数组`
 pair intersectionpoint(path p, path q);     // `\color{comment}p 与 q 的第一个交点`
-\end{lstlisting}
+\end{asycode}
 
 令狐庸的要求其实很简单：由时间参数 $t$ 得到路径上的点。这只需要用 |point| 函
 数。因此他可以这样画出一颗彗星：
-\begin{lstlisting}
+\begin{asycode}
 size(0,5cm);
 fill(box((-12,-2), (2,7)), darkblue);
 radialshade(circle((0,0), 1),
@@ -934,7 +899,7 @@ for (real t = 0; t < 1; t += 1/1000) {
     real r = 0.2 + t;
     draw(point(tail,t) + (random(-r,r), random(-r,r)), lightyellow+1bp);
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -962,7 +927,7 @@ for (real t = 0; t < 1; t += 1/1000) {
 $t^n \in [0,1]$，所以参数曲线 $r(t) = (x(t), y(t))$ 其实和参数曲线 $\tilde
 r(t) = r(t^n) = (x(t^n), y(t^n))$ 是图像是相同的，但第二个参数曲线的时间运行
 速度是不均匀的，当 $n>1$ 时前慢后快。因此，令狐庸对他的彗星又作了少许修改：
-\begin{lstlisting}
+\begin{asycode}
 real random(real a, real b=0)
 {
     return (b-a) * unitrand() + a;
@@ -978,7 +943,7 @@ for (real t = 0; t < 1; t += 1/1000) {  // `\color{comment}循环体内 t 变为
     real r = 0.2 + t^3;
     draw(point(tail,t^3) + (random(-r,r), random(-r,r)), lightyellow+1bp);
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1005,11 +970,11 @@ for (real t = 0; t < 1; t += 1/1000) {
 
 利用 \autoref{sec:tiling:ex} 习题 \ref{ex:venn} 中画 Venn 图的方法，不难利用
 |unfill| 挖洞画出月亮：
-\begin{lstlisting}
+\begin{asycode}
 size(3cm);
 fill(circle((0,0), 1), yellow);
 unfill(circle((-0.4,-0.1), 1));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1021,15 +986,16 @@ unfill(circle((-0.4,-0.1), 1));
 
 可一旦在画月亮之前再画背景，这样画月亮时用 |unfill| 会把背景的夜空也挖掉，这
 就很有问题了：
-\begin{lstlisting}
+\begin{asycode}
 size(4cm);
 fill(box((-2,-2), (2,2)), darkblue);
 fill(circle((0,0), 1), yellow);
 unfill(circle((-0.4,-0.1), 1));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
+size(4cm);
 fill(box((-2,-2), (2,2)), darkblue);
 fill(circle((0,0), 1), yellow);
 unfill(circle((-0.4,-0.1), 1));
@@ -1038,7 +1004,7 @@ unfill(circle((-0.4,-0.1), 1));
 
 另一种办法是不使用 |unfill| 这种剪切办法画月亮，而是直接定义月亮的路径；或者
 先把月亮画到一个 |picture| 类型的图上，然后再加在当前图 |currentpicture| 上：
-\begin{lstlisting}
+\begin{asycode}
 size(4cm);
 fill(box((-2,-2), (2,2)), darkblue);
 dot((-0.5,0), white);   // `\color{comment}一颗在月亮后面的星`
@@ -1046,7 +1012,7 @@ picture moon;
 fill(moon, circle((0,0), 1), yellow);
 unfill(moon, circle((-0.4,-0.1), 1));
 add(moon);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1072,7 +1038,7 @@ add(moon);
 最后令狐庸采用的办法是，在画出月亮的同时也同时画出月亮后面的阴影（与夜空颜色
 相同），把它单独画在一个图中，最后再加进当前图。结果的代码与最初的想法相比有
 些复杂：
-\begin{lstlisting}
+\begin{asycode}
 size(4cm);
 fill(box((-2,-2), (2,2)), darkblue);
 for (int i = 0; i < 200; ++i)   // `\color{comment}200 颗星`
@@ -1085,7 +1051,7 @@ fill(moon, unitcircle, darkblue);
 add(moon, moon_nobg);
 // `\color{comment}把月亮加入当前图`
 add(moon);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1111,13 +1077,13 @@ add(moon);
 \lstinline[mathescape]=Fill($\text{标签背景色}$)=
 \index{Fill@\lstinline=Fill=} 参数解决。为了显示比较平滑，令狐庸使用半透明的
 背景色：
-\begin{lstlisting}
+\begin{asycode}
 size(4cm);
 fill(box((-2,-2), (2,2)), darkblue);
 for (int i = 0; i < 100; ++i)   // `\color{comment}100 颗星`
     dot((random(-2,2),random(-2,2)), white);
 label("Stars", (0,0), lightyellow+fontsize(2cm), Fill(darkblue+opacity(0.7)));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1135,27 +1101,13 @@ label("Stars", (0,0), lightyellow+fontsize(2cm), Fill(darkblue+opacity(0.7)));
 
 最后，令狐庸把所有这些内容集合在一起，就得到了完整的星空图
 （\autoref{fig:stars}）代码：
-\begin{lstlisting}
+\begin{asycode}
 // # -*- coding:utf-8 -*-
 srand(seconds());
 // `\color{comment}随机实数`
 real random(real a, real b=0)
 {
     return (b-a) * unitrand() + a;
-}
-// `\color{comment}随机整数`
-int rand(int a, int b=0)
-{
-    if (a > b) {
-        int t = a;
-        a = b;
-        b = t;
-    }
-    real r;
-    do {
-        r = random(a, b+1.0);
-    } while (r == b+1);
-    return floor(r);
 }
 // `\color{comment}半径为 1 的 n 角星形路向`
 guide star(int n = 5, real r = 0, real angle = 90)
@@ -1185,7 +1137,7 @@ for (int i = 0; i < 100; ++i) {
     real shape = unitrand();
     pair pos = (random(xmin, xmax), random(ymin, ymax));
     real size = random(sizemin, sizemax);
-    pen color = colors[rand(colors.length-1)];
+    pen color = colors[rand() % colors.length];
     if (shape < 1/3)
         fill(shift(pos)*scale(size)*star(4), color);
     else if (shape < 2/3)
@@ -1224,7 +1176,7 @@ string text = "\begin{minipage}{3em}
 \end{minipage}";
 label(text, (xmax,ymax), align=SW, yellow+fontsize(0.7cm),
       Fill(darkblue+opacity(0.5)));  
-\end{lstlisting}
+\end{asycode}
 
 
 \section{习题和评注}
@@ -1237,9 +1189,9 @@ label(text, (xmax,ymax), align=SW, yellow+fontsize(0.7cm),
         角各自有一条边在一条直线上。请推广此要求，给出相距为 $k$ 的两个角有边
         共线条件下，求 $n$ 角星形路向的函数（$k\ge 1$, $n\ge 2k+1$）。设此函
         数原型为：
-\begin{lstlisting}
+\begin{asycode}
 guide star(int n, int k = 2);
-\end{lstlisting}
+\end{asycode}
         并利用这个函数画出下面的表格（特别地，当 $k=1$ 时，函数给出正 $n$ 边
         形的路向）：
         \begin{figure}[H]
@@ -1295,9 +1247,9 @@ filldraw(unitstar, lightblue, black+2);
       \item （较难）推广上一小题的结果，编写函数，它返回相距为 $k$ 的角有边共
         线时，$n$ 角星的路向数组（可能由多条路向组成），其中 $k\ge 1$,
         $n\ge 2k+1$：
-\begin{lstlisting}
+\begin{asycode}
 guide[] star_new(int n, int k = 2);
-\end{lstlisting}
+\end{asycode}
         特别地，当 $k = 1$ 时，此函数也返回正 $n$ 边形的路向。并利用这个函数
         画出下面的表格：
 \begin{figure}[H]
@@ -1354,17 +1306,17 @@ for (int k = 1; k <= 5; ++k) {
     \end{enumerate}% 有关星形画法的习题
 
   \item 实现函数 |bracelabel|，其函数原型为：
-\begin{lstlisting}
+\begin{asycode}
 void bracelabel(picture pic=currentpicture, Label L, pair a, pair b,
                 pen p=currentpen);
-\end{lstlisting}
+\end{asycode}
     其使用效果为：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm);
 bracelabel("hello", (0,0), (4,3), linewidth(2bp));
 dot("$(0,0)$", (0,0), blue);
 dot("$(4,3)$", (4,3), blue);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1390,9 +1342,9 @@ dot("$(4,3)$", (4,3), blue);
       \item \prgname{graph} 模块提供大量函数可以用来帮助绘制二维函数图形。最
         基本的函数是 \autoref{sec:function} 中提及的 |graph| 函数。请实现一个
         简化的 |guide| 函数版本，其函数原型为：
-\begin{lstlisting}
+\begin{asycode}
 guide graph(real f(real), real a, real b);
-\end{lstlisting}
+\end{asycode}
         它使用多段直线连接函数 $f$ 在区间 $[a, b]$ 的样本点。并用它画出正弦函
         数的图像。
       \item（较难）参考手册 \cite{asyman} 中对 \prgname{graph} 模块
@@ -1462,9 +1414,9 @@ draw(g, heavyblue+2bp);
         \end{figure}
 
       \item 函数\index{interp@\lstinline=interp=}
-\begin{lstlisting}
+\begin{asycode}
 T interp(T a, T b, real t);
-\end{lstlisting}
+\end{asycode}
       返回 |a| 与 |b| 的线性插值 |(1-t)*a+t*b|，其中 |T| 是数值、坐标或画笔。
       这个函数可以用来把两个颜色按比例混合，如 |interp(white,red,0.2)| 就是
       $20\%$ 的红色。试利用混合颜色作出渐变效果的随机游动图：
@@ -1511,6 +1463,48 @@ for (int i = 0; i < dirs.length; ++i)
 \end{asy}
     \end{figure}
 
+  \item\label{ex:randint} 令狐庸在读 Roberts 教授写的一本 C 语言的教材时，发现里
+    面使用了另外一种得到随机整数的办法（下面假定 $a<b$）：
+\begin{lstlisting}[language=C,backgroundcolor={\color{green!20!lightgray}}]
+int randomInteger(int a, int b)
+{
+    return ((double)rand() / (RAND_MAX+1)) * (b-a+1) + a;
+}
+\end{lstlisting}
+    其基本思路是：既然 |rand()| 返回从 0 到 |RAND_MAX| 的一个随机整数，那么
+\begin{lstlisting}[language=C,backgroundcolor={\color{green!20!lightgray}}]
+(double)rand() / (RAND_MAX+1)
+\end{lstlisting}
+    就是一个 $[0,1)$ 区间上的随机实数，从而
+\begin{lstlisting}[language=C,backgroundcolor={\color{green!20!lightgray}}]
+(double)rand() / (RAND_MAX+1) * (b-a+1)
+\end{lstlisting}
+    就是 $[0, b-a+1)$ 区间上的随机实数。当转换回整数时，对它截尾取整的结果正
+    好就是 $[0,b-a]$ 上均匀分布的随机整数。
+
+    然而当令狐庸为此兴冲冲地写出下面的 \Asy{} 代码时（与 C 语言相同，这里的
+    |(int)| 表示对后面的结果到整数进行强制类型转换）：
+\begin{asycode}
+int randomInteger(int a, int b)
+{
+    return (int) (rand() / (randMax+1) * (b-a+1) + a);
+}
+\end{asycode}
+    \Asy{} 却给出了一个整数计算溢出的错误（Integer overflow）。
+
+    请自己试一试上面的代码并分析，\Asy{} 为什么会给出错误信息（也许你的
+    \Asy{} 并不会产生错误，为什么？），而上面的 C 程序代码并不会产生程序运行
+    错误。
+
+    假定 $a<b$，进一步分析，Roberts 教授给出的函数，在什么情况下会得到错误的
+    结果？如何修改 Roberts 教授的 C 函数，得到正确的结果？如何把同样的方法应
+    用于 \Asy{} 代码中？
+
+    \textcolor{gray}{（提示：在 C 语言中整数除法的结果是整数，需要把操作数转
+    换浮点数才能得到。C 语言中加法不检查溢出，但溢出时会因二进制补码表示得到
+    一个负数。在上面错误的实现中，不仅有溢出的错误，对负数强制类型转换的取整
+    方式也不对。）}
+
 %  \item （难）实现一个月历函数。综合问题，尚未设计图形。
 \end{enumerate}% 习题
 
@@ -1535,11 +1529,12 @@ for (int i = 0; i < dirs.length; ++i)
 原型和具体代码。
 
 本章定义的 |random(real,real)| 函数和 |rand(int,int)| 函数是伪随机数比较通用
-的使用方式。通常电脑总是难以生成真正的随机数序列，而一个确定的算法也只能产生
-伪随机数序列。大多数电脑程序使用一种“线性模同余”的方式，从某一初始值生成一
-个周期很长的迭代序列作为伪随机数序列。只有在对随机性要求很高的场合（如网络密
-钥生成），才会使用记录键盘敲击时间、数字化设备电路噪声等硬件方式生成“真正”
-的随机数。有关伪随机数可参看 \cite{taocp2}。
+的使用方式，而 |rand() % n| 是在 C/C++ 语言中最常用的生成数组随机下标的方式。
+通常电脑总是难以生成真正的随机数序列，而一个确定的算法也只能产生伪随机数序列
+。大多数电脑程序使用一种“线性模同余”的方式，从某一初始值生成一个周期很长的
+迭代序列作为伪随机数序列。只有在对随机性要求很高的场合（如网络密钥生成），才
+会使用记录键盘敲击时间、数字化设备电路噪声等硬件方式生成“真正”的随机数。有
+关伪随机数可参看 \cite{taocp2}。
 
 数组是 \Asy{} 乃至各种程序设计语言最重要的数据抽象类型之一，本章对数组的介绍
 是肤浅的。\cite{asyman} 中有单独一节篇幅讲解数组的使用，读者可以详加参考。与
@@ -1560,6 +1555,9 @@ C/C++ 语言的数组相比，\Asy{} 的数组是一种高级的数组结构，�
 习题 \ref{ex:graph} 选材自 \cite{pgfman}。\prgname{graph} 模块用来绘制各类函
 数图形，功能十分丰富，在官方手册 \cite{asyman} 中已经有较详细的讲解和示例（但
 这部分手册尚没有中文翻译），故本文只做极简单的说明。
+
+习题 \ref{ex:randint} 选材自 \cite{roberts1995}，原书给出了随机数函数使用的许
+多有用的技巧，并给出了 |randomInteger| 的一个正确的实现。
 
 \endinput
 

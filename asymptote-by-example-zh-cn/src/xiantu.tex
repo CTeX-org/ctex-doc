@@ -39,9 +39,9 @@
 
 点图标运行 \Asy{}，就出现了交互式\index{交互式}的命令行，提示符是一个
 \verb=>=。输入命令：
-\begin{lstlisting}
+\begin{asycode}
 draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
-\end{lstlisting}
+\end{asycode}
 赵博士装的 GSView 立即弹了出来，里面已经画出一条倾斜的直线。再输入
 |quit|\index{quit@\lstinline=quit=}，程序退出，并留下了一个叫做
 \verb=out.eps= 的图形文件，
@@ -78,9 +78,9 @@ draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
 正如前面试验的时候做的那样，一条直线就是用 |--|\index{--@\lstinline=--=} 把坐
 标连起来，再使用 |draw| 命令，直线就画出来了。事实上，可以用 |--| 把坐标点连
 成折线：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -91,9 +91,9 @@ draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) );
 像这样把坐标用 |--| 连结起来的，就成为一条路径\index{路径}。把直线而稍做修改
 ，在后面连上一个特殊的坐标 |cycle|\index{cycle@\lstinline=cycle=}，就可以得到
 一条首尾相接的闭路径\index{路径!闭路径}。如：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) -- cycle );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -103,9 +103,9 @@ draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) -- cycle );
 
 画一条路径可以使用不同的颜色、粗细的笔，这只要给 |draw| 命令多加一个画笔
 \index{画笔}参数（多个参数用逗号分开）：
-\begin{lstlisting}
+\begin{asycode}
 draw((0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm), darkblue+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -116,9 +116,9 @@ draw((0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm), darkblue+1mm);
 蓝色粗线。（可用的颜色\index{颜色}名称可以参考 \cite{asyman}）
 
 赵博士画的是“勾三股四弦五”的红色三角形，这很容易：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red+0.5mm );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -129,9 +129,9 @@ draw( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red+0.5mm );
 \index{填充}
 不过现在还需要的是实心的三角形，因此就需要一个新的绘图命令
 |fill|\index{fill@\lstinline=fill=}，即填充。于是，红色三角形就成为
-\begin{lstlisting}
+\begin{asycode}
 fill( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -143,10 +143,10 @@ fill( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red );
 一遍，然后再用深红色勾边。好在可以使用一个命令
 |filldraw|\index{filldraw@\lstinline=filldraw=} 同时完成这两件事情，这样就不
 需要把一条路径写两遍了。即有：
-\begin{lstlisting}
+\begin{asycode}
 filldraw((0,0) -- (4cm,0) -- (0,3cm) -- cycle,
     fillpen=palered, drawpen=red+0.5mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -159,7 +159,7 @@ filldraw((0,0) -- (4cm,0) -- (0,3cm) -- cycle,
 
 现在，赵博士的整个弦图的框架就呼之欲出了，就是画出四个三角形
 （\autoref{fig:xiantuskeleton}）：
-\begin{lstlisting}
+\begin{asycode}
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle,
     fillpen=palered, drawpen=red+0.5mm);
 filldraw( (7cm,4cm) -- (4cm,4cm) -- (4cm,0) -- cycle,
@@ -168,7 +168,7 @@ filldraw( (3cm,7cm) -- (3cm,4cm) -- (7cm,4cm) -- cycle,
     fillpen=palered, drawpen=red+0.5mm);
 filldraw( (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
     fillpen=palered, drawpen=red+0.5mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}
 \centering
 \begin{asy}
@@ -188,9 +188,9 @@ filldraw( (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
 的 \lstinline[mathescape]|box($\text{角点}$, $\text{角点}$)|
 \index{box@\lstinline=box=} 命令来产生矩形的路径，因而填充正中间的正方形就可
 以用：
-\begin{lstlisting}
+\begin{asycode}
 fill( box((3cm,3cm), (4cm,4cm)), yellow );
-\end{lstlisting}
+\end{asycode}
 这个填充的命令应该放在画线之前（以免覆盖描的红线）。
 
 回顾前面的代码，赵博士觉得连续地写四个 |filldraw| 命令太重复了。他读了 \Asy{}
@@ -204,14 +204,14 @@ fill( box((3cm,3cm), (4cm,4cm)), yellow );
 来设定有一定不透明度（取值为 $0\sim1$）的画笔，并把它加在原来的画笔上
 \footnote{\Asy{} 的 EPS 格式输出看不到透明效果，必须输出为 PDF 格式或从 PDF 
 格式转化为其他格式才能有透明效果。}。于是赵博士最后写出了这样的代码：
-\begin{lstlisting}
+\begin{asycode}
 fill( box((3cm,3cm), (4cm,4cm)), opacity(0.5)+yellow );
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
     ^^ (7cm,4cm) -- (4cm,4cm) -- (4cm,0) -- cycle
     ^^ (3cm,7cm) -- (3cm,4cm) -- (7cm,4cm) -- cycle
     ^^ (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
-\end{lstlisting}
+\end{asycode}
 至此，弦图的主要框架（\autoref{fig:xiantuskeleton2}）就此完成。
 \begin{figure}[H]
 \centering
@@ -236,7 +236,7 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
 
 按说这个网格是十分简单的，无非就是画一些灰色的纵横细线。比如这个 $3\times3$ 
 的网格：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (3cm,0)
     ^^ (0,1cm) -- (3cm,1cm)
     ^^ (0,2cm) -- (3cm,2cm)
@@ -247,7 +247,7 @@ draw( (0,0) -- (0,3cm)
     ^^ (2cm,0) -- (2cm,3cm)
     ^^ (3cm,0) -- (3cm,3cm),
     gray );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -276,9 +276,9 @@ $16$ 条直线。这样的代码不仅不好写，而且容易出错，修改一
 数做好了。但有一个结果特别引人注目，有人指出，在 \prgname{math} 模块中已经定
 义好了一个 |grid| 函数，只要拿来用就可以了。赵博士立即精神大振，来看这个
 |grid| 函数：\index{grid@\lstinline=grid=}
-\begin{lstlisting}
+\begin{asycode}
 picture grid(int Nx, int Ny, pen p=currentpen)
-\end{lstlisting}
+\end{asycode}
 这个是在 \prgname{math} 模块中 |grid| 函数的原型。\index{原型}它说明 |grid| 
 函数有 |Nx|, |Ny| 两个整数类型的必需参数，一个可选的画笔，并且返回一个
 |picture|（图）\index{picture@\lstinline=picture=}类型的对象。
@@ -286,23 +286,23 @@ picture grid(int Nx, int Ny, pen p=currentpen)
 \index{导入}\index{模块!导入}
 要使用模块的功能，需要在绘图之前导入这个模块，这只要使用
 \index{import@\lstinline=import=}
-\begin{lstlisting}
+\begin{asycode}
 import `模块名`;
-\end{lstlisting}
+\end{asycode}
 因此，要使用 \prgname{math} 模块中的 |grid| 函数，只要在代码中写
-\begin{lstlisting}
+\begin{asycode}
 import math;
-\end{lstlisting}
+\end{asycode}
 就可以了。
 
 |grid| 函数的行为看起来很奇怪，调用它会在一个单独的图上画出一个
 |Nx|${}\times{}$|Ny| 的网格，网格的左下角在原点，间距为 $1$。要使用 |grid| 函
 数画的图形，要使用 \lstinline[mathescape]|add($\text{图}$)|
 \index{add@\lstinline=add=} 命令，把这个图形加在当前的图上：
-\begin{lstlisting}
+\begin{asycode}
 import math;
 add(grid(10,10,gray));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -324,7 +324,7 @@ add(grid(10,10,gray));
 \index{rotate@\lstinline=rotate=}
 \index{slant@\lstinline=slant=}
 \index{reflect@\lstinline=reflect=}
-\begin{lstlisting}
+\begin{asycode}
 shift(`坐标`)           // `\color{comment}按坐标平移`
 shift(x, y)           // `\color{comment}按` (x, y) `\color{comment}平移`
 scale(`倍数`)           // `\color{comment}按倍数放缩`
@@ -334,11 +334,11 @@ scale(x, y)           // `\color{comment}在 $x$ 轴、$y$ 轴方向分别按倍
 rotate(`角度`, z=(0,0)) // `\color{comment}按角度绕中心` z`\color{comment}（默认为原点，逆时针）旋转`
 slant(`因子`)           // `\color{comment}按一定因子向右倾斜`
 reflect(a, b)         // `\color{comment}相对直线` a--b `\color{comment}反射`
-\end{lstlisting}
+\end{asycode}
 使用一个变换就是把这个变换乘在被变换对象的左边。例如一个放缩一个单位正方形：
-\begin{lstlisting}
+\begin{asycode}
 draw( scale(2cm) * box((0,0), (1,1)) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -346,9 +346,9 @@ draw( scale(2cm) * box((0,0), (1,1)) );
 \end{asy}
 \end{figure}
 这样的变换可以连续地做下去，例如
-\begin{lstlisting}
+\begin{asycode}
 draw( rotate(90) * slant(0.3) * scale(1cm) * box((0,0), (1,1)) );
-\end{lstlisting}
+\end{asycode}
 就是把一个单位正方形先放大，再倾斜，再旋转 $90^\circ$：
 \begin{figure}[H]
 \centering
@@ -358,10 +358,10 @@ draw( rotate(90) * slant(0.3) * scale(1cm) * box((0,0), (1,1)) );
 \end{figure}
 
 有了这些变换，画出一个合适大小的网格就不再是什么难事了：
-\begin{lstlisting}
+\begin{asycode}
 import math;
 add( scale(5mm) * grid(4, 4, gray) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -382,7 +382,7 @@ atan2 函数，但注意返回值是弧度。}。更详细的数学函数列表�
 
 于是，赵博士弦图中的网格，就可以这样方便地画出来了
 （\autoref{fig:xiantugrid}）：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}网格`
 import math;
 add( scale(1cm) * grid(7, 7, gray) );
@@ -394,7 +394,7 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
     ^^ (3cm,7cm) -- (3cm,4cm) -- (7cm,4cm) -- cycle
     ^^ (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[htbp]
 \centering
 \begin{asy}
@@ -429,23 +429,23 @@ filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle
 用 \XeTeX{}\index{XeTeX@\XeTeX} 引擎与
 \prgname{xeCJK}\index{xeCJK@\prgname{xeCJK}} 宏包来处理中文。为此，在 \Asy{} 
 源文件中，他使用了下面的设置代码：
-\begin{lstlisting}
+\begin{asycode}
 settings.tex = "xelatex";
 usepackage("xeCJK");
 texpreamble("\setCJKmainfont{SimSun}");
-\end{lstlisting}
+\end{asycode}
 这里第一行是设置编译时所用的 \TeX{} 引擎。后面
 |usepackage|\index{usepackage@\lstinline=usepackage=} 命令就是 \LaTeX{} 中的
-\texcode|\usepackage| 命令的一个包装形式，里面的字符串参数就是宏包名；而
+\verb|\usepackage| 命令的一个包装形式，里面的字符串参数就是宏包名；而
 |texpreamble|\index{texpreamble@\lstinline=texpreamble=} 命令则把接收的参数直
 接放进 \LaTeX{} 的导言区。
 
 进行上述设置后，就可以正确使用中文标签了。标注的命令很简单，就是
 |label|\index{label@\lstinline=label=}，参数正是标签文字和标签的位置。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (1cm,1cm) -- (2cm,0) );
 label( "`\color{string}中间`", (1cm,0cm) );
-\end{lstlisting}
+\end{asycode}
 就得到
 \begin{figure}[H]
 \centering
@@ -459,18 +459,18 @@ label( "中间", (1cm,0cm) );
 \end{figure}
 
 可以在标签中使用任意的 \LaTeX{} 代码，包括数学公式，例如：
-\begin{lstlisting}
+\begin{asycode}
 label("$x = \sin\alpha$", (0,0));
-\end{lstlisting}
+\end{asycode}
 就会正确地得到 $x = \sin\alpha$ 的标签。
 
 现在，我们可以给弦图加上“朱实”、“黄实”和“弦实”的标签了。在前面的框架代
 码后面加上
-\begin{lstlisting}
+\begin{asycode}
 label("`\color{string}朱实`", (2cm,4cm));
 label("`\color{string}黄实`", (3.5cm,3.5cm));
 label("`\color{string}弦实`", (5cm,4cm));
-\end{lstlisting}
+\end{asycode}
 以及设置字体的代码，就得到\autoref{fig:xiantupartlabel} 的结果。
 \begin{figure}
 \centering
@@ -501,14 +501,14 @@ label("弦实", (5cm,4cm));
 到的是距离这条路径的中点一定方向距离加一个标签，而不是简单地取路径上的一点作
 为标签的位置。好在 \Asy{} 确实也提供了这样的功能，仍然使用 |label| 命令，基本
 语法是：\index{label@\lstinline=label=}
-\begin{lstlisting}
+\begin{asycode}
 label(`标签`, `路径`)
-\end{lstlisting}
+\end{asycode}
 这里默认会在路径中间的右侧（沿着路径行进方向）加标签。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (4cm,2cm), linewidth(0.5mm) );
 label("`\color{string}粗线条`", (0,0) -- (4cm,2cm));
-\end{lstlisting}
+\end{asycode}
 （其中的 |linewidth|\index{linewidth@\lstinline=linewidth=} 函数用来表示具有
 一定线宽\index{线宽}的画笔）这段代码将得到
 \begin{figure}[H]
@@ -524,13 +524,13 @@ label("粗线条", (0,0) -- (4cm,2cm));
 
 现在，赵博士就可以给三角形的三边加上“勾三”、“股四”、“弦五”的标签了，只
 要稍稍注意一下标签摆放的默认方向：
-\begin{lstlisting}
+\begin{asycode}
 filldraw( (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle,
     fillpen=opacity(0.1)+red, drawpen=red+0.5mm );
 label( "`\color{string}勾三`", (4cm,3cm) -- (4cm,0) );
 label( "`\color{string}股四`", (0,3cm) -- (4cm,3cm) );
 label( "`\color{string}弦五`", (4cm,0) -- (0,3cm) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -555,7 +555,7 @@ label( "弦五", (4cm,0) -- (0,3cm) );
 \lstinline[mathescape]|Relative($\text{方向}$)|。%
 \index{Relative@\lstinline=Relative=}%
 例如：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) -- (4cm,2cm), blue, Arrow );
 label( "LeftSide", (0,0) -- (4cm,2cm), align=LeftSide );
 label( "RightSide", (0,0) -- (4cm,2cm), align=RightSide );
@@ -566,7 +566,7 @@ label( "E", (6cm,0)--(8cm,2cm), Relative(E) );
 label( "S", (6cm,0)--(8cm,2cm), Relative(S) );
 label( "W", (6cm,0)--(8cm,2cm), Relative(W) );
 label( "N", (6cm,0)--(8cm,2cm), Relative(N) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -592,9 +592,9 @@ label( "N", (6cm,0)--(8cm,2cm), Relative(N) );
 角形的边作旋转，使标签沿着边排列。为此，赵博士不得不又仔细查看了
 \cite{asyman}，在讲标注文字一节（label）他找到了一个构造标签的更高级的办法，
 即不仅仅是使用一个简单的字符串，而是使用\index{Label@\lstinline=Label=}
-\begin{lstlisting}
+\begin{asycode}
 Label(`标签`)
-\end{lstlisting}
+\end{asycode}
 函数进行构造。里面的“标签”参数仍然可以是原来的字符串，或是通过这个函数构造
 出来的高级的标签。这个函数可以带许多可选的其他参数，如
 \lstinline[mathescape]|position=$\text{位置}$|
@@ -605,11 +605,11 @@ Label(`标签`)
 这里暂且放下 |position| 参数。只来看 |embed| 参数的一个特例：%
 \lstinline[mathescape]|Rotate($\text{方向}$)|%
 \index{Rotate@\lstinline=Rotate=}。这个参数会让标签向着给定的方向旋转，如：
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0)--(4cm,2cm), blue, Arrow );
 label( Label("Rotate", Rotate((4,2))),
     (0,0)--(4cm,2cm) );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -622,7 +622,7 @@ label( Label("Rotate", Rotate((4,2))),
 
 终于，使用了上面的全部功能，赵博士完成了全部的图形标注工作
 （\autoref{fig:xiantulabel}）：
-\begin{lstlisting}
+\begin{asycode}
 settings.tex = "xelatex";
 usepackage("xeCJK");
 texpreamble("\setCJKmainfont{SimSun}");
@@ -644,7 +644,7 @@ label("`\color{string}弦实`", (5cm,4cm));
 label( Label("`\color{string}勾三`",Rotate(S)), (4cm,0)--(4cm,3cm), LeftSide );
 label( Label("`\color{string}股四`",Rotate(E)), (4cm,3cm)--(0,3cm), LeftSide );
 label( Label("`\color{string}弦五`",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[htbp]
 \centering
 \begin{asy}
@@ -686,9 +686,9 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
     带哪些可选的参数，并自己举例子试验一下效果。
 
   \item 代码
-\begin{lstlisting}
+\begin{asycode}
 guide zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
-\end{lstlisting}
+\end{asycode}
     可以把一个三角形的路径保存在变量 |zhushi| 中，以后就可以使用
     |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{这里定义了一个
     \lstinline=guide= 类型的变量，我们译之为“路向”，以区别于“路径”

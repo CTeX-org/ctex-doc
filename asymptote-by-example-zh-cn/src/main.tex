@@ -3,7 +3,7 @@
   {ctexbook}[2009/05/20]
 \linespread{1.0}
 
-%\includeonly{tiling}
+%\includeonly{automata}
 
 \usepackage{amsmath}
 
@@ -17,8 +17,8 @@
 \renewcommand{\headrulewidth}{0pt}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\normalfont\rightmark}
-\rhead{\normalfont\thepage}
+\lhead{\rmfamily\mdseries\upshape\rightmark}
+\rhead{\rmfamily\mdseries\upshape\thepage}
 \fancypagestyle{plain}{\fancyhf{}}
 
 \usepackage{float}
@@ -61,13 +61,11 @@
 
 \usepackage{asysyntex}
 \usepackage{listings}
-\lstloadlanguages{[LaTeX]TeX}
-\newcommand*\texcode{\expandafter\lstinline[language={[LaTeX]TeX}]}
-
+\lstloadlanguages{C}
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand*\Asy{\textsf{Asymptote}}
-\newcommand*\asyversion{1.88}
+\newcommand*\asyversion{1.90}
 \begin{document}
 
 \frontmatter
@@ -111,6 +109,7 @@
 \include{xiantu}
 \include{tiling}
 \include{stars}
+\include{automata}
 
 \appendix
 \include{gpl-3.0}

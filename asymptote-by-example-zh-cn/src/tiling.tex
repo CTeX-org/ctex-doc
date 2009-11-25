@@ -87,13 +87,13 @@ for (int i = 0 ; i < 2; ++i)
 那么，首先要了解如何在 \Asy{} 中描述曲线。\ref{sec:linedraw} 节中提到 |--| 连
 结一组坐标就成为直（折）线段；类似地，用 |..|\index{..@\lstinline=..=} 连结坐
 标就得到经过这些坐标点的曲线：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm,0);
 pair z1 = (0,1), z2 = (1,1), z3 = (2,1),
      z4 = (0,0), z5 = (1,0), z6 = (2,0);
 guide p = z4 .. z1 .. z2 .. z6;
 draw(p, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -115,9 +115,9 @@ dot("6", z6);
 码）。|pair|\index{pair@\lstinline=pair=} 类型的变量 |z1|, \ldots, |z6| 保存
 六个坐标\index{坐标}，|guide|\index{guide@\lstinline=guide=} 类型的变量 |p| 
 保存一条曲线的路向\index{路向}。因而上面 |size| 之后的绘图代码就相当于
-\begin{lstlisting}
+\begin{asycode}
 draw( (0,0) .. (0,1) .. (1,1) .. (2,0), gray+2mm );
-\end{lstlisting}
+\end{asycode}
 其中前面的一句 |size(5cm,0)|\index{size@\lstinline=size=} 表示代码中的坐标只
 是相对位置，最后将整个图形按比例放缩为 $5$\,cm 宽\footnote{注意坐标、图形会被
 放缩，但画笔的宽度不会放缩。}。类似地，也可以使用 |size(0,4cm)| 把图形放缩到
@@ -126,10 +126,10 @@ $4$\,cm 高。
 最重要的当然还是曲线的表示。以 |..| 连结的坐标会以一种尽量接近圆弧的方式连为
 经过这些点的光滑曲线。与画直线类似，|cycle|\index{cycle@\lstinline=cycle=} 可
 以作为一个特殊的坐标产生闭合曲线，即一条闭路向\index{路向!闭路向}：
-\begin{lstlisting}
+\begin{asycode}
 guide q = z4 .. z1 .. z2 .. z6 .. cycle;
 draw(q, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -149,10 +149,10 @@ dot("6", z6);
 
 变量不仅仅是给了坐标、路向等对象一个简洁的名字，它也使得对同一个对象重复使用
 并进行不同的操作变得十分方便：
-\begin{lstlisting}
+\begin{asycode}
 fill(q, lightblue);
 draw(q, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -185,10 +185,10 @@ dot("6", z6);
 \end{table}
 
 例如：
-\begin{lstlisting}
+\begin{asycode}
 filldraw( circle((0,0), 1cm), lightblue, gray+2mm );
 draw( arc((5cm,0), 1cm, 45, 135), gray+2mm );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -200,10 +200,10 @@ draw( arc((5cm,0), 1cm, 45, 135), gray+2mm );
 一条用 |cycle| 产生的闭路向和简单地把首尾结点重合的路向是非常不同的。首先，只
 有闭路向可以填充颜色；其次，使用 |cycle| 连结的曲线在起点处是光滑连接的，而如
 果只是首尾结点重合则不会光滑连接。试将下面的曲线 |q2| 与上面的曲线 |q| 比较：
-\begin{lstlisting}
+\begin{asycode}
 guide q2 = z4 .. z1 .. z2 .. z6 .. z4;
 draw(q2, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
 \centering
 \begin{asy}
@@ -224,7 +224,7 @@ dot("6", z6);
 现在有了绘制曲线的方法，画出一个羊头就只是把草稿上的坐标连接起来而已。André
 有一个纸上的草图，于是在描出几个点以后，他很快得到这样的结果（这里给图形增加
 了辅助网格）：
-\begin{lstlisting}
+\begin{asycode}
 size(0,4cm);
 pen outline = black+1mm;
 // `\color{comment}头`
@@ -239,7 +239,7 @@ fill( (3.5,0.3) .. (3.35,0.45) .. (3.5,0.6) .. (3.6,0.4) .. cycle, outline );
 draw( (3,0.35) .. (3.3,0.1) .. (3.6,0.05), outline );
 draw( (2.3,1.3) .. (2.1, 1.5) .. (2.15,1.7), outline );
 draw( (2.1,1.7) .. (2.35,1.6) .. (2.45,1.4), outline );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -265,18 +265,18 @@ draw( (2.1,1.7) .. (2.35,1.6) .. (2.45,1.4), outline );
 \end{figure}
 
 在一开始，André 使用
-\begin{lstlisting}
+\begin{asycode}
 pen outline = black+1mm;
-\end{lstlisting}
+\end{asycode}
 定义一个 |pen|\index{pen@\lstinline=pen=} 类型的变量 |outline| 表示用来画羊头
 轮廓的画笔\index{画笔}，以备使用。
 
 然后，André 直接用 |..| 连结一组坐标来定义羊的头部轮廓：
-\begin{lstlisting}
+\begin{asycode}
 guide head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
     .. (0.4,1.3) .. (0.8,1.5) .. (2.2,1.9) .. (3,1.5) .. (3.2,1.3)
     .. (3.6,0.5) .. (3.4,-0.3) .. (3,0) .. (2.2,0.4) .. (0.5,-0.2) .. cycle;
-\end{lstlisting}
+\end{asycode}
 需要尖角的时候，就使用重复的相同点（如这里的起点）；曲线变化大的地方，取的点
 也比较密集。
 
@@ -286,12 +286,12 @@ guide head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
 砌效果了。设计羊头形状的工作无疑是最关键也最复杂的，因此 André 的任务现在就
 已经完成了一半。
 
-不过继承了法国完美主义风气的 André 老师，很快挑出了毛病：这只羊头部的轮廓，
+不过继承了法国完美主义风气的 Deledicq 老师，很快挑出了毛病：这只羊头部的轮廓，
 并不完全是按照 \ref{sec:rect2tiling} 节对矩形变形得到的——他的手稿基本上是这
 样设计的，但在使用 \Asy{} 上绘图时则只是在手稿上相当随意地取了一些结点连结得
 到曲线，这个轮廓想必也并不能严丝合缝地一个个拼起来。还有一件很令他恼火的事情
 则是：要画出羊头的轮廓，他要画的点太多了，一个尖角用两个结点表示，也太不符合
-他的简洁美学了。因此，这个看上去相当不错的羊头一号，就被 André 老师无情地否
+他的简洁美学了。因此，这个看上去相当不错的羊头一号，就被 Deledicq 老师无情地否
 决掉了。他决定发扬数学教师严谨简洁的作风，再做出更完美的羊头二号来。
 
 \section{细致的曲线调整与曲线操作}
@@ -303,10 +303,10 @@ guide head = (0.5,-0.2) .. (0.6,0.5) .. (0.2,1.3) .. (0,1.5) .. (0,1.5)
 
 在曲线的结点处，可以使用以花括号括起的一个向量坐标来限定曲线在此处的切线方向
 \index{方向}。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 .. z2 .. z6, gray+2mm);
 draw(z4{right} .. z2{right} .. z6{right}, heavyblue+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -329,10 +329,10 @@ dot(Label("6", align=down), z6);
 |right|\index{right@\lstinline=right=}，作为四个罗盘方向的同义词。此外，也可
 以使用预置的函数 \lstinline[mathescape]|dir($\text{角度}$)|
 \index{dir@\lstinline=dir=} 来表示指向此方向的单位向量，例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 .. z2 .. z6, gray+2mm);
 draw(z4{dir(60)} .. z2{dir(30)} .. z6{dir(-120)}, heavyblue+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -355,10 +355,10 @@ dot(Label("6", align=down), z6);
 就像上面的例子，限定曲线的切线方向无疑使得定义一条曲线更加直观和方便。不仅如
 此，我们甚至还可以在曲线同一结点的两侧设置截然不同的切线方向，此时曲线就会在
 这个结点的位置得到一个尖角。如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 .. z2 .. z6, gray+2mm);
 draw(z4 .. {up} z2 {down} .. z6, heavyblue+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -384,11 +384,11 @@ dot(Label("6", align=down), z6);
 \lstinline[mathescape]|tension $\text{张力值}$|
 \index{tension@\lstinline=tension=} 来设定，张力值是不小于 $0.75$ 的实数，默
 认值 $1$ 使得曲线最接近圆弧形状。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 {up} .. tension 0.75 .. {down} z6, heavyblue+2mm);
 draw(z4 {up} .. tension 1 .. {down} z6, gray+2mm);
 draw(z4 {up} .. tension 1.5 .. {down} z6, heavygreen+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -409,11 +409,11 @@ dot(Label("6", align=down), z6);
 \end{asy}
 \end{figure}
 注意张力不仅影响两个结点之间的曲线形状，临近结点间的曲线形状也会受到影响。如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 .. tension 0.75 .. z2 .. z6, heavyblue+2mm);
 draw(z4 .. tension 1 .. z2 .. z6, gray+2mm);
 draw(z4 .. tension 1.5 .. z2 .. z6, heavygreen+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -435,10 +435,10 @@ dot(Label("6", align=down), z6);
 比弹簧或橡皮绳更强的是，\Asy{} 曲线在结点两边的张力事实上也可以使用
 \lstinline[mathescape]|tension $\text{起}$ and $\text{末}$|
 来分开设定：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 {up} .. tension 1 .. {down} z6, gray+2mm);
 draw(z4 {up} .. tension 0.75 and 2 .. {down} z6, heavyblue+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -460,11 +460,11 @@ dot(Label("6", align=down), z6);
 \lstinline[mathescape]|{curl $\text{数值}$}|\index{curl@\lstinline=curl=}。卷
 曲度是一个非负值，其数值越大则曲线在端点的曲率越大，数值为 $0$ 时则曲率趋于
 $0$。在曲线的端点处，有默认的卷曲度 $1$，使得曲线接近圆弧。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 {curl 0} .. z0 .. {curl 0} z6, heavyblue+2mm);
 draw(z4 {curl 1} .. z0 .. {curl 1} z6, gray+2mm);
 draw(z4 {curl 5} .. z0 .. {curl 5} z6, heavygreen+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -487,11 +487,11 @@ dot(Label("0", align=up), z0);
 必须注意的是，卷曲度影响的是曲线的首尾端点的弯曲情况；而如果某个结点原本不是
 曲线的端点，那么曲线就会在此处折成尖角——特别地，如果相临端点都设置了卷曲度
 值，那么这两个结点之间就会是一段直线。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4 .. z1 .. z0{curl 0} .. z3 .. z6, heavyblue+1mm);
 draw(z4 .. z1 .. z0{curl 1} .. z3 .. z6, gray+1mm);
 draw(z4 .. z1 .. z0{curl 5} .. z3 .. z6, heavygreen+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -526,10 +526,10 @@ dot(Label("0", align=up), z0);
 一般并不直接使用，故本文不作讨论，可参考 \cite{knuth1986}。}。因而，如果把
 |---| 与 |..| 配合使用，就能使得到的直线与曲线光滑地连接，而不像使用 |--| 那
 样得到不需要的尖角。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z6 .. z4 -- z1 .. z3 .. cycle, gray+2mm);
 draw(z6 .. z4 --- z1 .. z3 .. cycle, heavyblue+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -553,10 +553,10 @@ dot(Label("6", align=right), z6);
 功能相同的连接符是 \lstinline=...=。}。不过连接符 |::| 有一个特性，就是它将尽可能使两个坐标之间的曲线没有拐
 点（即尽可能避免两坐标间出现 S 形曲线，效果是在 |..| 的基础上自动增加张力的结
 果）。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z4{up} .. z2{dir(40)} .. z3, gray+2mm);
 draw(z4{up} :: z2{dir(40)} .. z3, heavyblue+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -579,9 +579,9 @@ dot(Label("6", align=right), z6);
 ，但在 \Asy{} 中，连接符 |&| 会在生成的曲线中去除第一条曲线的尾结点（它应该是
 与第二条曲线的首结点重合的），因而不会出现像之前直接使用 |..| 生成的曲线那样
 会有重复的结点。例如：
-\begin{lstlisting}
+\begin{asycode}
 draw(z1{right} .. {down} z5 & z5 {up} .. {right}z3, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -599,9 +599,9 @@ dot(Label("6", align=down), z6);
 \end{figure}
 另一方面，相比直接单独绘制几条不相关的曲线，使用 |&| 连接符的一个重要作用是可
 以由此生成合适的闭曲线。例如：
-\begin{lstlisting}
+\begin{asycode}
 filldraw(z1 .. z2 .. z6 & z6 .. z5 .. z1 & cycle, lightblue, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -628,10 +628,10 @@ dot(Label("6", align=down), z6);
 \lstinline[mathescape]|reverse($\text{曲线}$)|%
 \index{reverse@\lstinline=reverse=}，它接受一条曲线（可以是路径或路向）作为参
 数，并返回此曲线的逆方向曲线。绘制时给曲线加上箭头可以明显看出其方向：
-\begin{lstlisting}
+\begin{asycode}
 draw(z1 .. z2 .. z6, gray+1mm, Arrow);
 draw(reverse(z1 .. z2 .. z6), heavyblue+0.5mm, Arrow);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -650,10 +650,10 @@ dot(Label("6", align=down), z6);
 \end{figure}
 于是，利用这种机制，在大圆内加上一个反方向的圆，把这两条曲线用 |^^| 连接，就
 可以用来填充得到环形：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm, 0);
 filldraw(circle((0,0), 2) ^^ reverse(circle((0,0), 1)), lightblue, gray+2mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -667,13 +667,13 @@ filldraw(circle((0,0), 2) ^^ reverse(circle((0,0), 1)), lightblue, gray+2mm);
 （数组在稍后的章节介绍）。因而它们在使用时是不同的。
 
 上面介绍的内容，差不多就是 \Asy{} 中全部基本的曲线控制方式了。有了这些，
-André 老师就可以按照 \autoref{sec:rect2tiling} 中的方式，精确地设计羊头的轮
+Deledicq 老师就可以按照 \autoref{sec:rect2tiling} 中的方式，精确地设计羊头的轮
 廓了。他分别定义羊头左边和下面的两根线：
-\begin{lstlisting}
+\begin{asycode}
 guide headleft = (0,1.5){SE} .. tension 1.4 .. (0.5,-0.2){dir(-150)} ..
       {NW}(0,0);
 guide headbottom = (0,0){SE} .. {dir(30)}(0.5,-0.2) ..{SE}(3,0);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -689,10 +689,10 @@ draw("headbottom", headbottom, heavygreen+1mm);
 更为直观，且在数学上更加简单。此外，明确限定了两条曲线在结点处的切线方向，可
 以保证它们可以精确拼接。于是，通过平移变换、使用 |reverse| 函数逆向并使用连接
 符 |&| 的拼接，就可以得到完整的羊头轮廓了：
-\begin{lstlisting}
+\begin{asycode}
 guide head = headleft & headbottom &
     shift(3,0)*reverse(headleft) & shift(0,1.5)*reverse(headbottom) & cycle;
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -708,21 +708,21 @@ filldraw(head, lightblue, gray+2mm);
 
 下面，羊的眼睛（|eye|）、耳朵（|ear|）、鼻子（|muzzle|）和嘴（|mouth|）就比较
 容易得到了：
-\begin{lstlisting}
+\begin{asycode}
 guide eye = circle((2.6,1.2), 0.1);
 guide ear = (2.3,1.3) .. (2.1,1.5) .. (2.2,1.7)
     & (2.2,1.7) .. (2.4,1.6) .. (2.5,1.4);
 guide muzzle = circle((3.5,0.5), 0.15);
 guide mouth = (3,0.4) .. (3.4,0.1) .. (3.6,0.2);
-\end{lstlisting}
+\end{asycode}
 
 于是，André 就这样画出了一个完整的青色羊头：
-\begin{lstlisting}
+\begin{asycode}
 size(5cm, 0);
 filldraw(head, cyan, linewidth(1mm));
 fill(eye ^^ muzzle);
 draw(ear ^^ mouth, linewidth(1mm));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -753,18 +753,18 @@ draw(ear ^^ mouth, linewidth(1mm));
 循环语句来完成这种重复的工作。
 
 最常用的循环语句是 |for|\index{for@\lstinline=for=} 循环，其基本语法是：
-\begin{lstlisting}
+\begin{asycode}
 for (`初始化`; `执行条件`; `循环增量`)
     `循环语句体`
-\end{lstlisting}
+\end{asycode}
 在一个循环语句中，\Asy{} 首先运行初始化语句，随后开始不断运行循环语句体，每次
 运行语句体前检查执行条件以判断是否开始，而在运行语句体后运行循环增量的语句。
 例如下面的语句会画出起始角度为 $0^\circ$, $30^\circ$, $60^\circ$, $90^\circ$ 
 的四条曲线：
-\begin{lstlisting}
+\begin{asycode}
 for (real angle = 0; angle <= 90; angle += 30)
     draw( (0,0){dir(angle)} .. {right}(6cm,0), gray+1mm );
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -784,12 +784,12 @@ for (real angle = 0; angle <= 90; angle += 30)
 分别表示 |var += 1| 和 |var -= 1|。
 
 如果循环体的语句不止一个，可以用花括号把这些语句括起来。如：
-\begin{lstlisting}
+\begin{asycode}
 for (int i = 0; i < 5; ++i) {
     filldraw(circle((2i*cm,0), 1cm), lightblue, gray+1mm);
     draw( (2i*cm,-1cm) -- (2i*cm,1cm), gray+1mm);
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -802,11 +802,11 @@ for (int i = 0; i < 5; ++i) {
 
 平面铺砌图形需要在横向和纵向两个方向重复延伸，因而可以使用两层嵌套的循环语句
 来完成这种图形：
-\begin{lstlisting}
+\begin{asycode}
 for (real x = 0; x < 8cm; x += 2cm)
     for (real y = 0; y < 4cm; y += 1cm)
         filldraw(ellipse((x,y), 1cm, 0.5cm), lightblue, gray+1mm);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -818,7 +818,7 @@ for (real x = 0; x < 8cm; x += 2cm)
 
 因此，有了前面的准备工作，André 就很容易通过一个双重循环来做出羊头的铺砌形状
 来：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}……相关曲线的定义同前`
 size(7cm, 0);
 for (int x = 0; x < 4; ++x) {
@@ -829,7 +829,7 @@ for (int x = 0; x < 4; ++x) {
         draw( pos * (ear ^^ mouth), linewidth(2bp));
     }
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -868,7 +868,7 @@ for (int x = 0; x < 4; ++x) {
 
 \Asy{} 的条件判断\index{条件判断}语句正好可以完成这项工作。条件判断语句的基本
 语法是：\index{if@\lstinline=if=}
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}只有一个分支`
 if (`条件`)
     `条件为真执行的语句块`
@@ -877,19 +877,19 @@ if (`条件`)
     `条件为真执行的语句块`
 else
     `条件为假执行的语句块`
-\end{lstlisting}
+\end{asycode}
 其中，可以用花括号括起多行的语句块。因而，可以使用如下的语句来通过判断
 |x|${}+{}$|y| 的奇偶性来决定画笔的颜色：
-\begin{lstlisting}
+\begin{asycode}
 pen color;
 if ( (x+y) % 2 == 0 )   // `\color{comment}判断 x+y 是否为偶数`
     color = cyan;
 else
     color = yellow;
-\end{lstlisting}
+\end{asycode}
 
 把上面的控制颜色的判断语句用到前面的循环体中，就可以得到交错色彩的铺砌图了：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}……相关曲线的定义同前`
 size(7cm, 0);
 for (int x = 0; x < 4; ++x) {
@@ -905,7 +905,7 @@ for (int x = 0; x < 4; ++x) {
         draw( pos * (ear ^^ mouth), linewidth(2bp));
     }
 }
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -942,13 +942,13 @@ for (int x = 0; x < 4; ++x) {
 黄两种颜色的值，因此，可以使用条件运算符\index{条件运算符}
 |? :|\index{? :@\lstinline=? :=} 来代替。条件运算符是一个特殊的三元运算符
 \index{三元运算符}，它的语法是：
-\begin{lstlisting}
+\begin{asycode}
 `条件` ? `条件为真的值` : `条件为假的值`
-\end{lstlisting}
+\end{asycode}
 因此前面的颜色判断和赋值语句就可以简化为：
-\begin{lstlisting}
+\begin{asycode}
 pen color = (i+j)%2==0 ? cyan : yellow;
-\end{lstlisting}
+\end{asycode}
 
 现在，André 的铺砌图形就完成了。下面只要把他的图形剪裁一下，就大工告成了。
 
@@ -959,9 +959,9 @@ pen color = (i+j)%2==0 ? cyan : yellow;
 André 最后的问题是把整个铺砌图形剪裁为椭圆形。为此，我们就需要引入在画线
 （|draw|）、填充（|fill|）、标注（|label|）之外的最后一种基本绘图命令，即剪裁
 （|clip|）\index{剪裁}\index{clip@\lstinline=clip=}。剪裁命令的基本语法是：
-\begin{lstlisting}
+\begin{asycode}
 clip(`图`, `曲线`);     // `\color{comment}图的默认值是当前图 currentpicture`
-\end{lstlisting}
+\end{asycode}
 如果省略 |picture| 类型的图参数，则剪裁命令会把当前正在绘制的图用给定的曲线裁
 剪开来；显示指定图参数则只剪裁给定的图中的内容。
 
@@ -973,20 +973,20 @@ clip(`图`, `曲线`);     // `\color{comment}图的默认值是当前图 curren
 自定义一个图只要定义一个 |picture|\index{picture@\lstinline=picture=} 类型的
 变量。新定义的图相当于一块单独的画布，而画线、填充、标注这些命令都可以在最前
 面加上图的参数，表示在某一个图上进行绘图。例如：
-\begin{lstlisting}
+\begin{asycode}
 picture mypic;      //`\color{comment}自定义图`
 draw(mypic, (0,0) -- (3cm,4cm) -- (5cm,0) -- cycle, gray+2mm);  //`\color{comment}画三角形`
 fill(mypic, circle((4cm,3cm), 1cm), lightblue);                 //`\color{comment}画圆`
 label(mypic, "trangle", (0,0));     //`\color{comment}标注`
 label(mypic, "circle", (3cm,2cm));
-\end{lstlisting}
+\end{asycode}
 不过这些内容都是画在自定义的图 |mypic| 上的，而只有在默认图 |currentpicture|
 上的内容才会真正输出被我们看到。因此，就又需要使用
 \autoref{sec:transformmodule} 中提到过的 |add| 命令把自定义图 |mypic| 中的内
 容加到 |currentpicture| 之上：
-\begin{lstlisting}
+\begin{asycode}
 add(mypic);
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1003,12 +1003,12 @@ add(mypic);
 |add| 函数还可以有更多的参数，更一般的形式是\footnote{\lstinline=add= 函数有
 很多变形，还带有更多次要的参数，详细的语法形式参看手册 \cite{asyman} 和
 \prgname{plain\_picture.asy} 中的源代码。}：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}可以利用 size 函数自动缩放`
 add(`目标图`=currentpicture, `源图`, above=true);
 // `\color{comment}不能自动缩放`
 add(`目标图`=currentpicture, `源图`, `位置坐标`, above=true);
-\end{lstlisting}
+\end{asycode}
 |add| 函数的意义是：把源图的内容加到目标图的上方或下方，并使源图的原点重合于
 目标图的位置坐标，其中目标图的默认值是当前图 |currentpicture|，|above| 的真假
 值控制目标图是否在源图的上方，位置坐标不指定的形式两图原点重合。但需要注意，
@@ -1021,10 +1021,10 @@ add(`目标图`=currentpicture, `源图`, `位置坐标`, above=true);
 图 |pic|，经过仿射变换\footnote{为方便文字标签的阅读，在 \Asy{} 中文字默认只
 会旋转，不会倾斜。如果要求在图变换时，标签也随之变换产生特殊效果，可以修改
 \lstinline=Label= 的 \lstinline=embed= 参数，参见 \cite{asyman}。}：
-\begin{lstlisting}
+\begin{asycode}
 add(mypic);
 add(slant(1)*mypic, (5cm,0));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1040,12 +1040,12 @@ add(slant(1)*mypic, (5cm,0));
 
 把剪裁命令用在自定义的图上，则这个图的内容就会随之被剪裁，在使用 |add| 时，即
 可看到效果：
-\begin{lstlisting}
+\begin{asycode}
 add(mypic);                             // `\color{comment}增加未剪裁的图`
 draw(circle((2cm,2cm), 2cm), red+1bp);  // `\color{comment}在未剪裁的图上画出剪裁圆形线`
 clip(mypic, circle((2cm,2cm), 2cm));    // `\color{comment}用圆形剪裁`
 add(mypic, (5cm,0));                    // `\color{comment}增加剪裁过的图`
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}
@@ -1063,9 +1063,9 @@ add(mypic, (5cm,0));
 
 剪裁命令的效果正是 André 需要的，为了用椭圆形剪裁图形，André 只需要对当前图
 上的铺砌图进行剪裁。增加一句
-\begin{lstlisting}
+\begin{asycode}
 clip(ellipse((6,3), 5, 2));
-\end{lstlisting}
+\end{asycode}
 就得到下图右侧的剪裁效果：
 \begin{figure}[H]
   \centering
@@ -1107,7 +1107,7 @@ add(shift(15,0)*pic);
 \end{figure}
 
 最后，André 得到了完整画出\autoref{fig:tiling} 的全部代码：
-\begin{lstlisting}
+\begin{asycode}
 // `\color{comment}André 的铺砌图案`
 
 // `\color{comment}全局图形缩放`
@@ -1138,7 +1138,7 @@ for (int x = 0; x < 8; ++x) {
 
 // `\color{comment}剪裁为椭圆形`
 clip(ellipse((12,6), 10, 5));
-\end{lstlisting}
+\end{asycode}
 
 
 \section{习题和评注}
@@ -1227,12 +1227,12 @@ label(Label("$B$",position=3), b);
     的区别是，|clip| 命令留下剪裁曲线的内部，而 |unfill| 命令挖掉剪裁曲线的内
     部而留下外部。|unfill| 命令的语法与 |clip| 相同。借用
     \autoref{sec:clippicture} 中的 |mypic| 举例：
-\begin{lstlisting}
+\begin{asycode}
 add(mypic);
 draw(circle((2cm,2cm), 1.5cm), red+1bp);
 unfill(mypic, circle((2cm,2cm), 1.5cm));
 add(mypic, (5cm,0));
-\end{lstlisting}
+\end{asycode}
 \begin{figure}[H]
   \centering
 \begin{asy}

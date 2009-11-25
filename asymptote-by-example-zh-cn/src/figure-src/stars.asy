@@ -7,20 +7,6 @@ real random(real a, real b=0)
 {
     return (b-a) * unitrand() + a;
 }
-// 随机整数
-int rand(int a, int b=0)
-{
-    if (a > b) {
-        int t = a;
-        a = b;
-        b = t;
-    }
-    real r;
-    do {
-        r = random(a, b+1.0);
-    } while (r == b+1);
-    return floor(r);
-}
 // 半径为 1 的 n 角星形路向
 guide star(int n = 5, real r = 0, real angle = 90)
 {
@@ -49,7 +35,7 @@ for (int i = 0; i < 100; ++i) {
     real shape = unitrand();
     pair pos = (random(xmin, xmax), random(ymin, ymax));
     real size = random(sizemin, sizemax);
-    pen color = colors[rand(colors.length-1)];
+    pen color = colors[rand() % colors.length];
     if (shape < 1/3)
         fill(shift(pos)*scale(size)*star(4), color);
     else if (shape < 2/3)
