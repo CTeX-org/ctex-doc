@@ -3,7 +3,7 @@
 % 要用 Windows 预装字体，给 ctexbook 用 winfonts 选项
 % 要用 Adobe 字体，给 ctexbook 用 adobefonts 选项
 
-\usepackage[pdftex]{geometry}
+\usepackage{geometry}
 \geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
 
 \usepackage{makeidx}
@@ -30,6 +30,10 @@
 
 \input{asysyntex.tex}
 
+\usepackage{everypage}
+\AddEverypageHook{%
+  \special{pdf: put @thispage << /Group << /S /Transparency /I true %
+  /CS /DeviceRGB >> >>}} % 处理插入透明图形时变色的问题
 \usepackage{graphicx}
 
 \usepackage{hyperref}
@@ -66,7 +70,7 @@
 
 \newcommand*\prgname[1]{\textsf{#1}}
 \newcommand\transnote[1]{\footnote{#1——译者注}}
-\newcommand\asyversion{1.79}
+\newcommand\asyversion{1.91}
 
 \hypersetup{bookmarksopen=false,
   bookmarksnumbered=true,
@@ -113,8 +117,8 @@
 \section*{翻译说明}
 
 本手册根据 \prgname{Asymptote \asyversion} 手册节选翻译。目前节选的部分是原
-手册的三、四、五章，包括全部的基本绘图功能说明，但未包括软件配置、与 \LaTeX{}
-结合、扩展模块、命令行等相关内容。
+手册的三、四、五、六章，包括全部的基本绘图功能说明，但未包括软件配置、与
+\LaTeX{} 结合、扩展模块、命令行等相关内容。
 
 手册大部分取原文直译，在不影响意义时偶有变化，或增添少量词语帮助理解。
 个别术语夹注原文。增加语法高亮，大部分格式如旧，格式上偶有不妥处迳改，不另
@@ -131,90 +135,77 @@
 \chapter{教程}
 \label{chap:tutorial}
 % 3 Tutorial
+\index{教程}
 
-\emph{一份由用户编写的 \prgname{Asymptote} 绝佳教程又可得自}\transnote{这个
-教程是比较简单的。\prgname{Asymptote} 的开发者之一，法国人 Philippe Ivaldi
-\href{http://piprim.tuxfamily.org/asymptote/}{关于 \prgname{Asymptote} 的页面}
-（英文）以大量例子的形式，展示了从最简单的点线绘图到复杂的模块设计，这无疑是
-目前 \prgname{Asymptote} 方面最为生动翔实学习资料。在中文社区，由用户编写的
-\prgname{Asymptote} 教程包括较早莫图（lapackapi@ctex.org）的一个中途已中止的
-项目\href{http://gzmfig.googlepages.com/}{《\prgname{Asymptote} 作图指南》}，
-和 cvgmt@ctex.org 目前正在编写的\href{http://code.google.com/p/asy4cn/}
-{一个教程}。中文译介的资料包括本手册和由 goodluck@ctex.org 翻译的
-\href{http://bbs.ctex.org/viewthread.php?tid=47344}
-{\prgname{Asymptote} 官方 FAQ}。这些中文资料一般都可以在
-\href{http://bbs.ctex.org}{\CTeX{} 论坛}找到作者并获得更新和支持。}：
-\url{http://www.artofproblemsolving.com/Wiki/index.php/Asymptote:_Basics}
+\section{在批处理模式中绘图}
+% 3.1 Drawing in batch mode
+\index{批处理模式}
 
-要用 \prgname{Asymptote} 的交互模式绘制一条从坐标 $(0, 0)$ 到坐标
-$(100, 100)$ 的直线，在命令提示符处敲：
-\lstset{delim=[is][\color{black}]{<@}{@>}}
-\begin{lstlisting}
-<@asy@>
-draw((0,0)--(100,100));
+要绘制一条从坐标 $(0, 0)$ 到坐标 $(100, 100)$ 的直线，建立一个名为
+\prgname{test.asy} 的文本文档，它包含：
+\lstinputlisting{diagonal.asy}
+然后执行命令
+\begin{lstlisting}[language=]
+asy -V test
 \end{lstlisting}
-\lstset{delim=[][]{}}
+此外，\prgname{Windows} 用户\transnote{原手册误作 \prgname{MSDOS}，此更正。}
+可以将 \prgname{test.asy} 拖放到桌面的 \prgname{asy} 图标上（或是把
+\prgname{Asymptote} 作为扩展名为 \prgname{asy} 的文件的默认应用程序）。
+
+这种方法，即\emph{批处理模式}，输出一个 \prgname{PostScript} 文件
+\prgname{test.eps}。\verb=-V=\index{-V@\verb=-V=} 选项打开一个
+\prgname{PostScript} 查看器窗口，从而你可以立即看到结果：
 \begin{center}
   \includegraphics{diagonal.pdf}
 \end{center}
 
-\index{大点}\index{bp}
-\index{点}\index{pt}
-\index{英寸}\index{inch}
-\index{复数}\index{序对}\index{pair@\inlinecode=pair=}
-这里的单位是 \prgname{PostScript}“大点”（big point\transnote{这里大点（big
-point）的概念来自 \TeX{}。在 \TeX{} 之外的印刷领域，$1/72$\,inch 就叫点
-（point, pt），而在 \TeX{} 中的点要小一些：$1\,\text{pt} = 1/72.27\,\text{inch}$。},
-$1\,\text{bp} = 1/72\,\text{inch}$）；|--| 意谓用直线段连结。在
-\prgname{Asymptote} 坐标中像 |(0,0)| 和 |(1000,100)| 这样的叫做\emph{复数}%
-（序对，|pair|）。
+|--| 连接符把两个点 |(0,0)| 和 |(100,100)| 用一条线段连接。
 
-\index{quit@\inlinecode=quit=}
-\index{自动补全}
+\section{在交互模式中绘图}
+% 3.2 Drawing in interactive mode
 \index{交互模式}
-这里你可以敲入更进一步的绘图命令，它们将被加到上面展示出的图中，也可敲 |quit|
-退出交互模式。你可以在交互模式中使用方向键来编辑以前的行（假定你已经打开了
-GNU \prgname{readline} 库的支持）。Tab 键将自动补全无歧义的词；否则，再次按下
-tab 将显示可能的选择。对交互模式的进一步的特殊命令在原手册第 9 章 Interactive
-Mode\transnote{本译本未包括此章。} 描述。
 
-\index{批处理模式}
-在批处理模式下，\prgname{Asymptote} 从一个文件中直接读入命令。要试试这个，把
+另一种途径是\emph{交互模式}，\prgname{Asymptote} 会一条条读入用户敲入的命令。
+要试试这个，可以点击 \prgname{Asymptote} 图标或输入命令 \verb=asy= 进入
+\prgname{Asymptote} 的交互模式。然后输入
 \lstinputlisting{diagonal.asy}
-敲进一个文件，比方说 \prgname{test.asy}。然后用 \prgname{MSDOS} 或
-\prgname{UNIX} 命令来执行此文件：
-\begin{lstlisting}[language=]
-asy -V test
-\end{lstlisting}
-\index{拖放}
-\prgname{Windows} 用户\transnote{原手册误作 \prgname{MSDOS}，或欲指
-\prgname{Windows} 命令行，但不准确。此更正。}可以将文件拖放到桌面的
-\prgname{asy} 图标或是把 \prgname{Asymptote} 作为扩展名为 \prgname{asy} 的文
-件的默认应用程序。
-
-\index{-V@\verb=-V=}
-\index{-o@\verb=-o=}
-\verb=-V= 选项打开一个 \prgname{PostScript} 查看窗口，从而你可以立即查看嵌入
-式 \prgname{PostScript} 输出。默认将输出到文件 \prgname{test.eps}；输出文件的
-前缀可以通过 \verb=-o= 命令行参数改变。
-
-可以用多于两个点画线并创建一个像这个正方形的环形路径：
-\lstinputlisting{square.asy}
-\begin{center}
-  \includegraphics{square}
-\end{center}
-
-\index{size@\inlinecode=size=}
-通常直接以 \prgname{PostScript} 坐标工作是不方便的。下面的例子绘制一个放缩到
-宽 $101$\,bp 和高 $101$\,bp 的单位正方形。其输出与前面的例子相同。
+\index{自动补全}
+\index{方向键}
+\index{erase@\inlinecode=erase=}
+\index{quit@\inlinecode=quit=}
+并按回车键，就得到上面的图形。这里你可以进一步输入 |draw| 命令，它们将被加到
+上面展示出的图中，输入 |erase| 清空画面，输入
 \begin{lstlisting}
-size(101,101);
-draw((0,0)--(1,0)--(1,1)--(0,1)--cycle);
+input test;
 \end{lstlisting}
+会运行文件 \prgname{test.asy} 中包含的所有命令，或是输入 |quit| 退出交互模式
+。你可以在交互模式中使用方向键来编辑以前的行。Tab 键将自动补全无歧义的词；否
+则，再次按下 tab 将显示可能的选择。交互模式进一步的特有命令在原手册第 10 章
+Interactive Mode\transnote{本译本未包括此章。} 描述。
 
-\index{unitsquare@\inlinecode=unitsquare=}
-为方便计，路径 |(0,0)--(1,0)--(1,1)--(0,1)--cycle| 可以用预定义的变量
-|unitsquare| 代换，或等价地，|box((0,0),(1,1))|。
+\section{图形尺寸}
+% 3.3 Figure size
+
+\index{大点}\index{bp@\inlinecode=bp=}
+\index{点}\index{pt@\inlinecode=pt=}
+\index{英寸}\index{inch@\inlinecode=inch=}
+在 \prgname{Asymptote} 中，像 |(0,0)| 和 |(100,100)| 这样的坐标称为%
+\emph{复数}\transnote{原文为 pair，即序对。译文一般通称为复数。}%
+\index{pair@\inlinecode=pair=}，以 \prgname{PostScript}“大点”\transnote{这
+里的单位大点（big point, \inlinecode=bp=），即 $1/72$\,inch，其概念来自
+\TeX{}。在 \TeX{} 之外的印刷领域，大点就叫点（point, \inlinecode=pt=），而在
+\TeX{} 中的点要小一些：$1\,\text{pt} = 1/72.27\,\text{inch}$。}（
+$1\,\text{bp} = 1/72\,\text{inch}$）为单位，且默认的线宽为 |0.5bp|。然而，
+直接以 \prgname{PostScript} 坐标通过是不方便的。下面的例子通过放缩直线
+|(0,0)--(1,1)|，将其匹配到一个宽 |100.5 bp| 高 |100.5 bp| 的矩形大小（多出的
+|0.5bp| 被直线宽占用），来生成与前面例子完全相同的输出：
+\begin{lstlisting}
+size(100.5,100.5);
+draw((0,0)--(1,1));
+\end{lstlisting}
+\begin{center}
+  \includegraphics{diagonal.pdf}
+\end{center}
 
 \index{pt@\inlinecode=pt=}
 \index{cm@\inlinecode=cm=}
@@ -224,26 +215,34 @@ draw((0,0)--(1,0)--(1,1)--(0,1)--cycle);
 \index{size@\inlinecode=size=}
 可以按 |pt|（$1$\,|pt|${}=1/72.27$\,|inch|）、|cm|、|mm| 或是 |inches|%
 \transnote{这里 \inlinecode{inch} 和 \inlinecode{inches} 意义相同，都是
-英尺。}来设定尺寸。如果给定尺寸（|size|）参数为 0，则该方向没有约束；总的放缩
-将由另一方向决定（见 \pageref{sec:framepicture} 页 \ref{sec:framepicture} 节
-|size| 函数说明）：
-\lstinputlisting{bigsquare.asy}
+英寸。}来设定尺寸。两个非零尺寸参数（或单个尺寸参数）限定两个方向的尺寸，并保
+持宽高比例。如果给定尺寸（|size|）参数为 0，则该方向没有约束；总的放缩将由另
+一方向决定（见 \pageref{sec:framepicture} 页 \ref{sec:framepicture} 节 |size|
+函数说明）：
+\lstinputlisting{bigdiagonal.asy}
 \begin{center}
-  \includegraphics{bigsquare.pdf}
+  \includegraphics{bigdiagonal.pdf}
 \end{center}
 
+\index{cycle@\inlinecode=cycle=}
+要把若干个点连接起来创建一条环形路径，使用 |cycle| 关键字：
+\lstinputlisting{square.asy}
+\begin{center}
+  \includegraphics{square.pdf}
+\end{center}
+\index{unitsquare@\inlinecode=unitsquare=}
+为方便计，路径 |(0,0)--(1,0)--(1,1)--(0,1)--cycle| 可以用预定义的变量
+|unitsquare| 代换，或等价地，|box((0,0),(1,1))|。
+
 \index{unitsize@\inlinecode=unitsize=}
-要使用户坐标表示正好 |1cm| 的倍数：
+要使用户坐标正好表示 |1cm| 的倍数：
 \begin{lstlisting}
 unitsize(1cm);
 draw(unitsquare);
 \end{lstlisting}
 
-还可以设定不同的 $x$ 与 $y$ 单位尺寸：
-\begin{lstlisting}
-unitsize(1cm,2cm);
-draw(unitsquare);
-\end{lstlisting}
+\section{标签}
+% 3.4 Labels
 
 \index{标签}
 \index{label@\inlinecode=label=}
@@ -265,127 +264,38 @@ draw(unitsquare);
 \index{left@\inlinecode=left=}
 \prgname{Asymptote} 使用标准的罗盘方向 |E=(1,0)|、|N=(0,1)|、|NE=unit(N+E)|
 以及 |ENE=unit(E+NE)| 等等，并在 \prgname{Asymptote} 基本模块 \prgname{plain}
-中定义有复数（|pair|) |up|、|down|、|right| 和 |left|。具有名为 |E| 的局部
-变量的用户可以通过在前面缀以定义它的模块名来访问罗盘方向 |E|：|plain.E|。
+中定义有复数（|pair|) |up|、|down|、|right| 和 |left|（具有名为 |E| 的局部
+变量的用户可以通过在前面缀以定义它的模块名来访问罗盘方向 |E|：|plain.E|）。
 
-这个例子绘制一条路径近似为 $1/4$ 圆：
+\section{路径}
+% 3.5 Paths
+
+这个例子绘制一条路径近似为 $1/4$ 圆，末端有箭头：
 \lstinputlisting{quartercircle.asy}
 \begin{center}
   \includegraphics{quartercircle.pdf}
 \end{center}
+这里花括号中的方向 |up| 和 |left| 分别指定了在点 |(1,0)| 和 |(0,1)| 进入和发
+出的方向。
 
 \index{--@\inlinecode=--=}
 \index{..@\inlinecode=..=}
 \index{cycle@\inlinecode=cycle=}
 \index{unitcircle@\inlinecode=unitcircle=}
 \index{环形路径}
-一般地，一条路径由一列复数（或其他路径）确定，它们以 |--| 相连来表示直线段或
-|..| 表示三次样条。设定终止结点 |cycle| 建立一条平滑连回初始结点的环形路径，
-如在这里对单位圆的近似（精确到 $0.06\%$ 以内）：
+一般地，一条路径由一列复数（或其他路径）用 |--| 相连来表示直线段，或用 |..|
+相连表示三次样条（参见 \pageref{chap:bezier} 页第 \ref{chap:bezier} 章）。设
+定最终的 |..cycle| 建立一条平滑连回初始结点的环形路径，如在这里对单位圆的近似
+（精确到 $0.06\%$ 以内）:
 \begin{lstlisting}
 path unitcircle=E..N..W..S..cycle;
 \end{lstlisting}
-
-\index{三次样条曲线}
-\index{结点}
-\index{入向切线}
-\index{出向切线}
-三次样条曲线的每个内结点可以指定一个前缀或后缀的方向 |{dir}|：复数 |dir| 的
-方向分别设定该曲线在此结点处，入向或出向切线的方向。外结点仅能在向内一边指定
-方向限定。
-
-\index{控制点}
-\index{Bézier 曲线}
-在带有后控制点 $c_0$ 的结点 $z_0$，与带有前控制点 $c_1$ 的结点 $z_1$ 之间的
-一段三次样条曲线，按 Bézier 曲线
-\begin{equation*}
-  (1-t)^3 z_0 + 3t(1-t)^2 c_0 + 3t^2 (1-t) c_1 + t^3 z_1, \qquad 0\leq t\leq 1
-\end{equation*}
-计算\transnote{本节关于三次 Bézier 样条曲线的讲解是比较难懂的，并且下图中关
-于曲线离散生成的知识事实上与绘图无关。关于曲线控制的更清晰详细的介绍可以参考
-\MP{} 的手册 \textit{\MP{}: A User's Manual} 第 4 章 Curves，以及关于 \MP{} 
-与 Con\TeX{}t 的文档 \textit{METAFUN} 的第 1 章。}。
-
-\index{Bézier 曲线!离散生成}
-如下图所示，由两个终点 $z_0$ 和 $z_1$ 以及两个控制点 $c_0$ 与 $c_1$ 构造的
-三阶中点（$m_5$），正是在由四元组 $(z_0, c_0, c_1, z_1)$ 建立的 Bézier 曲线
-上对应于 $t = 1/2$ 的点。这就允许人们通过将重新提取的三阶中点用作终点，并
-将二阶与一阶中点用作控制点，递归地构造想要的曲线：
-\begin{center}
-  \includegraphics{bezier2.pdf}
-\end{center}
-这里 $m_0$, $m_1$ 和 $m_2$ 是一阶中点，$m_3$ 与 $m_4$ 是二阶中点，而 $m_5$ 是
-三阶中点。于是曲线就通过对 $(z_0, m_0, m_3, m_5)$ 和 $(m_5, m_4, m_2, z_1)$
-递归应用此算法构造出来。
-
-事实上，类似的性质对于每小段中在 $[0,1]$ 上的任意分数 $t$ 位置的点都成立，而
-不仅仅是中点（$t=1/2$）。
-
-\index{Bézier 曲线!的几何性质}
-用这种方式构造的 Bézier 曲线具有如下性质：
-\begin{itemize}
-  \item 它完全包含在给定四个点的凸包内。
-  \item 其起点朝向从第一个端点到第一个控制点而其终点朝向从第二个控制点到
-    第二个端点。
-\end{itemize}
-
-\index{controls@\inlinecode=controls=}
-用户可以像这样设定两个结点间的显式控制点：
-\begin{lstlisting}
-draw((0,0)..controls (0,100) and (100,100)..(100,0));
-\end{lstlisting}
-
-然而，通常更为方便的是仅使用 |..| 运算符，它告诉 \prgname{Asymptote} 使用在
-Donald Knuth 的专著 \textit{The \MF{}book} 的第 14 章中描述的算法来选择自己的
-控制点。用户还可以通过设定方向、张力和卷曲值来定制路向（或路径）。
-
-\index{张力}
-张力越强，曲线越直，它也就越接近直线。可以将样条曲线的张力从其默认值 $1$ 变为
-任意大于等于 $0.75$ 的实数值（参考 John D.~Hobby, \textit{Discrete and
-Computational Geometry 1}, 1986）：
-\index{tension@\inlinecode=tension=}
-\index{tension atleast@\inlinecode=tension atleast=}
-\begin{lstlisting}
-draw((100,0)..tension 2 ..(100,100)..(0,100));
-draw((100,0)..tension 2 and 1 ..(100,100)..(0,100));
-draw((100,0)..tension atleast 1 ..(100,100)..(0,100));
-\end{lstlisting}
-
-\index{卷曲参数}
-卷曲参数设定在路径端点处的弯曲程度（$0$ 表示直的；默认值 $1$ 表示近似为圆）：
-\index{curl@\inlinecode=curl=}
-\begin{lstlisting}
-draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
-\end{lstlisting}
-
-\index{::@\inlinecode=::=}
-\MP{} 的 |...| 路径连接符，在可能时它要求一个限定在由端点和方向定义的三角形内
-的无拐点的曲线，它在 \prgname{Asymptote} 中实现为 |.. tension atleast 1 ..|
-的方便缩写 |::|（省略号 |...| 在 \prgname{Asymptote} 中用于标示可变长参数；见
-\pageref{subsec:restarguments} 页 \ref{subsec:restarguments} 节剩余参数）。
-例如，比较
-\lstinputlisting{dots.asy}
-\begin{center}
-  \includegraphics{dots.pdf}
-\end{center}
-与
-\lstinputlisting{colons.asy}
-\begin{center}
-  \includegraphics{colons.pdf}
-\end{center}
-
-\index{---@\inlinecode=---=}
-\index{&@\inlinecode=&=}
-|---| 连接符是 |..tension atleast infinity..| 的缩写\transnote{它的效果和通常
-的折线连接基本相同，只是在弯折处比完全的折线更为圆滑。}，而 |&| 连接符连结两条
-路径，并去除第一条路径的第最后一个结点（它一般应该与第二条路径的第一个结点
-重合）。
 
 \index{^^@\inlinecode=^^=}
 一条相连的 \prgname{Asymptote} 路径，与一条 \prgname{PostScript} 的
 \verb=subpath=（子路径）等价。|^^| 二元运算符，它要求画笔从左边路径的终点移动
 （而不绘制出来或影响终点的曲率）到右边路径的起点，可以用来将若干
-\prgname{Asymptote} 路径聚集到一个 |path[]| 数组中（等价于一条
+\prgname{Asymptote} 路径汇集到一个 |path[]| 数组中（等价于一条
 \prgname{PostScript} 路径）：
 \lstinputlisting{superpath.asy}
 \begin{center}
@@ -395,24 +305,38 @@ draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
 \index{evenodd@\inlinecode=evenodd=}
 \index{zerowinding@\inlinecode=zerowinding=}
 这里 \prgname{PostScript} 奇偶（|evenodd|）填充规制设定仅在两个圆\transnote{%
-原文误作单位圆。事实上这里其中一个圆已经放缩过。}之间界定的区域会被填充。在
-这个例子中，如果小心地变换路径的方向，可以使用默认的零卷绕数（|zerowinding|）
-填充规则得到同样的效果：
+原文作两个单位圆，但事实上这里其中一个圆已经放缩过。}之间界定的区域会被填充。
+在这个例子中，如果小心地变换路径的方向，可以使用默认的零卷绕数（|zerowinding|
+）填充规则得到同样的效果：
 \begin{lstlisting}
 filldraw(unitcircle^^reverse(g),yellow,black);
 \end{lstlisting}
+
 \index{^^@\inlinecode=^^=}
-|^^| 运算符被 \prgname{three.asy} 中的 |box(triple, triple)| 函数用于无回溯
-步骤地构造立方体 |unitbox| 的边：
+|^^| 运算符被模块 \prgname{three.asy} 中的 |box(triple, triple)| 函数用于无回
+溯步骤地构造立方体 |unitbox| 的边（见原手册 8.29 节 \prgname{three} 模块
+\transnote{本译本未包括此节。}）：
 \lstinputlisting{cube.asy}
 \begin{center}
   \includegraphics{cube.pdf}
 \end{center}
 
-见原手册 7.25 节 graph 模块\transnote{本译本未包括此节。}（或在线的
-\prgname{Asymptote} 画廊和在 \url{http://asymptote.sourceforge.net} 发布的
-外部链接）以得到更多例子，包括二维和三维的科学图形。额外的例子则由 Philippe
-Ivaldi 在 \url{http://piprim.tuxfamily.org/asymptote/} 发布。
+更多的例子见原手册 8.27 节 \prgname{graph} 模块\transnote{本译本未包括此节。}
+（或在线的 \prgname{Asymptote} 画廊和在
+\url{http://asymptote.sourceforge.net} 发布的外部链接），包括二维和三维的科学
+图形。额外的例子已由 Philippe Ivaldi 在
+\url{http://www.piprime.fr/asymptote} 发布。
+一份由用户编写的 \prgname{Asymptote} 绝佳教程又可得自\transnote{这个
+教程是比较简单的。在中文社区，由用户编写的
+\prgname{Asymptote} 教程包括较早莫图（lapackapi@ctex.org）的一个中途已中止的
+项目\href{http://gzmfig.googlepages.com/}{《\prgname{Asymptote} 作图指南》}；
+还有 cvgmt@ctex.org 与译者目前正在编写的两个教程，连同本文的最新译本则可在
+\href{http://code.google.com/p/asy4cn/}{asy4cn 项目}找到。中文译介的资料包括
+本手册和由 goodluck@ctex.org 翻译的
+\href{http://bbs.ctex.org/viewthread.php?tid=47344}
+{\prgname{Asymptote} 官方 FAQ}。这些中文资料一般都可以在
+\href{http://bbs.ctex.org}{\CTeX{} 论坛}找到作者并获得更新和支持。}：
+\url{http://www.artofproblemsolving.com/Wiki/index.php/Asymptote:_Basics}
 
 
 
@@ -505,7 +429,8 @@ void draw(picture pic=currentpicture, Label L="", path g,
 |HookHead|、|TeXHead| 之一），实数 |size|（\prgname{PostScript} 坐标的箭尖
 尺寸），实数 |angle|（箭尖角度，以度计），填充类型 |filltype|（|FillDraw|、
 |Fill|、|NoFill|、|UnFill|、|Draw| 之一）以及（除了 |MidArrow| 和 |Arrows|）
-表示箭头顶端沿路径放置相对位置的实数 |position|（一个 |arctime|）。用画笔 |p|
+一个表示箭头顶端沿路径放置位置的实数 |position|
+（在 |point(path p, real t)| 意义下）。用画笔 |p|
 绘制时，默认的箭尖尺寸为 |arrowsize(p)|。还有 |size| 与 |angle| 默认值略有
 修改的适合曲线的箭头版本\transnote{其中如果使用 \inlinecode{TeXHead}，尺寸过
 大，而效果不佳。}：|BeginArcArrow|、|EndArcArrow|（或等价地 |ArcArrow|）、
@@ -739,7 +664,8 @@ void tensorshade(picture pic=currentpicture, path g, bool stroke=false,
 还可以使用给定的画笔数组，光滑渐变填充连续一列路径之间的区域：
 \index{draw@\inlinecode=draw=}
 \begin{lstlisting}
-void draw(picture pic=currentpicture, path[] g, pen[] p);
+void draw(picture pic=currentpicture, pen fillrule=currentpen, path[] g,
+          pen[] p);
 \end{lstlisting}
 张量积和 Coons 渐变的例子在示例文件 \prgname{tensor.asy}、
 \prgname{Coons.asy}、\prgname{BezierSurface.asy} 和 \prgname{rainbow.asy}
@@ -853,9 +779,8 @@ void label(picture pic=currentpicture, Label L, path g, align align=NoAlign,
 \index{标签位置}
 \index{position@\inlinecode=position=}
 \index{Relative@\inlinecode=Relative=}
-标签默认将位于路径的中点。另一种标签位置（一个在 0 与 |length(g)| 之间的
-|arctime| 值，参看 \pageref{sec:pathsandguides} 页 \ref{sec:pathsandguides}
-节 |arctime| 函数）可以在构造标签时用一个实数值 |position| 设定。位置
+标签默认将位于路径的中点。另一种标签位置（在 |point(path p, real t)| 意义下）
+可以在构造标签时用一个实数值 |position| 设定。位置
 |Relative(real)| 确定一个相对于路径总弧长的位置\transnote{\label{foot:morelabel}
 因而除了上面的提及的四种 \inlinecode{Label} 构造函数外，还有两种接受
 \inlinecode{position} 类型参数的构造函数：
@@ -973,8 +898,110 @@ object draw(picture pic=currentpicture, Label L, envelope e, pair position,
 \lstinputlisting{CDlabel.asy}
 
 
+
+
+\chapter{Bézier 曲线}
+% 5 Bezier curves
+\label{chap:bezier}
+
+\index{三次样条曲线}
+\index{结点}
+\index{入向切线}
+\index{出向切线}
+三次样条曲线的每个内结点可以指定一个前缀或后缀的方向 |{dir}|：复数 |dir| 的
+方向分别设定该曲线在此结点处，入向或出向切线的方向。外结点仅能在向内一侧指定
+限定方向。
+
+\index{控制点}
+\index{Bézier 曲线}
+在带有后控制点 $c_0$ 的结点 $z_0$，与带有前控制点 $c_1$ 的结点 $z_1$ 之间的
+一段三次样条曲线，按 Bézier 曲线
+\begin{equation*}
+  (1-t)^3 z_0 + 3t(1-t)^2 c_0 + 3t^2 (1-t) c_1 + t^3 z_1, \qquad 0\leq t\leq 1
+\end{equation*}
+计算\transnote{本节关于三次 Bézier 样条曲线的讲解是比较难懂的，并且下图中关
+于曲线离散生成的知识事实上与绘图无关。关于曲线控制的更清晰详细的介绍可以参考
+\MP{} 的手册 \textit{\MP{}: A User's Manual} 第 4 章 Curves，以及关于 \MP{} 
+与 Con\TeX{}t 的文档 \textit{METAFUN} 的第 1 章。}。
+
+\index{Bézier 曲线!离散生成}
+如下图所示，由两个终点 $z_0$ 和 $z_1$ 以及两个控制点 $c_0$ 与 $c_1$ 构造的
+三阶中点（$m_5$），正是在由四元组 $(z_0, c_0, c_1, z_1)$ 建立的 Bézier 曲线
+上对应于 $t = 1/2$ 的点。这就允许人们通过将重新提取的三阶中点用作终点，并
+将二阶与一阶中点用作控制点，递归地构造想要的曲线：
+\begin{center}
+  \includegraphics{bezier2.pdf}
+\end{center}
+这里 $m_0$, $m_1$ 和 $m_2$ 是一阶中点，$m_3$ 与 $m_4$ 是二阶中点，而 $m_5$ 是
+三阶中点。于是曲线就通过对 $(z_0, m_0, m_3, m_5)$ 和 $(m_5, m_4, m_2, z_1)$
+递归应用此算法构造出来。
+
+事实上，类似的性质对于每小段中在 $[0,1]$ 上的任意分数 $t$ 位置的点都成立，而
+不仅仅是中点（$t=1/2$）。
+
+\index{Bézier 曲线!的几何性质}
+用这种方式构造的 Bézier 曲线具有如下性质：
+\begin{itemize}
+  \item 它完全包含在给定四个点的凸包内。
+  \item 其起点朝向从第一个端点到第一个控制点而其终点朝向从第二个控制点到
+    第二个端点。
+\end{itemize}
+
+\index{controls@\inlinecode=controls=}
+用户可以像这样设定两个结点间的显式控制点：
+\begin{lstlisting}
+draw((0,0)..controls (0,100) and (100,100)..(100,0));
+\end{lstlisting}
+
+然而，通常更为方便的是仅使用 |..| 运算符，它告诉 \prgname{Asymptote} 使用在
+Donald Knuth 的专著 \textit{The \MF{}book} 的第 14 章中描述的算法来选择自己的
+控制点。用户还可以通过设定方向、张力和卷曲值来定制路向（或路径）。
+
+\index{张力}
+张力越强，曲线越直，它也就越接近直线。可以将样条曲线的张力从其默认值 $1$ 变为
+任意大于等于 $0.75$ 的实数值（参考 John D.~Hobby, \textit{Discrete and
+Computational Geometry 1}, 1986）：
+\index{tension@\inlinecode=tension=}
+\index{tension atleast@\inlinecode=tension atleast=}
+\begin{lstlisting}
+draw((100,0)..tension 2 ..(100,100)..(0,100));
+draw((100,0)..tension 2 and 1 ..(100,100)..(0,100));
+draw((100,0)..tension atleast 1 ..(100,100)..(0,100));
+\end{lstlisting}
+
+\index{卷曲参数}
+卷曲参数设定在路径端点处的弯曲程度（$0$ 表示直的；默认值 $1$ 表示近似为圆）：
+\index{curl@\inlinecode=curl=}
+\begin{lstlisting}
+draw((100,0){curl 0}..(100,100)..{curl 0}(0,100));
+\end{lstlisting}
+
+\index{::@\inlinecode=::=}
+\MP{} 的 |...| 路径连接符，在可能时它要求一个限定在由端点和方向定义的三角形内
+的无拐点的曲线，它在 \prgname{Asymptote} 中实现为 |.. tension atleast 1 ..|
+的方便缩写 |::|（省略号 |...| 在 \prgname{Asymptote} 中用于标示可变长参数；见
+\pageref{subsec:restarguments} 页 \ref{subsec:restarguments} 节剩余参数）。
+例如，比较
+\lstinputlisting{dots.asy}
+\begin{center}
+  \includegraphics{dots.pdf}
+\end{center}
+与
+\lstinputlisting{colons.asy}
+\begin{center}
+  \includegraphics{colons.pdf}
+\end{center}
+
+\index{---@\inlinecode=---=}
+\index{&@\inlinecode=&=}
+|---| 连接符是 |..tension atleast infinity..| 的缩写\transnote{它的效果和通常
+的折线连接基本相同，只是在弯折处比完全的折线更为圆滑。}，而 |&| 连接符连结两条
+路径，并去除第一条路径的第最后一个结点（它一般应该与第二条路径的第一个结点
+重合）。
+
+
 \chapter{编程}
-% 5 Programming
+% 6 Programming
 \label{chap:programming}
 
 \index{控制结构}
@@ -1035,7 +1062,7 @@ for(int k : array) {
 
 
 \section{数据类型}
-% 5.1 Data types
+% 6.1 Data types
 
 \index{数据类型}
 \prgname{Asymptote} 支持下列数据类型（除用户自定义类型外）：
@@ -1529,7 +1556,7 @@ time(seconds()-24*60*60);
 
 
 \section{路径（path）与路向（guide）}
-% 5.2 Paths and guides
+% 6.2 Paths and guides
 \label{sec:pathsandguides}
 
 \begin{typelist}
@@ -1987,7 +2014,7 @@ e{down}..nullpath..{up}f;
 \end{typelist}
 
 \section{画笔}
-% 5.3 Pens
+% 6.3 Pens
 \label{sec:pens}
 
 \index{画笔}
@@ -2540,7 +2567,7 @@ picture brick(real Hx=5mm, real Hy=0, pen p=currentpen);
 
 
 \section{变换}
-% 5.4 Transforms
+% 6.4 Transforms
 \label{sec:transforms}
 
 \index{仿射变换}\index{变换}
@@ -2640,7 +2667,7 @@ shift(x,y) * (rotate(90)*scale(yx,-xy) + scale(xx,yy))^^J
 
 
 \section{帧（frame）与图（picture）}
-% 5.5 Frames and pictures
+% 6.5 Frames and pictures
 \label{sec:framepicture}
 
 \begin{typelist}
@@ -3027,7 +3054,7 @@ texpreamble("\usepackage["+options+"]{"+s+"}");
 
 
 \section{文件}
-% 5.6 Files
+% 6.6 Files
 
 \index{文件}
 \index{file@\inlinecode=file=}
@@ -3226,7 +3253,7 @@ int animate(string args="", string file="", string format="");
 
 
 \section{变量初始式}
-% 5.7 Variable initializers
+% 6.7 Variable initializers
 \label{sec:initializers}
 
 % 按：initializer 译为“初始式”，与《C++ 程序设计语言》中裘宗燕教授的译法一致。
@@ -3287,7 +3314,7 @@ int y;
 
 
 \section{结构体}
-% 5.8 Structures
+% 6.8 Structures
 \label{sec:structures}
 
 \index{结构体}
@@ -3538,11 +3565,11 @@ write(c.y);                     // `输出` 3;
 
 
 \section{运算符}
-% 5.9 Operators
+% 6.9 Operators
 
 \index{运算符!算术和逻辑运算符}
 \subsection{算术和逻辑运算符}
-% 5.9.1 Arithmetic & logical operators
+% 6.9.1 Arithmetic & logical operators
 \label{subsec:arthlogoper}
 
 \index{quotient@\inlinecode=quotient=}
@@ -3624,7 +3651,7 @@ bool positive=(pi >= 0) ? true : false;
 \index{运算符!前缀运算符}
 \index{运算符!自（赋值）运算符}
 \subsection{自（赋值）与前缀运算符}
-% 5.9.2 Self & prefix operators
+% 6.9.2 Self & prefix operators
 
 \index{+=@\inlinecode/+=/}
 \index{-=@\inlinecode/-=/}
@@ -3655,7 +3682,7 @@ int j=i=i+1;
 
 \index{运算符!用户自定义运算符}
 \subsection{用户自定义运算符}
-% 5.9.3 User-defined operators
+% 6.9.3 User-defined operators
 
 \index{operator@\inlinecode=operator=}
 \index{运算符!重载}
@@ -3726,7 +3753,7 @@ write("g=",g);
 
 
 \section{隐式放缩}
-% 5.10 Implicit scaling
+% 6.10 Implicit scaling
 \index{隐式放缩}
 
 如果一个数值字面量在特定类型的表达式前面，则它们会相乘：
@@ -3765,7 +3792,7 @@ write(10cm);
 
 
 \section{函数}
-% 5.11 Functions
+% 6.11 Functions
 \label{sec:functions}
 \index{函数}
 
@@ -3888,7 +3915,7 @@ g(true); // 写入 true, 然后写入 false.
 配置的时候已经安装）。
 
 \subsection{默认参数}
-% 5.11.1 Default arguments
+% 6.11.1 Default arguments
 
 \prgname{Asymptote} 支持比 C++ 更为灵活的默认函数参数机制：它们可以在函数原型
 的任何位置出现。由于特定的数据类型被隐式转换为更复杂的类型（见
@@ -3902,7 +3929,7 @@ real f(int a=1, real b=0) {return a+b;}
 默认参数的值在被调函数定义的环境中对给定 \prgname{Asymptote} 表达式求值决定。
 
 \subsection{具名参数}
-% 5.11.2 Named arguments
+% 6.11.2 Named arguments
 
 有时很难记住函数声明中参数出现的顺序。具名（带关键字的）参数使调用多参数函数
 更容易了。不像在 C 和 C++ 语言里那样，在函数参数中的赋值被解释为在函数标识中
@@ -3956,7 +3983,7 @@ int f(int x=3, int x()) {
 
 \subsection{剩余参数}
 \label{subsec:restarguments}
-% 5.11.3 Rest arguments
+% 6.11.3 Rest arguments
 
 剩余参数允许人们写使用可变个数参数的函数：
 \begin{lstlisting}
@@ -4038,7 +4065,7 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \end{lstlisting}
 
 \subsection{数学函数}
-% 5.11.4 Mathematical functions
+% 6.11.4 Mathematical functions
 \index{libm 过程@\prgname{libm} 过程}
 
 \index{sin@\inlinecode=sin=}
@@ -4063,8 +4090,8 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \index{expm1@\inlinecode=expm1=}
 \index{log1p@\inlinecode=log1p=}
 \index{identity@\inlinecode=identity=}
-\index{J@\inlinecode=J=}
-\index{Y@\inlinecode=Y=}
+\index{Jn@\inlinecode=Jn=}
+\index{Yn@\inlinecode=Yn=}
 \index{gamma@\inlinecode=gamma=}
 \index{erf@\inlinecode=erf=}
 \index{erfc@\inlinecode=erfc=}
@@ -4089,7 +4116,7 @@ i(3,4); // 歧义；第一个候选的第一个参数更好，
 \inlinecode{log1p} 为 $x \mapsto \log(1+x)$（对接近零的参数也精确）；
 恒等函数 \inlinecode{identity} 与产生单位方阵的函数同名。}。
 \prgname{Asymptote} 同样定义了 |n| 阶 Bessel 函数：
-第一类 |J(int n, real)| 以及第二类 |Y(int n, real)|，还有 $\Gamma$ 函数
+第一类 |Jn(int n, real)| 以及第二类 |Yn(int n, real)|，还有 $\Gamma$ 函数
 |gamma|，误差函数 |erf|，以及互补误差函数 |erfc|。还包括标准的
 |real(real, real)| 型函数 |atan2|, |hypot|, |fmod|, |remainder|\transnote{
 函数 \inlinecode{atan2(real y, real x)} 计算 \inlinecode{y/x} 的反正切；函数
@@ -4171,7 +4198,7 @@ Newton-Raphson bisection）在区间 $[$|x1|, |x2|$]$（在上面 |f| 的端点�
 
 
 \section{数组}
-% 5.12 Arrays
+% 6.12 Arrays
 \label{sec:arrays}
 \index{数组}
 
@@ -4445,8 +4472,8 @@ T max(T[][][] a)
 \index{fft@\inlinecode=fft=}
 \item |pair[] fft(pair[] a, int sign=1)| \go
   返回 |a| 的快速 Fourier 变换（如果可选的 \prgname{FFTW} 包安装了的话），
-  使用给定的符号 |sign|\transnote{当 \inlinecode{sign} 为 $-1$ 时给出离散
-  Fourier 变换，当 \inlinecode{sign} 为 $+1$ 时给出离散 Fourier 逆变换。}。
+  使用给定的符号 |sign|\transnote{当 \inlinecode{sign} 为 $+1$ 时给出离散
+  Fourier 变换，当 \inlinecode{sign} 为 $-1$ 时给出离散 Fourier 逆变换。}。
   这是一个简单的例子：
 \begin{lstlisting}
 int n=4;
@@ -4607,7 +4634,7 @@ real[][][] C=read3(fin);
 
 
 \subsection{切割}
-% 5.12.1 Slices
+% n.12.1 Slices
 
 \index{切割（slice）}
 \index{数组!切割（slice）}
@@ -4681,7 +4708,7 @@ toppings[0:3]=new string[] {"tomato"};
 
 
 \section{类型转换}
-% 5.13 Casts
+% 6.13 Casts
 \label{sec:casts}
 \index{类型转换}
 
@@ -4750,7 +4777,7 @@ real operator cast(int x)=convert;
 
 
 \section{导入}
-% 5.14 Import
+% 6.14 Import
 \index{导入}
 
 尽管 \prgname{Asymptote} 默认提供了许多特征，但一些应用仍需要外部
@@ -4910,7 +4937,7 @@ void list(string s, bool imports=false);
 
 
 \section{静态（static）}
-% 5.15 Static
+% 6.15 Static
 \label{sec:static}
 \index{静态（static）}
 \index{static@\inlinecode=static=}

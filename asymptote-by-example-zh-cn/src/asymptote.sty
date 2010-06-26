@@ -1,20 +1,23 @@
 %%% Asymptote style file for LaTeX
 %%% Contributed by Tom Prince 14 May 2003
 %%% Modified by John Bowman
-%%% Adapted from comment.sty (Under GPL v2)
+%%% Adapted from comment.sty (Under GPL v2+)
 
-\ProvidesPackage{asymptote}[2009/06/18 v1.08 Asymptote style file for LaTeX]
+\ProvidesPackage{asymptote}[2009/08/15 v1.11 Asymptote style file for LaTeX]
 \RequirePackage{keyval}
 \RequirePackage{ifthen}
 \newif\ifASYinline
 \DeclareOption{inline}{\ASYinlinetrue}
 \ProcessOptions*
 
+\def\unquoteJobname#1"#2"#3\relax{\def\rawJobname{#1}%
+  \ifx\rawJobname\empty\def\rawJobname{#2}\fi}
+\expandafter\unquoteJobname\jobname""\relax
 % Work around jobname bug in MiKTeX 2.5 and 2.6:
 % Turn stars in file names (resulting from spaces, etc.) into minus signs
 \def\fixstar#1*#2\relax{\def\argtwo{#2}\ifx\argtwo\empty\gdef\Jobname{#1}\else
 \fixstar#1-#2\relax\fi}
-\expandafter\fixstar\jobname*\relax
+\expandafter\fixstar\rawJobname*\relax
 
 \RequirePackage{color,graphicx}
 
@@ -48,12 +51,12 @@
 \fi
 \fi
 \ifx\XeTeXversion\undefined
-\else
-\ASYPDFtrue
-\immediate\write\AsyStream{settings.texcommand="xelatex";}%
-\fi
 \ifASYPDF
 \immediate\write\AsyStream{settings.tex="pdflatex";}%
+\fi
+\else
+\immediate\write\AsyStream{settings.tex="xelatex";}%
+\ASYPDFtrue
 \fi
 
 \ifASYinline
@@ -119,13 +122,13 @@
       \immediate\write\AsyStream{size(\ASYwidth,\ASYheight);}%
     \fi
   \fi
-  \ASYtexfalse
+  \ASYtexfalse%
   \ifASYattach
-    \def\ASYdefaultviewportwidth{0}
+    \def\ASYdefaultviewportwidth{0}%
   \else
-    \def\ASYdefaultviewportwidth{\the\linewidth}
+    \def\ASYdefaultviewportwidth{\the\linewidth}%
     \ifASYinline
-      \ASYtextrue
+      \ASYtextrue%
     \fi
   \fi
   \ifx\ASYviewportwidth\empty
@@ -141,10 +144,10 @@
         \AsyStream{viewportsize=(\ASYviewportwidth,\ASYviewportheight);}%
     \fi
   \fi
-  \gdef\ASYwidth{}
-  \gdef\ASYheight{}
-  \gdef\ASYviewportwidth{\ASYdefaultviewportwidth}
-  \gdef\ASYviewportheight{}
+  \gdef\ASYwidth{}%
+  \gdef\ASYheight{}%
+  \gdef\ASYviewportwidth{\ASYdefaultviewportwidth}%
+  \gdef\ASYviewportheight{}%
   \immediate\write\AsyStream{\@charrb);}%
   \immediate\write\AsyStream{// End of Asymptote Figure \the\c@asy}%
   \ifASYtex

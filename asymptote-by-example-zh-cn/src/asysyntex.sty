@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{asysyntex}[2009/11/25 v1.90]
+\ProvidesPackage{asysyntex}[2009/11/27 v1.90-1]
 
 \RequirePackage{xcolor}
 \colorlet{comment}{green!50!black}
@@ -297,12 +297,14 @@
   stepnumber=1,
   numbersep=5pt}
 %
-\lstnewenvironment{asycode}
-  {\lstset{language=Asymptote}}
+\lstnewenvironment{asycode}[1][]
+  {\lstset{language=Asymptote,#1}}
   {}
 %
 \def\oldvert{|} % 保存字符 | 的旧定义（其 catcode 在此定义读入时已确定）
 \lstMakeShortInline[language=Asymptote]\|
+
+\def\asyinline{\expandafter\lstinline[language=Asymptote]}
 
 \endinput
 

@@ -20,6 +20,7 @@
  * 2009/10/19 修正放缩时的 BUG	v1.2
  * 2009/11/5 重写整个数据结构 v1.3，简化了 node，不再支持 nodepath 类型
  * 2009/11/20 增加 draw_t 的复合函数，增加球形渐变和阴影效果 v1.4
+ * 2009/11/25 按 plain_boxes 中的方式改写了默认锚点的设置算法
  *************************************************************************/
 
 typedef void draw_t(picture pic, path[] g);
@@ -108,9 +109,21 @@ struct node {
 	return this.O + inanchor;
     }
 
-    void updateanchors(pair anch)
+    // 按 stuff 中的坐标，返回相对边框及其中心矫正的某方向锚点
+    // 这是对矩形合理的默认锚点
+    pair _rectified(pair v)
     {
-        if (anch == (0,0)) _anchor = (0,0);
+        path g = outline[0];
+        pair M = max(g), m = min(g);
+        real len = length(M-m);
+        pair c = (M+m) / 2;
+        pair dir = m + realmult(rectify(v),M-m);
+        return intersectionpoint(g, c -- 2*dir-c);
+    }
+
+    void setanchor(pair anch)
+    {
+        if (anch == (0,0)) _anchor = _O;
         else if (anch == plain.E) _anchor = _E;
         else if (anch == plain.NE) _anchor = _NE;
         else if (anch == plain.N) _anchor = _N;
@@ -140,6 +153,17 @@ struct node {
         label(this.stuff, text);
         this.outline = shape(min(this.stuff), max(this.stuff), innersep);
         drawer(this.stuff, this.outline);
+        // 默认的锚点位置
+        _O = (0,0);
+        _E = _rectified(plain.E);
+        _NE = _rectified(plain.NE);
+        _N = _rectified(plain.N);
+        _NW = _rectified(plain.NW);
+        _W = _rectified(plain.W);
+        _SW = _rectified(plain.SW);
+        _S = _rectified(plain.S);
+        _SE = _rectified(plain.SE);
+        setanchor(anchor);
     }
 }
 
@@ -154,6 +178,7 @@ void draw(picture pic=currentpicture ... node[] nodearr)
     draw(pic, nodearr);
 }
 
+
 node Circle(Label text, pair at, pair anchor=(0,0), pen textpen=currentpen,
             real innersep=fontsize(textpen)/3,
             real xinnersep=innersep, real yinnersep=innersep,
@@ -166,16 +191,6 @@ node Circle(Label text, pair at, pair anchor=(0,0), pen textpen=currentpen,
         return circle(c, r);
     }
     node nd = node(Label(text,textpen), at, anchor, (xinnersep,yinnersep), circleshape, drawfunc);
-    nd._O = (0,0);
-    nd._E = point(nd.outline[0],0);
-    nd._NE = point(nd.outline[0],0.5);
-    nd._N = point(nd.outline[0],1);
-    nd._NW = point(nd.outline[0],1.5);
-    nd._W = point(nd.outline[0],2);
-    nd._SW = point(nd.outline[0],2.5);
-    nd._S = point(nd.outline[0],3);
-    nd._SE = point(nd.outline[0],3.5);
-    nd.updateanchors(anchor);
     return nd;
 }
 
@@ -189,16 +204,6 @@ node Rectangle(Label text, pair at, pair anchor=(0,0), pen textpen=currentpen,
         return box(min-innersep, max+innersep);
     }
     node nd = node(Label(text,textpen), at, anchor, (xinnersep,yinnersep), rectangleshape, drawfunc);
-    nd._O = (0,0);
-    nd._E = point(nd.outline[0],1.5);
-    nd._NE = point(nd.outline[0],2);
-    nd._N = point(nd.outline[0],2.5);
-    nd._NW = point(nd.outline[0],3);
-    nd._W = point(nd.outline[0],3.5);
-    nd._SW = point(nd.outline[0],0);
-    nd._S = point(nd.outline[0],0.5);
-    nd._SE = point(nd.outline[0],1);
-    nd.updateanchors(anchor);
     return nd;
 }
 

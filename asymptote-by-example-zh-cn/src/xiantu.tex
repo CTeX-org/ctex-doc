@@ -43,18 +43,18 @@
 draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
 \end{asycode}
 赵博士装的 GSView 立即弹了出来，里面已经画出一条倾斜的直线。再输入
-|quit|\index{quit@\lstinline=quit=}，程序退出，并留下了一个叫做
+|quit|\index{quit@\asyinline=quit=}，程序退出，并留下了一个叫做
 \verb=out.eps= 的图形文件，
 小菜一碟。
 
-这里稍稍解释一下上面的一句代码。|draw|\index{draw@\lstinline=draw=} 是画线的
+这里稍稍解释一下上面的一句代码。|draw|\index{draw@\asyinline=draw=} 是画线的
 命令，更准确地说，是 \Asy{} 中的函数\index{函数}：它带有一个参数\index{参数}
 |(0,0) -- (3cm,4cm)|，参数外面是圆括号，整个命令以分号结束。里面的
 |(0,0) -- (3cm,4cm)| 是由两个坐标\index{坐标}连接而成的直线，坐标是在直角坐标
 系下的，可以带单位 |mm|, |cm|, |pt|, |bp|, |inch|, |inches|，%
-\index{mm@\lstinline=mm=}\index{cm@\lstinline=cm=}\index{pt@\lstinline=pt=}%
-\index{bp@\lstinline=bp=}\index{inch@\lstinline=inch=}%
-\index{inches@\lstinline=inches=}%
+\index{mm@\asyinline=mm=}\index{cm@\asyinline=cm=}\index{pt@\asyinline=pt=}%
+\index{bp@\asyinline=bp=}\index{inch@\asyinline=inch=}%
+\index{inches@\asyinline=inches=}%
 其意义与在\TeX{} 中的一样，如果不带单位，则默认为 |bp|。行末以 |//| 开头的是
 注释，另有一种在 |/* */| 之间的注释\index{注释}，与 C 语言相同。
 
@@ -75,7 +75,7 @@ draw((0,0) -- (3cm,4cm));   // `\color{comment}一条直线`
 度也都是整数值。那么，首先就是在 \Asy{} 中来画直线。
 
 \index{画线}
-正如前面试验的时候做的那样，一条直线就是用 |--|\index{--@\lstinline=--=} 把坐
+正如前面试验的时候做的那样，一条直线就是用 |--|\index{--@\asyinline=--=} 把坐
 标连起来，再使用 |draw| 命令，直线就画出来了。事实上，可以用 |--| 把坐标点连
 成折线：
 \begin{asycode}
@@ -89,7 +89,7 @@ draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) );
 \end{figure}
 
 像这样把坐标用 |--| 连结起来的，就成为一条路径\index{路径}。把直线而稍做修改
-，在后面连上一个特殊的坐标 |cycle|\index{cycle@\lstinline=cycle=}，就可以得到
+，在后面连上一个特殊的坐标 |cycle|\index{cycle@\asyinline=cycle=}，就可以得到
 一条首尾相接的闭路径\index{路径!闭路径}。如：
 \begin{asycode}
 draw( (0,0) -- (1cm,0) -- (2cm,0.5cm) -- (1cm,1cm) -- (0,1cm) -- cycle );
@@ -128,7 +128,7 @@ draw( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red+0.5mm );
 
 \index{填充}
 不过现在还需要的是实心的三角形，因此就需要一个新的绘图命令
-|fill|\index{fill@\lstinline=fill=}，即填充。于是，红色三角形就成为
+|fill|\index{fill@\asyinline=fill=}，即填充。于是，红色三角形就成为
 \begin{asycode}
 fill( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red );
 \end{asycode}
@@ -141,7 +141,7 @@ fill( (0,0) -- (4cm,0) -- (0,3cm) -- cycle, red );
 
 但这样一来三角形的颜色就太重了，而且边界也不清楚。因此似乎应该先用浅红色填充
 一遍，然后再用深红色勾边。好在可以使用一个命令
-|filldraw|\index{filldraw@\lstinline=filldraw=} 同时完成这两件事情，这样就不
+|filldraw|\index{filldraw@\asyinline=filldraw=} 同时完成这两件事情，这样就不
 需要把一条路径写两遍了。即有：
 \begin{asycode}
 filldraw((0,0) -- (4cm,0) -- (0,3cm) -- cycle,
@@ -185,8 +185,8 @@ filldraw( (0,3cm) -- (3cm,3cm) -- (3cm,7cm) -- cycle,
 \end{figure}
 
 还应该画出弦图的中间的“黄实”，用黄色填充。这部分是一个正方形，可以使用现成
-的 \lstinline[mathescape]|box($\text{角点}$, $\text{角点}$)|
-\index{box@\lstinline=box=} 命令来产生矩形的路径，因而填充正中间的正方形就可
+的 \lstinline[language=Asymptote,mathescape]|box($\text{角点}$, $\text{角点}$)|
+\index{box@\asyinline=box=} 命令来产生矩形的路径，因而填充正中间的正方形就可
 以用：
 \begin{asycode}
 fill( box((3cm,3cm), (4cm,4cm)), yellow );
@@ -194,13 +194,13 @@ fill( box((3cm,3cm), (4cm,4cm)), yellow );
 这个填充的命令应该放在画线之前（以免覆盖描的红线）。
 
 回顾前面的代码，赵博士觉得连续地写四个 |filldraw| 命令太重复了。他读了 \Asy{}
-的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^^@\lstinline=^^=} 
+的文档 \cite{asyman}，才知道多条路径可以用符号 |^^|\index{^^@\asyinline=^^=} 
 连起来，一起使用，于是立即着手改进原来的代码。
 
 而且，由于还打算在图的后面画出参考网格，图形的颜色还应该设置为半透明\index{透
 明}的。好在这并不难实现，只要稍稍改动一下填充的画笔，使用
-\lstinline[mathescape]|opacity($\text{数值}$)|
-\index{opacity@\lstinline=opacity=}
+\lstinline[language=Asymptote,mathescape]|opacity($\text{数值}$)|
+\index{opacity@\asyinline=opacity=}
 来设定有一定不透明度（取值为 $0\sim1$）的画笔，并把它加在原来的画笔上
 \footnote{\Asy{} 的 EPS 格式输出看不到透明效果，必须输出为 PDF 格式或从 PDF 
 格式转化为其他格式才能有透明效果。}。于是赵博士最后写出了这样的代码：
@@ -275,17 +275,17 @@ $16$ 条直线。这样的代码不仅不好写，而且容易出错，修改一
 于是赵博士就去论坛上咨询，一些人劝他去用几行循环语句，甚至有人已经把完整的函
 数做好了。但有一个结果特别引人注目，有人指出，在 \prgname{math} 模块中已经定
 义好了一个 |grid| 函数，只要拿来用就可以了。赵博士立即精神大振，来看这个
-|grid| 函数：\index{grid@\lstinline=grid=}
+|grid| 函数：\index{grid@\asyinline=grid=}
 \begin{asycode}
 picture grid(int Nx, int Ny, pen p=currentpen)
 \end{asycode}
 这个是在 \prgname{math} 模块中 |grid| 函数的原型。\index{原型}它说明 |grid| 
 函数有 |Nx|, |Ny| 两个整数类型的必需参数，一个可选的画笔，并且返回一个
-|picture|（图）\index{picture@\lstinline=picture=}类型的对象。
+|picture|（图）\index{picture@\asyinline=picture=}类型的对象。
 
 \index{导入}\index{模块!导入}
 要使用模块的功能，需要在绘图之前导入这个模块，这只要使用
-\index{import@\lstinline=import=}
+\index{import@\asyinline=import=}
 \begin{asycode}
 import `模块名`;
 \end{asycode}
@@ -297,8 +297,8 @@ import math;
 
 |grid| 函数的行为看起来很奇怪，调用它会在一个单独的图上画出一个
 |Nx|${}\times{}$|Ny| 的网格，网格的左下角在原点，间距为 $1$。要使用 |grid| 函
-数画的图形，要使用 \lstinline[mathescape]|add($\text{图}$)|
-\index{add@\lstinline=add=} 命令，把这个图形加在当前的图上：
+数画的图形，要使用 \lstinline[language=Asymptote,mathescape]|add($\text{图}$)|
+\index{add@\asyinline=add=} 命令，把这个图形加在当前的图上：
 \begin{asycode}
 import math;
 add(grid(10,10,gray));
@@ -317,13 +317,13 @@ add(grid(10,10,gray));
 \index{变换!错切}\index{变换!反射}
 \Asy{} 提供了平移、旋转、放缩、倾斜、反射等各种的仿射变换，来对坐标、路径、图
 形等元素进行变换（严格的函数原型参考 \cite{asyman}）：
-\index{shift@\lstinline=shift=}
-\index{scale@\lstinline=scale=}
-\index{xscale@\lstinline=xscale=}
-\index{yscale@\lstinline=yscale=}
-\index{rotate@\lstinline=rotate=}
-\index{slant@\lstinline=slant=}
-\index{reflect@\lstinline=reflect=}
+\index{shift@\asyinline=shift=}
+\index{scale@\asyinline=scale=}
+\index{xscale@\asyinline=xscale=}
+\index{yscale@\asyinline=yscale=}
+\index{rotate@\asyinline=rotate=}
+\index{slant@\asyinline=slant=}
+\index{reflect@\asyinline=reflect=}
 \begin{asycode}
 shift(`坐标`)           // `\color{comment}按坐标平移`
 shift(x, y)           // `\color{comment}按` (x, y) `\color{comment}平移`
@@ -374,11 +374,11 @@ add( scale(5mm) * grid(4, 4, gray) );
 的位置很明显，但旋转仍然需要一些计算。当然这难不倒精研天文算学多年的赵博士，
 这里弦实（$5\times5$ 的正方形）可以看作是顺时针旋转得到的，从朱实的三角形容易
 看出旋转的角度正好是 $\arctan(3/4)$。\Asy{} 中也可以方便地调用返回角度的反三
-角函数 |aTan|\index{aTan@\lstinline=aTan=} 来计算这个角度\footnote{也可以使用
+角函数 |aTan|\index{aTan@\asyinline=aTan=} 来计算这个角度\footnote{也可以使用
 atan2 函数，但注意返回值是弧度。}。更详细的数学函数列表，参看 \cite{asyman}。
 （注意：C/C++ 中 |3/4| 表示求带余除法 $3\div 4$ 的商，得到 $0$；但在 \Asy{} 中
 |3/4| 的结果是实数 $0.75$，整数的带余除法则用 |quotient(a,b)|
-\index{quotient@\lstinline=quotient=} 函数。）
+\index{quotient@\asyinline=quotient=} 函数。）
 
 于是，赵博士弦图中的网格，就可以这样方便地画出来了
 （\autoref{fig:xiantugrid}）：
@@ -435,13 +435,13 @@ usepackage("xeCJK");
 texpreamble("\setCJKmainfont{SimSun}");
 \end{asycode}
 这里第一行是设置编译时所用的 \TeX{} 引擎。后面
-|usepackage|\index{usepackage@\lstinline=usepackage=} 命令就是 \LaTeX{} 中的
+|usepackage|\index{usepackage@\asyinline=usepackage=} 命令就是 \LaTeX{} 中的
 \verb|\usepackage| 命令的一个包装形式，里面的字符串参数就是宏包名；而
-|texpreamble|\index{texpreamble@\lstinline=texpreamble=} 命令则把接收的参数直
+|texpreamble|\index{texpreamble@\asyinline=texpreamble=} 命令则把接收的参数直
 接放进 \LaTeX{} 的导言区。
 
 进行上述设置后，就可以正确使用中文标签了。标注的命令很简单，就是
-|label|\index{label@\lstinline=label=}，参数正是标签文字和标签的位置。例如：
+|label|\index{label@\asyinline=label=}，参数正是标签文字和标签的位置。例如：
 \begin{asycode}
 draw( (0,0) -- (1cm,1cm) -- (2cm,0) );
 label( "`\color{string}中间`", (1cm,0cm) );
@@ -500,7 +500,7 @@ label("弦实", (5cm,4cm));
 与前面在一个点处标注不同，这里实际是给一条路径（直线）标注标签。因此，想要得
 到的是距离这条路径的中点一定方向距离加一个标签，而不是简单地取路径上的一点作
 为标签的位置。好在 \Asy{} 确实也提供了这样的功能，仍然使用 |label| 命令，基本
-语法是：\index{label@\lstinline=label=}
+语法是：\index{label@\asyinline=label=}
 \begin{asycode}
 label(`标签`, `路径`)
 \end{asycode}
@@ -509,7 +509,7 @@ label(`标签`, `路径`)
 draw( (0,0) -- (4cm,2cm), linewidth(0.5mm) );
 label("`\color{string}粗线条`", (0,0) -- (4cm,2cm));
 \end{asycode}
-（其中的 |linewidth|\index{linewidth@\lstinline=linewidth=} 函数用来表示具有
+（其中的 |linewidth|\index{linewidth@\asyinline=linewidth=} 函数用来表示具有
 一定线宽\index{线宽}的画笔）这段代码将得到
 \begin{figure}[H]
 \centering
@@ -547,13 +547,13 @@ label( "弦五", (4cm,0) -- (0,3cm) );
 
 不过，为了得到正确的标签位置，不得不把原来逆时针画的线用顺时针方向重写，这多
 少让赵博士有些恼火：为什么不能在路径的左边标注标签呢？确实可以，很简单，只要
-给 |label| 命令再加上 |align=LeftSide|\index{align@\lstinline=align=}
-\index{LeftSide@\lstinline=LeftSide=} 选项（或者简单地只用 |LeftSide|）就指定
+给 |label| 命令再加上 |align=LeftSide|\index{align@\asyinline=align=}
+\index{LeftSide@\asyinline=LeftSide=} 选项（或者简单地只用 |LeftSide|）就指定
 了在左边放置对齐。同理，还有向右对齐的
-|RightSide|\index{RightSide@\lstinline=RightSide=}，在中间对齐的
-|Center|\index{Center@\lstinline=Center=} 以及一般意义的相对方向
-\lstinline[mathescape]|Relative($\text{方向}$)|。%
-\index{Relative@\lstinline=Relative=}%
+|RightSide|\index{RightSide@\asyinline=RightSide=}，在中间对齐的
+|Center|\index{Center@\asyinline=Center=} 以及一般意义的相对方向
+\lstinline[language=Asymptote,mathescape]|Relative($\text{方向}$)|。%
+\index{Relative@\asyinline=Relative=}%
 例如：
 \begin{asycode}
 draw( (0,0) -- (4cm,2cm), blue, Arrow );
@@ -582,29 +582,29 @@ label( "W", (6cm,0)--(8cm,2cm), Relative(W) );
 label( "N", (6cm,0)--(8cm,2cm), Relative(N) );
 \end{asy}
 \end{figure}
-|E|, |S|, |W|, |N|\index{E@\lstinline=E=}\index{S@\lstinline=S=}
-\index{W@\lstinline=W=}\index{N@\lstinline=N=} 分别是东南西北四个罗盘方向，%
+|E|, |S|, |W|, |N|\index{E@\asyinline=E=}\index{S@\asyinline=S=}
+\index{W@\asyinline=W=}\index{N@\asyinline=N=} 分别是东南西北四个罗盘方向，%
 \index{罗盘方向}用在 |Relative| 函数里面就表示相对于路径方向的四个方向。为明
-确，这里用 |Arrow|\index{Arrow@\lstinline=Arrow=} 选项在画线时加了箭头。
+确，这里用 |Arrow|\index{Arrow@\asyinline=Arrow=} 选项在画线时加了箭头。
 \index{箭头}
 
 不过，这样的标签还是不能令赵博士满意。赵博士给三角形加标签，还希望标签随着三
 角形的边作旋转，使标签沿着边排列。为此，赵博士不得不又仔细查看了
 \cite{asyman}，在讲标注文字一节（label）他找到了一个构造标签的更高级的办法，
-即不仅仅是使用一个简单的字符串，而是使用\index{Label@\lstinline=Label=}
+即不仅仅是使用一个简单的字符串，而是使用\index{Label@\asyinline=Label=}
 \begin{asycode}
 Label(`标签`)
 \end{asycode}
 函数进行构造。里面的“标签”参数仍然可以是原来的字符串，或是通过这个函数构造
 出来的高级的标签。这个函数可以带许多可选的其他参数，如
-\lstinline[mathescape]|position=$\text{位置}$|
-\index{position@\lstinline=position=} 的参数就可以指定标签放在路径中点之外的
-其他地方；而 \lstinline[mathescape]|embed=$\text{嵌入变换方式}$|
-\index{embed@\lstinline=embed=} 的参数则可以解决标签自动旋转的问题。
+\lstinline[language=Asymptote,mathescape]|position=$\text{位置}$|
+\index{position@\asyinline=position=} 的参数就可以指定标签放在路径中点之外的
+其他地方；而 \lstinline[language=Asymptote,mathescape]|embed=$\text{嵌入变换方式}$|
+\index{embed@\asyinline=embed=} 的参数则可以解决标签自动旋转的问题。
 
 这里暂且放下 |position| 参数。只来看 |embed| 参数的一个特例：%
-\lstinline[mathescape]|Rotate($\text{方向}$)|%
-\index{Rotate@\lstinline=Rotate=}。这个参数会让标签向着给定的方向旋转，如：
+\lstinline[language=Asymptote,mathescape]|Rotate($\text{方向}$)|%
+\index{Rotate@\asyinline=Rotate=}。这个参数会让标签向着给定的方向旋转，如：
 \begin{asycode}
 draw( (0,0)--(4cm,2cm), blue, Arrow );
 label( Label("Rotate", Rotate((4,2))),
@@ -676,6 +676,7 @@ label( Label("弦五",Rotate((4,-3))), (0,3cm)--(4cm,0), LeftSide );
 
 
 \section{习题和评注}
+\label{sec:xiantu:ex}
 
 \begin{enumerate}
   \item 查阅参考手册 \cite{asyman}，看看都有哪些颜色可用。看看你的系统中安装
@@ -691,8 +692,8 @@ guide zhushi = (4cm,0) -- (4cm,3cm) -- (0,3cm) -- cycle;
 \end{asycode}
     可以把一个三角形的路径保存在变量 |zhushi| 中，以后就可以使用
     |draw(zhushi)| 这样的命令对此路径进行操作了\footnote{这里定义了一个
-    \lstinline=guide= 类型的变量，我们译之为“路向”，以区别于“路径”
-    （\lstinline=path=）。两个概念在 \Asy{} 中同源而有别，但本章中二者可以互
+    \asyinline=guide= 类型的变量，我们译之为“路向”，以区别于“路径”
+    （\asyinline=path=）。两个概念在 \Asy{} 中同源而有别，但本章中二者可以互
     换并无区别，因此为方便我们也不区别而通称为路径。有关 \Asy{} 语言中路径与
     路向的区别，以及关于变量定义和使用的详细内容，请参考后续的章节及手册
     \cite{asyman}。}。

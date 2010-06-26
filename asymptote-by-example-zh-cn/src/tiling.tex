@@ -85,7 +85,7 @@ for (int i = 0 ; i < 2; ++i)
 下面的问题就是，怎么画一个羊头呢？更具体地说，怎么画出羊头的曲线呢？
 
 那么，首先要了解如何在 \Asy{} 中描述曲线。\ref{sec:linedraw} 节中提到 |--| 连
-结一组坐标就成为直（折）线段；类似地，用 |..|\index{..@\lstinline=..=} 连结坐
+结一组坐标就成为直（折）线段；类似地，用 |..|\index{..@\asyinline=..=} 连结坐
 标就得到经过这些坐标点的曲线：
 \begin{asycode}
 size(5cm,0);
@@ -112,19 +112,19 @@ dot("6", z6);
 \end{figure}
 
 在这里，我们定义了一些变量\index{变量}以使代码清晰（这里略去了画点和标签的代
-码）。|pair|\index{pair@\lstinline=pair=} 类型的变量 |z1|, \ldots, |z6| 保存
-六个坐标\index{坐标}，|guide|\index{guide@\lstinline=guide=} 类型的变量 |p| 
+码）。|pair|\index{pair@\asyinline=pair=} 类型的变量 |z1|, \ldots, |z6| 保存
+六个坐标\index{坐标}，|guide|\index{guide@\asyinline=guide=} 类型的变量 |p| 
 保存一条曲线的路向\index{路向}。因而上面 |size| 之后的绘图代码就相当于
 \begin{asycode}
 draw( (0,0) .. (0,1) .. (1,1) .. (2,0), gray+2mm );
 \end{asycode}
-其中前面的一句 |size(5cm,0)|\index{size@\lstinline=size=} 表示代码中的坐标只
+其中前面的一句 |size(5cm,0)|\index{size@\asyinline=size=} 表示代码中的坐标只
 是相对位置，最后将整个图形按比例放缩为 $5$\,cm 宽\footnote{注意坐标、图形会被
 放缩，但画笔的宽度不会放缩。}。类似地，也可以使用 |size(0,4cm)| 把图形放缩到
 $4$\,cm 高。
 
 最重要的当然还是曲线的表示。以 |..| 连结的坐标会以一种尽量接近圆弧的方式连为
-经过这些点的光滑曲线。与画直线类似，|cycle|\index{cycle@\lstinline=cycle=} 可
+经过这些点的光滑曲线。与画直线类似，|cycle|\index{cycle@\asyinline=cycle=} 可
 以作为一个特殊的坐标产生闭合曲线，即一条闭路向\index{路向!闭路向}：
 \begin{asycode}
 guide q = z4 .. z1 .. z2 .. z6 .. cycle;
@@ -268,7 +268,7 @@ draw( (2.1,1.7) .. (2.35,1.6) .. (2.45,1.4), outline );
 \begin{asycode}
 pen outline = black+1mm;
 \end{asycode}
-定义一个 |pen|\index{pen@\lstinline=pen=} 类型的变量 |outline| 表示用来画羊头
+定义一个 |pen|\index{pen@\asyinline=pen=} 类型的变量 |outline| 表示用来画羊头
 轮廓的画笔\index{画笔}，以备使用。
 
 然后，André 直接用 |..| 连结一组坐标来定义羊的头部轮廓：
@@ -324,11 +324,11 @@ dot(Label("6", align=down), z6);
 \end{asy}
 \end{figure}
 在这里，常量 |right| 就相当于罗盘方向 |E|，也就是 |(0,1)|。事实上，在 \Asy{}
-中已经预定义好了上下左右四个方向：|up|\index{up@\lstinline=up=},
-|down|\index{down@\lstinline=down=}, |left|\index{left@\lstinline=left=},
-|right|\index{right@\lstinline=right=}，作为四个罗盘方向的同义词。此外，也可
-以使用预置的函数 \lstinline[mathescape]|dir($\text{角度}$)|
-\index{dir@\lstinline=dir=} 来表示指向此方向的单位向量，例如：
+中已经预定义好了上下左右四个方向：|up|\index{up@\asyinline=up=},
+|down|\index{down@\asyinline=down=}, |left|\index{left@\asyinline=left=},
+|right|\index{right@\asyinline=right=}，作为四个罗盘方向的同义词。此外，也可
+以使用预置的函数 \lstinline[language=Asymptote,mathescape]|dir($\text{角度}$)|
+\index{dir@\asyinline=dir=} 来表示指向此方向的单位向量，例如：
 \begin{asycode}
 draw(z4 .. z2 .. z6, gray+2mm);
 draw(z4{dir(60)} .. z2{dir(30)} .. z6{dir(-120)}, heavyblue+2mm);
@@ -381,8 +381,8 @@ dot(Label("6", align=down), z6);
 而把 \Asy{} 的曲线看做是用若干钉子固定起来的一根弹簧或是硬橡皮绳，或许有助于
 理解所谓张力的概念。在不同的钉子之间，弹簧的张力越大，弹簧就越趋于直线的紧绷
 状态；反之，张力小时，弹簧就会因为松驰而自动张成圆弧状。张力用
-\lstinline[mathescape]|tension $\text{张力值}$|
-\index{tension@\lstinline=tension=} 来设定，张力值是不小于 $0.75$ 的实数，默
+\lstinline[language=Asymptote,mathescape]|tension $\text{张力值}$|
+\index{tension@\asyinline=tension=} 来设定，张力值是不小于 $0.75$ 的实数，默
 认值 $1$ 使得曲线最接近圆弧形状。例如：
 \begin{asycode}
 draw(z4 {up} .. tension 0.75 .. {down} z6, heavyblue+2mm);
@@ -433,7 +433,7 @@ dot(Label("6", align=down), z6);
 \end{figure}
 
 比弹簧或橡皮绳更强的是，\Asy{} 曲线在结点两边的张力事实上也可以使用
-\lstinline[mathescape]|tension $\text{起}$ and $\text{末}$|
+\lstinline[language=Asymptote,mathescape]|tension $\text{起}$ and $\text{末}$|
 来分开设定：
 \begin{asycode}
 draw(z4 {up} .. tension 1 .. {down} z6, gray+2mm);
@@ -457,7 +457,7 @@ dot(Label("6", align=down), z6);
 \end{figure}
 
 最后来看卷曲度。卷曲度影响曲线端点的弯曲程度，它的语法和设定曲线方向类似：
-\lstinline[mathescape]|{curl $\text{数值}$}|\index{curl@\lstinline=curl=}。卷
+\lstinline[language=Asymptote,mathescape]|{curl $\text{数值}$}|\index{curl@\asyinline=curl=}。卷
 曲度是一个非负值，其数值越大则曲线在端点的曲率越大，数值为 $0$ 时则曲率趋于
 $0$。在曲线的端点处，有默认的卷曲度 $1$，使得曲线接近圆弧。例如：
 \begin{asycode}
@@ -513,16 +513,16 @@ dot(Label("0", align=up), z0);
 \end{figure}
 
 除了直线连接的符号 |--| 和曲线连接的符号 |..|，还有几个连接点坐标以得到曲线的
-连接符，它们分别是特殊的直线连接符 |---|\index{---@\lstinline=---=}、特殊的曲
-线连接符 |::|\index{::@\lstinline=::=} 以及将曲线首尾相接的
-|&|\index{&@\lstinline=&=}。再加上连接几条不同曲线的 |^^|，就是全部连接曲线的
+连接符，它们分别是特殊的直线连接符 |---|\index{---@\asyinline=---=}、特殊的曲
+线连接符 |::|\index{::@\asyinline=::=} 以及将曲线首尾相接的
+|&|\index{&@\asyinline=&=}。再加上连接几条不同曲线的 |^^|，就是全部连接曲线的
 符号了。
 
-连接符 |---|\index{---@\lstinline=---=} 与 |--| 类似，都得到直线，单独使用
+连接符 |---|\index{---@\asyinline=---=} 与 |--| 类似，都得到直线，单独使用
 |---| 画出的直线和折线与使用 |--| 得到的结果并不能看出区别。但事实上，用
 |---| 得到的并不是严格的直线折线，而只是非常接近直线的光滑曲线\footnote{在
-\Asy{} 内部，连接符 \lstinline=---= 是
-\lstinline=.. tension atleast infinity ..= 的缩写。\lstinline=atleast= 关键字
+\Asy{} 内部，连接符 \asyinline=---= 是
+\asyinline=.. tension atleast infinity ..= 的缩写。\asyinline=atleast= 关键字
 一般并不直接使用，故本文不作讨论，可参考 \cite{knuth1986}。}。因而，如果把
 |---| 与 |..| 配合使用，就能使得到的直线与曲线光滑地连接，而不像使用 |--| 那
 样得到不需要的尖角。例如：
@@ -547,10 +547,10 @@ dot(Label("6", align=right), z6);
 \end{asy}
 \end{figure}
 
-连接符 |::|\index{::@\lstinline=::=} 则与 |..| 类似，都得到曲线\footnote{在
-\Asy{} 内部，连接符 \lstinline=::= 是 \lstinline=.. tension atleast 1 ..= 的
-缩写。\Asy{} 的曲线功能和语法大多源自 \MP{}，不过在 \MP{} 中与 \lstinline=::=
-功能相同的连接符是 \lstinline=...=。}。不过连接符 |::| 有一个特性，就是它将尽可能使两个坐标之间的曲线没有拐
+连接符 |::|\index{::@\asyinline=::=} 则与 |..| 类似，都得到曲线\footnote{在
+\Asy{} 内部，连接符 \asyinline=::= 是 \asyinline=.. tension atleast 1 ..= 的
+缩写。\Asy{} 的曲线功能和语法大多源自 \MP{}，不过在 \MP{} 中与 \asyinline=::=
+功能相同的连接符是 \asyinline=...=。}。不过连接符 |::| 有一个特性，就是它将尽可能使两个坐标之间的曲线没有拐
 点（即尽可能避免两坐标间出现 S 形曲线，效果是在 |..| 的基础上自动增加张力的结
 果）。例如：
 \begin{asycode}
@@ -574,7 +574,7 @@ dot(Label("6", align=right), z6);
 \end{asy}
 \end{figure}
 
-|&|\index{&@\lstinline=&=} 连接符用于把几段首尾点依次重合的曲线直接相连，而不
+|&|\index{&@\asyinline=&=} 连接符用于把几段首尾点依次重合的曲线直接相连，而不
 改变原来连接前曲线的形状。这事实上与使用重复点直接用 |..| 生成尖角的效果相同
 ，但在 \Asy{} 中，连接符 |&| 会在生成的曲线中去除第一条曲线的尾结点（它应该是
 与第二条曲线的首结点重合的），因而不会出现像之前直接使用 |..| 生成的曲线那样
@@ -618,15 +618,15 @@ dot(Label("6", align=down), z6);
 \end{asy}
 \end{figure}
 
-连接符 |^^|\index{^^@\lstinline=^^=} 在前面 \autoref{sec:linedraw} 中已经介绍
+连接符 |^^|\index{^^@\asyinline=^^=} 在前面 \autoref{sec:linedraw} 中已经介绍
 过了。这里则指出它的一个特殊应用：在一个区域中“挖洞”填充。在数学中，平面上
 的一条简单闭曲线有的方向可以分为正负两种，逆时针方向为正，正时针方向为负。因
 此，在某个方向曲线围成的区域中用连接符 |^^| 加入一条反方向的闭曲线，就相当于
 在这个封闭区域中挖了一个洞。
 
 在给出相关的例子之前，我们首先给出 \Asy{} 中把曲线方向逆转的函数
-\lstinline[mathescape]|reverse($\text{曲线}$)|%
-\index{reverse@\lstinline=reverse=}，它接受一条曲线（可以是路径或路向）作为参
+\lstinline[language=Asymptote,mathescape]|reverse($\text{曲线}$)|%
+\index{reverse@\asyinline=reverse=}，它接受一条曲线（可以是路径或路向）作为参
 数，并返回此曲线的逆方向曲线。绘制时给曲线加上箭头可以明显看出其方向：
 \begin{asycode}
 draw(z1 .. z2 .. z6, gray+1mm, Arrow);
@@ -752,7 +752,7 @@ draw(ear ^^ mouth, linewidth(1mm));
 要在平面上铺满相同的图形，就需要反复地在不同的位置进行绘制。\Asy{} 中可以使用
 循环语句来完成这种重复的工作。
 
-最常用的循环语句是 |for|\index{for@\lstinline=for=} 循环，其基本语法是：
+最常用的循环语句是 |for|\index{for@\asyinline=for=} 循环，其基本语法是：
 \begin{asycode}
 for (`初始化`; `执行条件`; `循环增量`)
     `循环语句体`
@@ -772,15 +772,15 @@ for (real angle = 0; angle <= 90; angle += 30)
     draw( (0,0){dir(angle)} .. {right}(6cm,0), gray+1mm );
 \end{asy}
 \end{figure}
-在初始化部分定义了一个实数\index{实数}（|real|\index{real@\lstinline=real=}）
+在初始化部分定义了一个实数\index{实数}（|real|\index{real@\asyinline=real=}）
 类型的变量 |angle|，初始值为 $0$；进入循环的执行条件是角度变量 |angle| 不大于
 直角；而在每次循环体画完曲线后，变量 |angle| 的值就增加 $30^\circ$。这里复合
-赋值运算符 |+=|\index{+=@\lstinline/+=/} 表示在变量原有的基础上累加，
+赋值运算符 |+=|\index{+=@\asyinline/+=/} 表示在变量原有的基础上累加，
 |var += x| 就等价于 |var = var + x|，类似地减法、乘除法、取余数和乘方也有
-|-=|\index{-=@\lstinline/-=/}、|*=|\index{*=@\lstinline/*=/}、
-|/=|\index{/=@\lstinline+/=+}、|%=|\index{%=@\lstinline/%=/}、
-|^=|\index{^=@\lstinline/^=/} 这几种对应的赋值形式。对于整数\index{整数}
-（|int|\index{int@\lstinline=int=}）类型的变量，还可以使用 |++var| 和 |--var|
+|-=|\index{-=@\asyinline/-=/}、|*=|\index{*=@\asyinline/*=/}、
+|/=|\index{/=@\asyinline+/=+}、|%=|\index{%=@\asyinline/%=/}、
+|^=|\index{^=@\asyinline/^=/} 这几种对应的赋值形式。对于整数\index{整数}
+（|int|\index{int@\asyinline=int=}）类型的变量，还可以使用 |++var| 和 |--var|
 分别表示 |var += 1| 和 |var -= 1|。
 
 如果循环体的语句不止一个，可以用花括号把这些语句括起来。如：
@@ -856,7 +856,7 @@ for (int x = 0; x < 4; ++x) {
 \end{figure}
 在这里，André 使用关于整数变量 |x| 和 |y| 的二重循环来控制整个铺砌图。在循环
 体中使用了变换\index{变换}类型
-|transform|\index{transform@\lstinline=transform=} 的变量 |pos| 来保存从原点
+|transform|\index{transform@\asyinline=transform=} 的变量 |pos| 来保存从原点
 到每一块铺砌图形元的平移变换。在绘图时，给每条曲线都使用 |pos| 进行变换，就可
 以在正确的位置绘图，而不用直接修改原来的曲线。
 
@@ -867,7 +867,7 @@ for (int x = 0; x < 4; ++x) {
 |x|${}+{}$|y| 的奇偶性来判定，于是只要在循环体内增加一点判断……
 
 \Asy{} 的条件判断\index{条件判断}语句正好可以完成这项工作。条件判断语句的基本
-语法是：\index{if@\lstinline=if=}
+语法是：\index{if@\asyinline=if=}
 \begin{asycode}
 // `\color{comment}只有一个分支`
 if (`条件`)
@@ -940,7 +940,7 @@ for (int x = 0; x < 4; ++x) {
 时候，他的同事，\Asy{} 的专家 Philippe 告诉他，其实有关条件判断的语句还可以使
 用一个条件表达式来简化。在这里，要判断的条件比较简单，而判断的结果也只是青、
 黄两种颜色的值，因此，可以使用条件运算符\index{条件运算符}
-|? :|\index{? :@\lstinline=? :=} 来代替。条件运算符是一个特殊的三元运算符
+|? :|\index{? :@\asyinline=? :=} 来代替。条件运算符是一个特殊的三元运算符
 \index{三元运算符}，它的语法是：
 \begin{asycode}
 `条件` ? `条件为真的值` : `条件为假的值`
@@ -958,7 +958,7 @@ pen color = (i+j)%2==0 ? cyan : yellow;
 
 André 最后的问题是把整个铺砌图形剪裁为椭圆形。为此，我们就需要引入在画线
 （|draw|）、填充（|fill|）、标注（|label|）之外的最后一种基本绘图命令，即剪裁
-（|clip|）\index{剪裁}\index{clip@\lstinline=clip=}。剪裁命令的基本语法是：
+（|clip|）\index{剪裁}\index{clip@\asyinline=clip=}。剪裁命令的基本语法是：
 \begin{asycode}
 clip(`图`, `曲线`);     // `\color{comment}图的默认值是当前图 currentpicture`
 \end{asycode}
@@ -970,7 +970,7 @@ clip(`图`, `曲线`);     // `\color{comment}图的默认值是当前图 curren
 章中已经看到了产生一个带网格的图的 |grid| 函数与使用图的 |add| 函数，下面，我
 们首先说明如何自定义图并在其上绘图。
 
-自定义一个图只要定义一个 |picture|\index{picture@\lstinline=picture=} 类型的
+自定义一个图只要定义一个 |picture|\index{picture@\asyinline=picture=} 类型的
 变量。新定义的图相当于一块单独的画布，而画线、填充、标注这些命令都可以在最前
 面加上图的参数，表示在某一个图上进行绘图。例如：
 \begin{asycode}
@@ -999,8 +999,8 @@ add(mypic);
 \end{asy}
 \end{figure}
 
-\index{add@\lstinline=add=}
-|add| 函数还可以有更多的参数，更一般的形式是\footnote{\lstinline=add= 函数有
+\index{add@\asyinline=add=}
+|add| 函数还可以有更多的参数，更一般的形式是\footnote{\asyinline=add= 函数有
 很多变形，还带有更多次要的参数，详细的语法形式参看手册 \cite{asyman} 和
 \prgname{plain\_picture.asy} 中的源代码。}：
 \begin{asycode}
@@ -1020,7 +1020,7 @@ add(`目标图`=currentpicture, `源图`, `位置坐标`, above=true);
 |add| 函数对其重复使用，或者进行各种操作（如仿射变换）。例如，对于前面定义的
 图 |pic|，经过仿射变换\footnote{为方便文字标签的阅读，在 \Asy{} 中文字默认只
 会旋转，不会倾斜。如果要求在图变换时，标签也随之变换产生特殊效果，可以修改
-\lstinline=Label= 的 \lstinline=embed= 参数，参见 \cite{asyman}。}：
+\asyinline=Label= 的 \asyinline=embed= 参数，参见 \cite{asyman}。}：
 \begin{asycode}
 add(mypic);
 add(slant(1)*mypic, (5cm,0));
@@ -1223,7 +1223,7 @@ label(Label("$B$",position=3), b);
 \end{figure}
 
   \item 与 |clip| 命令作用类似，还有一个
-    |unfill|\index{unfill@\lstinline=unfill=} 命令也可以用于图形的剪裁。它们
+    |unfill|\index{unfill@\asyinline=unfill=} 命令也可以用于图形的剪裁。它们
     的区别是，|clip| 命令留下剪裁曲线的内部，而 |unfill| 命令挖掉剪裁曲线的内
     部而留下外部。|unfill| 命令的语法与 |clip| 相同。借用
     \autoref{sec:clippicture} 中的 |mypic| 举例：
@@ -1252,9 +1252,9 @@ add(mypic, (5cm,0));
     $A\bigtriangleup B$ 的 Venn 图\footnote{Venn 图的做法并不是唯一的。例如，
     对称差集 $A\bigtriangleup B$ 的 Venn 图也可以利用 \autoref{sec:curve} 绘
     制圆环的方式制做；在 \cite{asyman} 中，还介绍了利用表示特殊填充规则的画笔
-    \lstinline=evenodd=\index{evenodd@\lstinline=evenodd=} 绘制这种 Venn 图的
-    方法；路径的 \lstinline=buildcycle=
-    \index{buildcycle@\lstinline=buildcycle=}函数（参看 \cite{asyman}）也可以
+    \asyinline=evenodd=\index{evenodd@\asyinline=evenodd=} 绘制这种 Venn 图的
+    方法；路径的 \asyinline=buildcycle=
+    \index{buildcycle@\asyinline=buildcycle=}函数（参看 \cite{asyman}）也可以
     用于绘制对称差集——这些方式对画一般的 Venn 图并不通用，但在一些情况下比
     使用剪裁功能要简洁，或能得到更丰富的效果。读者在实际使用中不必拘泥。}：
 \begin{figure}[H]

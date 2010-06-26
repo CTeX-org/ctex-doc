@@ -10,6 +10,7 @@ hsv interp(explicit hsv p1, explicit hsv p2, real t)
 }
 
 unitsize(2cm);
+
 for(real x = 0; x <= 1; x += 0.01)
     draw((x,0) -- (x+0.015,0), interp(hsv(red),hsv(green),x)+squarecap+4bp);
 for(real x = 0; x <= 1; x += 0.01)

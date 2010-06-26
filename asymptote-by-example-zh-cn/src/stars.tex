@@ -251,7 +251,7 @@ guide star(int n)
 值的类型是 |guide|（路向）。而后面括在花括号中的部分则是函数体，表示整个函数
 进行的操作。在函数体中可以使用在函数原型中声明的所有参变量，就如同这些变量是
 在函数体中定义的一样。在函数体的最后一句通常是一个 |return|
-\index{return@\lstinline=return=} 语句，它将退出整个函数的运行，并把 |return|
+\index{return@\asyinline=return=} 语句，它将退出整个函数的运行，并把 |return|
 语句后面的表达式作为这个函数的返回值。\index{函数!返回值}一般地，函数的定义形
 如：
 \index{函数!参数}
@@ -272,7 +272,7 @@ guide star(int n)
 义的变量来产生不同的行为，例如后面 \autoref{sec:randomarray} 将提到的伪随机数
 函数 |rand()|。更常见的情况是没有返回值的函数，此时函数体就不需要有 |return|
 语句（或者使用一个没有值的 |return| 语句表示退出函数），但仍然需要声明函数的
-返回类型为 |void|\index{void@\lstinline=void=}——即空类型\index{空类型}。和
+返回类型为 |void|\index{void@\asyinline=void=}——即空类型\index{空类型}。和
 数学中的函数不同，\Asy{} 中一个函数有用不仅因为它可以计算出一个返回值，还在于
 它能进行许多操作，比如画图。所以令狐庸写了这样一个画星形的函数：
 \begin{asycode}
@@ -297,7 +297,7 @@ void drawstar(int n = 5, pen drawpen = currentpen)  // currentpen `\color{commen
 廓；而用 |drawstar(red)| 则画出红色五角星；用 |drawstar(6)| 画出黑色六角星
 \footnote{C++ 的参数可以有缺省值，但允许从最后一个参数开始从后向前省略，不能
 这样跳跃缺省参数值。这是因为 C++ 是按位置解析参数的，但 \Asy{} 则还会考虑参数
-的类型。注意这个例子中 \lstinline=drawpen(red, 7)= 的形式是不成立的。}；用
+的类型。注意这个例子中 \asyinline=drawpen(red, 7)= 的形式是不成立的。}；用
 |drawstar(7, red)| 画出红色七角星。
 
 调用函数时，除了直接写出参数值，还有一种在 \autoref{sec:linedraw} 中就使用过
@@ -307,13 +307,13 @@ void drawstar(int n = 5, pen drawpen = currentpen)  // currentpen `\color{commen
 
 事实上，与数值、画笔等类型一样，函数也是一种数据类型。函数的类型名就是函数原
 型去掉函数名字的部分，如正弦函数 |real sin(real x)|
-\index{sin@\lstinline=sin=} 的类型就是 |real (real x)| （在不混淆时或可简写为
+\index{sin@\asyinline=sin=} 的类型就是 |real (real x)| （在不混淆时或可简写为
 |real (real)|）。定义一个函数就是定义这个类型的一个变量。因此，一个函数也可以
 作为另一个函数的参数，例如在 \Asy{} 绘制函数图形的基本模块 \prgname{graph}
 \index{graph 模块@\prgname{graph} 模块} 中，就有函数（这里省略了一些有默认值
 的参数）：
 \index{函数!函数作为参数}
-\index{graph@\lstinline=graph=}
+\index{graph@\asyinline=graph=}
 \begin{asycode}
 guide graph(real f(real), real a, real b);
 \end{asycode}
@@ -334,7 +334,7 @@ draw(graph(sin, 0, 2pi));
 \end{figure}
 
 因为函数也是一种数据类型，所以一个函数并不必须有名字。使用 |new|
-\index{new@\lstinline=new=} 表达式可以构造匿名函数\index{函数!匿名函数}。如计
+\index{new@\asyinline=new=} 表达式可以构造匿名函数\index{函数!匿名函数}。如计
 算 $f(x) = x^2$ 的函数：
 \begin{asycode}
 new real (real x)  { return x^2; }
@@ -409,7 +409,7 @@ guide star(int n = 5, real r = 0, real angle = 90)
 \end{asycode}
 它对任何 $n \ge 3$ 都能得出星形路向，而且所有的参数都给出了一个合理的默认值。
 而当 $n < 2$ 时，函数返回空路向 |nullpath|
-\index{nullpath@\lstinline=nullpath=}（这也是 |guide| 类型的默认初始化值）。
+\index{nullpath@\asyinline=nullpath=}（这也是 |guide| 类型的默认初始化值）。
 上面的四角星就是用
 \begin{asycode}
 size(3cm);
@@ -424,19 +424,19 @@ filldraw(star(4), lightblue, linewidth(2));
 就需要使用 \Asy{} 中的随机数。
 
 \Asy{} 中主要由两个函数生成均匀分布的随机数：\index{随机数}
-\index{rand@\lstinline=rand=}
-\index{unitrand@\lstinline=unitrand=}
-\index{randMax@\lstinline=randMax=}
+\index{rand@\asyinline=rand=}
+\index{unitrand@\asyinline=unitrand=}
+\index{randMax@\asyinline=randMax=}
 \begin{asycode}
 int rand();         // `\color{comment}返回 [0, randMax] 之间的随机整数`
 int unitrand();     // `\color{comment}返回 [0, 1] 之间的随机实数`
 \end{asycode}
 |rand()| 函数自源于 C 语言，它的返回值比较特别，是 $0$ 到一个大整数 |randMax|
-之间的一个随机整数，一般都会经过变换后使用\footnote{常数 \lstinline=randMax= 
+之间的一个随机整数，一般都会经过变换后使用\footnote{常数 \asyinline=randMax= 
 对应于 C 语言的 \lstinline=RAND_MAX= 宏，其取值不确定，与具体实现环境有关。如
-官方在 Windows 平台发布的 $1.88$ 版本中，\lstinline=randMax= 值为
-$2^{31}-1$，即 32 位带符号整数的最大值。\lstinline=unitrand()= 实际就是由
-\lstinline=rand()/randMax= 得到的。}。通常需要
+官方在 Windows 平台发布的 $1.88$ 版本中，\asyinline=randMax= 值为
+$2^{31}-1$，即 32 位带符号整数的最大值。\asyinline=unitrand()= 实际就是由
+\asyinline=rand()/randMax= 得到的。}。通常需要
 的是特定区间的随机整数或实数，都由 |unitrand()| 函数变换得到。任意区间的随机
 实数，可以对 |unitrand()| 的返回值作线性变换得到：|(b-a)*unitrand()+a| 就是
 $a$ 到 $b$ 之间的随机数。注意到对随机整数取余数的结果 |rand() % n| 正是 $0$
@@ -525,7 +525,7 @@ for (int i = 0; i < 15; ++i) {
 }
 \end{asy}
 \end{figure}
-其中 |string|\index{string@\lstinline=string=} 函数可以把各种数值类型转换为字
+其中 |string|\index{string@\asyinline=string=} 函数可以把各种数值类型转换为字
 符串类型。
 
 使用随机数时，令狐庸发现每次使用上面的代码都得到同样的结果，而并不是如想像中
@@ -536,13 +536,13 @@ for (int i = 0; i < 15; ++i) {
 伪随机数序列更随机一些，令狐庸就需要自己给这个函数迭代过程设定一个真正随机的
 数作为初始值——这是可以做到的。给伪随机数序列赋初值（这个初值通常被称为种子
 ［seed］）的函数是：
-\index{srand@\lstinline=srand=}
+\index{srand@\asyinline=srand=}
 \begin{asycode}
 void srand(int seed);
 \end{asycode}
 而由于令狐庸本人使用 \Asy{} 编译代码的时间是随机选取的，因而可以把系统的当前
 时间设定为伪随机序列的种子。系统时间可以用 |seconds()|
-\index{seconds@\lstinline=seconds=} 函数读入，它返回一个整数，表示从 1970 年
+\index{seconds@\asyinline=seconds=} 函数读入，它返回一个整数，表示从 1970 年
 1 月 1 日零点整到现在的秒数。于是，只要在使用随机数前加上
 \begin{asycode}
 srand(seconds());
@@ -594,7 +594,7 @@ pen[] pen_arr = {red, orange, yellow, green, cyan, blue, purple};
 标从 0 开始，到元素个数减 1。如对上面定义的 |pen_arr| 数组，|pen_arr[0]| 就是
 红色 |red|，而赋值 |pen_arr[6] = pink| 则把数组末尾的紫色 |purple| 改为粉色。
 数组元素的个数可以在变量后加 |.length|
-\index{length@\lstinline=length=}\index{数组!length@\lstinline=length=} 来得
+\index{length@\asyinline=length=}\index{数组!length@\asyinline=length=} 来得
 到，因而 |pen_arr.length| 就是 7。
 
 除了 |length| 之外，数组还有许多有用的成员\index{数组!成员}和相关的函数，可以
@@ -691,7 +691,7 @@ radialshade(circle((0,0), 1),
 \end{figure}
 放射渐变填充函数的原型是：
 \index{渐变!放射渐变}
-\index{radialshade@\lstinline=radialshade=}
+\index{radialshade@\asyinline=radialshade=}
 \begin{asycode}
 void radialshade(picture pic=currentpicture, path g, bool stroke=false,
                  pen pena, pair a, real ra,
@@ -796,7 +796,7 @@ for (real t = 0; t < 1; t += 1/1000) {
 法也是可以使用的。
 
 令狐庸很早就懂得使用各种曲线连接符把坐标点连接为曲线。这种曲线的描述，在
-\Asy{} 中就对应于 |guide|\index{guide@\lstinline=guide=} 类型，我们生造了一个
+\Asy{} 中就对应于 |guide|\index{guide@\asyinline=guide=} 类型，我们生造了一个
 名词，称它为路向\index{路向}。也就是说，在 \Asy{} 中的一个 |guide| 类型的变量
 ，就保存了描述这个曲线时使用的各个结点，以及各点处的切线方向、张力大小、卷曲
 值等等这些名目繁多的东西。路向保存了构造它用到的全部信息，这些信息往往也都是
@@ -806,7 +806,7 @@ for (real t = 0; t < 1; t += 1/1000) {
 点和在这些点上的切线方向，怎么就能唯一决定一条曲线？张力为 $2$ 到底算有多大？
 |{curl 0.5}| 和 |{curl 1}| 有多大区别？……因此，\Asy{} 内部还有一套算法，把
 这些相对模糊而直观的信息，转换成标准的参数方程的数学表示，这就是 |path| 类型
-\index{path@\lstinline=path=}，我们称之为路径\index{路径}。路向一经转换为路径
+\index{path@\asyinline=path=}，我们称之为路径\index{路径}。路向一经转换为路径
 ，就成为可以精确确定每一个点的参数曲线了。如果把路向比做用钉子连接固定的橡皮
 绳的话，那么转换得到的路径就是依照橡皮绳伸展的形状做成的铁丝，铁丝一经定形，
 就不再变化。在 \Asy{} 中从路向到路径的转换是自动进行的，所有绘图的命令（如
@@ -862,16 +862,16 @@ $z_1$ 和两个控制点 $c_0$, $c_1$ 决定：
 
 不过，大多数情况下，并不需要从底层的数学公式来控制路径。\Asy{} 已经提供了许多
 函数来获得有关路径的信息，常用的一些如（更多路径函数见手册 \cite{asyman}）：
-\index{length@\lstinline=length=}\index{路径!length@\lstinline=length=}
-\index{size@\lstinline=size=}\index{路径!size@\lstinline=size=}
-\index{point@\lstinline=point=}\index{路径!point@\lstinline=point=}
-\index{dir@\lstinline=dir=}\index{路径!dir@\lstinline=dir=}
-\index{reverse@\lstinline=reverse=}\index{路径!reverse@\lstinline=reverse=}
-\index{subpath@\lstinline=subpath=}\index{路径!subpath@\lstinline=subpath=}
-\index{intersectionpoints@\lstinline=intersectionpoints=}
-\index{路径!intersectionpoints@\lstinline=intersectionpoints=}
-\index{intersectionpoint@\lstinline=intersectionpoint=}
-\index{路径!intersectionpoint@\lstinline=intersectionpoint=}
+\index{length@\asyinline=length=}\index{路径!length@\asyinline=length=}
+\index{size@\asyinline=size=}\index{路径!size@\asyinline=size=}
+\index{point@\asyinline=point=}\index{路径!point@\asyinline=point=}
+\index{dir@\asyinline=dir=}\index{路径!dir@\asyinline=dir=}
+\index{reverse@\asyinline=reverse=}\index{路径!reverse@\asyinline=reverse=}
+\index{subpath@\asyinline=subpath=}\index{路径!subpath@\asyinline=subpath=}
+\index{intersectionpoints@\asyinline=intersectionpoints=}
+\index{路径!intersectionpoints@\asyinline=intersectionpoints=}
+\index{intersectionpoint@\asyinline=intersectionpoint=}
+\index{路径!intersectionpoint@\asyinline=intersectionpoint=}
 \begin{asycode}
 int length(path p);         // `\color{comment}路径 p 的 Bézier 曲线段数`
 int size(path p);           // `\color{comment}路径 p 的结点数（闭路径与 length(p) 相同）`
@@ -1073,9 +1073,9 @@ add(moon);
 \end{figure}
 
 最后再加上文字。由于文字和星星都是浅色，同样要考虑文字被星星影响的问题。这可
-以给 |label| 命令或标签构造函数 |Label|\index{Label@\lstinline=Label=} 加上
-\lstinline[mathescape]=Fill($\text{标签背景色}$)=
-\index{Fill@\lstinline=Fill=} 参数解决。为了显示比较平滑，令狐庸使用半透明的
+以给 |label| 命令或标签构造函数 |Label|\index{Label@\asyinline=Label=} 加上
+\lstinline[language=Asymptote,mathescape]=Fill($\text{标签背景色}$)=
+\index{Fill@\asyinline=Fill=} 参数解决。为了显示比较平滑，令狐庸使用半透明的
 背景色：
 \begin{asycode}
 size(4cm);
@@ -1350,7 +1350,7 @@ guide graph(real f(real), real a, real b);
       \item（较难）参考手册 \cite{asyman} 中对 \prgname{graph} 模块
         \index{模块!graph@\prgname{graph}} 的用法和轴向渐变
         \index{渐变!轴向渐变}函数 |axialshade|
-        \index{axialshade@\lstinline=axialshade=} 的说明，画出下面的图形（尽
+        \index{axialshade@\asyinline=axialshade=} 的说明，画出下面的图形（尽
         量利用 \prgname{graph} 模块已经提供的功能）：
 \begin{figure}[H]
   \centering
@@ -1413,7 +1413,7 @@ draw(g, heavyblue+2bp);
 \end{asy}
         \end{figure}
 
-      \item 函数\index{interp@\lstinline=interp=}
+      \item 函数\index{interp@\asyinline=interp=}
 \begin{asycode}
 T interp(T a, T b, real t);
 \end{asycode}
@@ -1446,12 +1446,12 @@ for (int i = 0; i < 100; ++i)
 
   \item 利用循环遍历一个字符串数组，画出 \Asy{} 中 16 个罗盘方向的示意图
     \index{罗盘方向}：
-    \index{E@\lstinline=E=}\index{ENE@\lstinline=ENE=}\index{NE@\lstinline=NE=}
-    \index{NNE@\lstinline=NNE=}\index{N@\lstinline=N=}\index{NNW@\lstinline=NNW=}
-    \index{NW@\lstinline=NW=}\index{WNW@\lstinline=WNW=}\index{W@\lstinline=W=}
-    \index{WSW@\lstinline=WSW=}\index{SW@\lstinline=SW=}\index{SSW@\lstinline=SSW=}
-    \index{S@\lstinline=S=}\index{SSE@\lstinline=SSE=}\index{SE@\lstinline=SE=}
-    \index{ESE@\lstinline=ESE=}
+    \index{E@\asyinline=E=}\index{ENE@\asyinline=ENE=}\index{NE@\asyinline=NE=}
+    \index{NNE@\asyinline=NNE=}\index{N@\asyinline=N=}\index{NNW@\asyinline=NNW=}
+    \index{NW@\asyinline=NW=}\index{WNW@\asyinline=WNW=}\index{W@\asyinline=W=}
+    \index{WSW@\asyinline=WSW=}\index{SW@\asyinline=SW=}\index{SSW@\asyinline=SSW=}
+    \index{S@\asyinline=S=}\index{SSE@\asyinline=SSE=}\index{SE@\asyinline=SE=}
+    \index{ESE@\asyinline=ESE=}
     \begin{figure}[H]
       \centering
 \begin{asy}
@@ -1471,7 +1471,8 @@ int randomInteger(int a, int b)
     return ((double)rand() / (RAND_MAX+1)) * (b-a+1) + a;
 }
 \end{lstlisting}
-    其基本思路是：既然 |rand()| 返回从 0 到 |RAND_MAX| 的一个随机整数，那么
+    其基本思路是：既然 \cinline|rand()| 返回从 0 到 \cinline|RAND_MAX| 的一个
+    随机整数，那么
 \begin{lstlisting}[language=C,backgroundcolor={\color{green!20!lightgray}}]
 (double)rand() / (RAND_MAX+1)
 \end{lstlisting}
@@ -1539,7 +1540,7 @@ int randomInteger(int a, int b)
 数组是 \Asy{} 乃至各种程序设计语言最重要的数据抽象类型之一，本章对数组的介绍
 是肤浅的。\cite{asyman} 中有单独一节篇幅讲解数组的使用，读者可以详加参考。与
 C/C++ 语言的数组相比，\Asy{} 的数组是一种高级的数组结构，具有下标检查、自动增
-长等能力和丰富的操作，它更接近于 C++ 的 |vector| 模板类。
+长等能力和丰富的操作，它更接近于 C++ 的 \cinline|vector| 模板类。
 
 \autoref{sec:randomarray} 一节除了随机数和数组外，也简单介绍了 |while| 和
 |do| 循环。由于与 C/C++ 类似，手册 \cite{asyman} 对于基本的控制程序流向的命令
@@ -1557,7 +1558,7 @@ C/C++ 语言的数组相比，\Asy{} 的数组是一种高级的数组结构，�
 这部分手册尚没有中文翻译），故本文只做极简单的说明。
 
 习题 \ref{ex:randint} 选材自 \cite{roberts1995}，原书给出了随机数函数使用的许
-多有用的技巧，并给出了 |randomInteger| 的一个正确的实现。
+多有用的技巧，并给出了 \cinline|randomInteger| 的一个正确的实现。
 
 \endinput
 
