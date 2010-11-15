@@ -1,0 +1,130 @@
+%% ttb_style.sty
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt 
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey  
+% 
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+
+\RequirePackage{xspace}
+\RequirePackage{boxedminipage}
+
+%\let\nospaceTeX\TeX
+%\def\TeX{\nospaceTeX\xspace}
+\def\bt{Bib\TeX\xspace}
+\let\nospaceLaTeX\LaTeX
+\def\LaTeX{\nospaceLaTeX\xspace}
+\def\gomo{\emph{grosso modo}\xspace}
+\def\ie{ie.\xspace}
+\def\cf{cf. }
+\catcode`\*=0
+*catcode`*\=11
+*def*bs{\}
+*catcode`*\=0
+\catcode`\*=12
+\def\at{@}
+\catcode`\$=11
+\def\dol{$}
+\catcode`\$=3  %$
+\def\cmd#1{\index{latex}{#1@\texttt{\protect\bs #1}}{\ttfamily \bs #1}\xspace}
+\def\cmdat#1{\index{latex}{#1@\texttt{\protect\bs\protect\at #1}}{\ttfamily \bs\at #1}\xspace}
+\def\env#1{\index{latex}{#1@\texttt{#1}}{\ttfamily #1}\xspace}
+\def\ext#1{{\ttfamily .#1}\xspace}
+
+\def\sty{\@ifnextchar[{\@sty}{\@sty[sty]}}
+\def\@sty[#1]#2{\index{latex}{#2@\textsf{#2.#1}}{\sffamily #2.#1}\xspace}
+
+\def\cls#1{\index{latex}{#1@\textsf{#1.cls}}{\sffamily #1.cls}\xspace}
+\def\bst#1{\index{bibtex}{#1@\textsf{#1.bst}}{\sffamily #1.bst}\xspace}
+\def\chp#1{\index{bibtex}{#1@\texttt{#1}}{\ttfamily #1}\xspace}
+\def\ent#1{\index{bibtex}{#1@\protect\at #1}{\bfseries \at #1}\xspace}
+\def\fn#1{\index{bibtex}{#1@\texttt{#1\protect\dol}}{\ttfamily #1\dol}\xspace}
+
+\def\el#1{$\cal #1$}
+\def\eli#1#2{$\mathcal{#1}_{#2}$}
+
+\def\nicmd#1{{\ttfamily \bs #1}\xspace}
+\def\nienv#1{{\ttfamily #1}\xspace}
+\def\niext#1{{\ttfamily .#1}\xspace}
+\def\nisty#1{{\sffamily #1.sty}\xspace}
+\def\nicls#1{{\sffamily #1.cls}\xspace}
+\def\nibst#1{{\sffamily #1.bst}\xspace}
+\def\nichp#1{{\ttfamily #1}\xspace}
+\def\nient#1{{\bfseries \at #1}\xspace}
+\def\nifn#1{{\ttfamily #1\dol}\xspace}
+
+\newenvironment{myex}{\bigskip\par
+   \noindent\begin{boxedminipage}{\textwidth}}{%
+            \end{boxedminipage}\bigskip\par}
+\newenvironment{myexv}{\bigskip\par
+   \noindent\begin{center}\begin{boxedminipage}{.8\textwidth}}{%
+            \end{boxedminipage}\end{center}
+			\bigskip\par}
+
+%\AtBeginDocument{%
+\setcounter{tocdepth}{0}%
+\def\thepart{\arabic{part}}%
+\def\mypart{\cleardoublepage\part}%
+\def\@part[#1]#2{    \ifnum\c@secnumdepth>\m@ne\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    {\parindent \z@ \raggedleft
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >\m@ne\relax
+       \Large\sffamily\bfseries \partname\nobreakspace\thepart
+       \par\nobreak
+     \fi
+     \huge \sffamily \bfseries #2%
+     \markboth{}{}\par}%
+    \nobreak
+    \vskip 12ex%
+    \@afterheading}%
+\renewcommand*\l@part[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty\@secpenalty
+    \addvspace{2.25em \@plus\p@}%
+    \setlength\@tempdima{3em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \large \sffamily #1
+       \leaders\hbox{$\m@th
+         \mkern 2mu\hbox{\small.}\mkern 2mu$}\hfill
+       \hb@xt@\@pnumwidth{\hss #2}}\par
+       \nobreak
+       \if@compatibility
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+      \fi
+    \endgroup
+  \fi}
+\let\mysection\section
+\def\mysubsection{\subsection}
+\def\mysubsubsection{\subsubsection}
+\def\floatpagefraction{.8}
+
+\def\section{\let\@ssect\save@ssect\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\normalfont\Large\bfseries}}
+%}
+

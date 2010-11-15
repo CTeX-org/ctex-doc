@@ -1,0 +1,2193 @@
+%% ttb_en.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+%
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey
+%
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+\def\ttbversion{1.3}
+\def\ttbdate{16/10/2005}
+
+\documentclass{article}
+
+\usepackage[UTF8,hyperref]{ctex}
+
+\usepackage{lastpage}
+\usepackage[english]{babel}
+\usepackage{moreverb}
+\usepackage[margin=3cm,bottom=2.5cm,top=3cm]{geometry}
+\usepackage{multind}
+\usepackage{array}	%% 配合longtable使用
+\usepackage{longtable}
+\usepackage{marvosym}	%% 排版通讯录的示例时用到
+\usepackage{ttb_style}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks,
+  breaklinks,
+  linkcolor=blue,
+  hyperindex,
+  pdfstartview=FitH,
+  plainpages=false
+}
+
+\makeatletter
+\def\@citecolor{green!50!black}
+\def\@linkcolor{red!80!black}
+\makeatother
+\usepackage{advdate}
+\makeatletter
+\let\save@ssect\@ssect
+\usepackage{minitoc}
+\expandafter\ifx\csname mtcskip\endcsname\relax
+  \def\mtcskip{}
+  \message{WARNING -- Please update your minitoc package.}
+\fi
+\makeatother
+
+\makeindex{latex}
+\makeindex{bibtex}
+
+
+\begin{document}
+\SetDate[\ttbdate]
+\setcounter{parttocdepth}{3}
+\doparttoc
+
+
+%% Title page
+\begin{center}
+{\Huge\bfseries 驯服猛兽}
+\par\bigskip
+{\Large ---关于~\bt 的前生今世}
+\par\bigskip
+{\large 英文名: Tame the BeaST (The B to X of \bt)} 
+\par\bigskip
+原作者: Nicolas \textsc{Markey} 
+\par
+\href{mailto:markey@lsv.ens-cachan.fr}{markey@lsv.ens-cachan.fr}
+\par\bigskip
+译作者: LaughCry
+\par
+\href{mailto:laughcry2002@163.com}{laughcry2002@163.com}
+\end{center}
+\widowpenalty10000
+\vfil\vfil
+\begin{center}
+\fbox{版本号: \ttbversion{} -- \today}
+\vfil
+\begin{minipage}{.8\textwidth}
+\indent 这本共~\pageref{LastPage} 页的小册子旨在清晰而又详尽地向读者介绍关于~\bt 的功能与原理.
+之所以写这么个教程, 是因为~\bt 手册~(实际上主要是其作者撰写的两个文档~\cite{btxdoc,btxhak}) 以及几本~\LaTeX{} 书籍~\cite[...]{latex:dps,latex:lc,latex:lc2} 中介绍~\bt 的章节大多过于简略, 不能完整地说明其功能与机理.
+
+\indent 本手册英文名称中的三个大写字母~``BST'' 表示~\bt 文献样式文件的标准扩展名, ``从~B~到~X'' 表示我希望本手册尽可能完整全面~(目标是~``从~A~到~Z''). 欢迎就关于~\TeX{} 方面的技术以及本文档的错误给我发送电子邮件.
+\end{minipage}
+\end{center}
+\vfil\vfil
+\begin{center}
+\begin{minipage}{.8\textwidth}
+\tableofcontents
+\end{minipage}
+\end{center}
+\vfil
+
+
+
+
+%% ttb_en.sec1.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+%
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey
+%
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+\mypart{\LaTeX{} 中基本的参考文献表}\label{part1}
+\parttoc
+\mtcskip
+
+在~\LaTeX{} 中, \bt 和其它各式各样的文献类命令一样, 通常被人们认为是比较复杂深奥的内容. 
+许多人在使用时, 大多是通过复制/粘贴经典的源代码, 然后加以修改完成自己的要求, 但对这些命令背后的原理并不清楚.
+其实, 在~\LaTeX{} 中, 参考文献表仅仅是一个文档中引用到的\emph{文献}的普通\emph{列表}而已. 
+假如我们在对~\env{thebibliography} 环境完全不熟悉的情况下手工创建参考文献表的话, 那应该这样书写:
+
+\medskip
+\begin{verbatim}
+这是文档的正文内容, 其中提及了[\ref{doc1}]与[\ref{doc2}].
+\section*{References}
+\begin{enumerate}
+  \renewcommand\labelenumi{[\theenumi]}  %% numbers are surronded with brackets
+  \item \label{doc1} Michel Goossens, Franck Mittelbach and Alexander
+        Samarin, \emph{The \LaTeX{} Companion}, Addison Wesley, 1993.
+  \item \label{doc2} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+        System}, Addison Wesley, 1997.
+\end{enumerate}
+\end{verbatim}
+\noindent 上述文档经过编译后, 生成的效果为
+\begin{myex}
+这是文档的正文内容, 其中提及了~[\ref{doc1}] 与~[\ref{doc2}].
+\section*{References}
+\begin{enumerate}
+  \renewcommand\labelenumi{[\theenumi]}  %% numbers are between brackets
+  \item \label{doc1} Michel Goossens, Franck Mittelbach and Alexander
+        Samarin, \emph{The \LaTeX Companion}, Addison Wesley, 1993.
+  \item \label{doc2} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+        System}, Addison Wesley, 1997.
+\end{enumerate}
+\end{myex}
+
+这个效果与使用~\env{thebibliography} 环境完全类似~(该环境以一个~\env{list} 环境开始, 效果类似于~\env{enumerate}), 
+而~\cmd{bibitem} 则对应于~\cmd{item} 命令. 二者最大差别之处在于~\cmd{bibitem} 允许使用比~\cmd{item} 和~\cmd{label} 更一般性的交叉引用~(例如, 我们可以这样引用:\cite{latex:lc}).
+
+
+本部分内容正是围绕~``如何在不使用~\bt 的情况下书写参考文献表'' 展开的, 虽然这并不是这本手册的主要目的, 但它对于深入理解其前后机理非常重要.
+
+\mysection{\nienv{thebibliography} 环境}
+
+
+%%
+%% Fin trad.
+%%
+
+首先应当注意, \LaTeX{} 本身并没有定义~\env{thebibliography} 环境~(当然~\TeX{} 也没有定义它\footnote{%
+\bt 也可以配合~\TeX{} 使用, 方法是要包含~(input)\sty[tex]{btxmac} 宏包.},
+它是在文档类文件中定义的~(例如, \cls{article} 或~\cls{book} 等).
+正如先前所述, 它首先新建一个章节~(根据文档类的不同, 章节可能是~\cmd{section} 或~\cmd{chapter}), 然后在其中定义一个~\env{list} 类环境\footnote{%
+这也就解释了为什么~\env{thebibliography} 环境需要在文档类文件中定义, 而其它与文献有关的一般命令则都是在标准的~\LaTeX{} 格式中定义的},
+不过为了避免在缩进方面产生问题, 这个列表还是精细地调整. 举例来说, 如果我们在先前例子中改用~``字母与数字'' 式的标签, 那么会得到以下不正常的排版效果
+\begin{myex}
+\section*{References}
+\begin{enumerate}
+\renewcommand\labelenumi{[\theenumi]}
+\item[{[GMS93]}] Michel Goossens, Franck Mittelbach, and Alexander
+Samarin, \emph{The \LaTeX Companion}, Addison Wesley, 1993.
+\item[{[Lam97]}] Leslie Lamport, \emph{\LaTeX: A Document Preparation
+System}, Addison Wesley, 1997.
+\end{enumerate}
+\end{myex}
+
+为了避免出现这种不适当的缩进问题, \env{thebibliography} 提供了一个强制参数, 它通常应取为列表中最长的标签, 目的是以此为标准建立合理空白间距.
+
+\medskip
+下面我们以文档类~\cls{article} 为例, 来看一下~\env{thebibliography} 环境的精确定义:
+\begin{listing}{1}
+\newenvironment{thebibliography}[1]
+     {\section*{\refname
+        \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}}%
+\end{listing}
+正如我们先前预料的那样, \env{thebibliography} 首先新建了一个节（或章）\footnote{事实上, 由于它采用了一个~\cmd{section*} 命令, 所以它不会出现在目录表中. 如果希望它出现在目录表中, 则可以使用~\sty{tocbibind} 宏包. 其它的解决办法通常会造成页码错乱.}.
+该环境同时修改了页眉\footnote{标准的~\sty{apalike} 宏包会根据文档类的不同, 将新页眉硬编码地定义为~``REFERENCES'' 或~``BIBLIOGRAPHY''. 另一个同名宏包则将新页眉硬编码为~\cmd{refname} 或~\cmd{bibname}. 因此如果你在实践中遇到关于页眉定义方面的问题, 不妨考虑通过检查一下宏包的源码以确定问题所在.}.
+
+\begin{listingcont}
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+\end{listingcont}
+这也是我们预料中的内容: 先创建一个新的~\env{list} 环境\footnote{\cmd{list} 命令等价于~\texttt{\bs begin\{list\}}, 为了封闭环境, 它需要有一个相匹配的~\cmd{endlist}命令.}, 它有两个强制参数: 
+\begin{itemize}
+\item 第一个强制参数~(\texttt{\bs\at biblabel\{...\}}) 用于指定标签格式, 这里是通过~\cmdat{biblabel}{}\footnote{\cmdat{biblabel} 命令是在~\LaTeX{} 中定义的, 它的输出是在其参数串两侧加上方括号. 其精确定义为:
+\texttt{\bs def\bs\at biblabel\#1\{[\#1]\}}.}命令与~\verb+enumiv+ 计数器的配合来实现的, 因此会得到~[1], [2], ...这样的标签输出. 由于~\cmd{bibitem} 是一种特殊的~\cmd{item}, 因此也允许通过使用可选参数来改变这里所定义的缺省标签的格式. 
+\item 第二个参数~(从上面的第~5 行到下文的第~11 行之间) 是在该环境开始时要运行的一条或多条命令, 通常是一些设置~\env{list} 环境中各种长度与参数取值的命令. 这里也是为了实现合理缩进而需要我们提供最长标签的地方~(``最长标签'' 是~\env{thebibliography} 环境的强制参数). 人们经常会书写~\verb+\begin{thebibliography}{99}+ 这样的语句, 但要注意这种写法仅在被引文献数目在~\(10\) 到~\(99\) 时才是恰当的~(当然, 这里假定所有数字符号具有相同的宽度, 例如: 在使用~\textsf{cmr} 类字体时就是这种情况). 
+\end{itemize}
+
+
+\env{thebibliography} 环境定义的其余部分还包括了列表边界的确定以及计数器~\verb+enumiv+ 的使用:
+\begin{listingcont}
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+\end{listingcont}
+使用~\cmdat{openbib\at code} 可以允许我们根据需要修改一些参数的取值, 它的缺省定义为空. 传统的样式文件会提供一个~\texttt{openbib} 选项, 该选项会使用这条命令对某些参数进行重新设置. 第~9 到~11 行的代码重置了列表计数器的值.
+
+最后, 定义了在参考文献列表排版中所使用的一些间距与分段处理参数: 
+\begin{listingcont}
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+\end{listingcont}
+
+
+以上就是该环境前置内容的所有内容. 而~\env{thebibliography} 环境的后置内容则更简单:
+如果文献列表为空, 则回显一条警告消息, 最后关闭~\env{list} 环境:
+\begin{listingcont}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\end{listingcont}
+
+
+
+\mysection{\protect\nicmd{bibitem} 命令}\label{bibitem}
+
+在前述~\env{list} 环境的内部, 通常需要插入一些~\cmd{item}{} 命令. 这是一种特殊的~\cmd{item} 命令, 因为它需要能够正确描述每一条参考文献项的特性, 这种特殊的~\cmd{item} 命令被命名为~\cmd{bibitem}, 它有两重角色: 一是在列表中写入一项新条目, 二是定义用以引用本条目的交叉引用标签, 该标签的缺省定义是~\verb+\@biblabel{\@arabic\c@enumiv}+, 效果类似于~[1] 这样, 但也可以通过使用可选参数将其修改成为类似于~[GMS94] 这样的样式, 这一点跟~\cmd{item} 命令的方式完全相同.
+\cmd{bibitem} 命令的精确定义为:
+\begin{listing}{1}
+\def\bibitem{\@ifnextchar[\@lbibitem\@bibitem}
+\end{listing}
+可见, 当使用可选参数时, \cmd{bibitem} 调用~\cmdat{lbibitem}, 否则它调用~\cmdat{bibitem}.
+这两个辅助性的命令定义如下:
+%
+\begin{listing}{1}
+\def\@lbibitem[#1]#2{\item[\@biblabel{#1}\hfill]\if@filesw
+      {\let\protect\noexpand
+       \immediate
+       \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
+\end{listing}
+%
+为了弄清楚它的工作原理, 我们举个例子说明: 假如我们写了~\verb+\bibitem[GMS94]{companion}+, 
+那么该命令首先创建一个具有相同可选参数的列表项, 通过使用~\cmdat{biblabel} 命令, 该列表项两侧会用中括号包围, 同时~\cmd{hfill} 命令又将它在行中居左对齐.\label{biblabel}
+然后, 又往辅助文件~\ext{aux}\footnote{更准确地说, 是用~\cmdat{auxout} 命令所指向的文件, 不过通常情况下, 它就是~\ext{aux} 文件}中写入一条带两个参数的~\cmd{bibcite} 命令.  
+\cmd{bibcite} 较为简单, 定义如下:
+\label{bibcite}
+\begin{listing}{1}
+\def\bibcite{\@newl@bel b}
+\end{listing}
+
+\cmdat{newl\at bel} 命令需要三个参数~\texttt{\#1},
+ \texttt{\#2} 和 ~\texttt{\#3}, 它定义了一条名称为~\texttt{\#1\at\#2} 的新命令~(当然这里的~\texttt{\#1} 和~\texttt{\#2} 会用它们相应的取值代替), 该新命令的取值为第三个参数~\texttt{\#3}.
+
+这种行为与在文档中定义了一个交叉引用~(通过使用~\cmd{label} 命令) 时的情形类似: 当~\ext{aux} 文件被~\LaTeX (namely at the \verb+\begin{document}+ and
+\verb+\end{document}+) 读入时, 就会执行这些~\cmdat{newl\at bel} 命令, 从而定义一条~\verb+\b@companion+ 命令, 在本例子中该命令就包含着文本内容: \texttt{GMS93}. 
+
+如果没有使用可选参数, 情形也非常类似:
+%
+\begin{listing}{1}
+\def\@bibitem#1{\item\if@filesw \immediate\write\@auxout
+       {\string\bibcite{#1}{\the\value{\@listctr}}}\fi\ignorespaces}
+\end{listing}
+%
+新建一个列表项~\cmd{item}, \cmd{bibcite} 命令被写入到~\ext{aux} 文件中. 这里唯一的新东西是指向~\verb+enumiv+
+的列表计数器~\cmdat{listctr}, 当在~\env{thebibliography} 定义中的~\cmd{usecounter} 请求时, 该计数器的值就会被取用.
+所有出现在~\cmd{bibitem}(及其参数) 之后的内容都将输出到文档中最近创建的那个列表项中去, 直到出现下一条~\cmd{bibitem} 命令或到达~\env{thebibliography} 环境的末尾为止\footnote{有些宏包重新定义了~\cmd{bibitem} 命令, 从而可能不再符合这种规则, 关于这方面的内容请参看第~\ref{redefbibitem} 节.}.
+
+\medskip
+我们通过一个小的文献列表的例子作为总结~(在本例中共有两条文献项, 这两条正是正文中出现的那两条):
+
+\begin{verbatim}
+\begin{thebibliography}{GMS93}   %% 最长的标签是GMS93
+\bibitem[GMS93]{companion} Michel Goossens, Franck Mittelbach and Alexander
+     Samarin, \emph{The \LaTeX{} Companion}, Addison Wesley, 1993.
+\bibitem[Lam97]{lamport} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+     System}, Addison Wesley, 1997.
+\end{thebibliography}
+\end{verbatim}
+这是编译后的结果:
+
+\begin{myex}
+\begin{thebibliography}{GMS93}
+\bibitem[GMS93]{companion1} Michel Goossens, Franck Mittelbach and Alexander
+     Samarin, \emph{The \LaTeX Companion}, Addison Wesley, 1993.
+\bibitem[Lam97]{lamport1} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+     System}, Addison Wesley, 1997.
+\end{thebibliography}
+\end{myex}
+
+
+\mysection{\protect\nicmd{cite} 命令}\label{cite}
+
+如果把参考文献表当作是具有交叉引用的列表, 那么
+~\cmd{cite} 命令就等价于其中的~\cmd{ref} 命令. 它有一个强制参数, 在文献项被引用时用作内部标签. 它还有一个可选参数, 可用于对文献进行补充注解, 例如对~\bt 引用时, 一种较好的写法是
+~\cite[第13章]{latex:lc}, 它是通过录入 
+~\verb+\cite[第13章]{companion}+ 来实现的.\label{citeopt}
+
+
+这里给出它的详细定义\footnote{关于~\cmd{DeclareRobustCommand} 命令的细节参看第~\pageref{DRC} 页. 如果你对该命令完全陌生的话, 可以暂时将它看作是一个~\cmd{newcommand} 命令.}: 
+%
+\begin{listing}{1}
+\DeclareRobustCommand\cite{%
+  \@ifnextchar [{\@tempswatrue\@citex}{\@tempswafalse\@citex[]}}
+\end{listing}
+% 
+如果带有可选参数, 则布尔变量~\cmdat{tempswa} 的值为~true(即记住此时带可选参数的状态和事实), 然后开始调用~\cmdat{citex} 命令. 否则, 若没有使用可选参数的话, \cmdat{tempswa} 的值为~false, 然后用一个空可选参数调用~\cmdat{citex} 命令.
+
+
+在开始详细解释~\cmdat{citex} 命令之前, 我们首先快速浏览一下~\cmdat{citex} 命令中要使用的~\cmdat{cite} 命令, 这将有助于我们更好地理解~\cmdat{tempswa} 的使用方法: 
+%
+\begin{listing}{1}
+\def\@cite#1#2{[{#1\if@tempswa , #2\fi}]}
+\end{listing}
+这是用于将文献输出到文档中的命令. 其第二个参数仅当~\cmdat{tempswa} 值为~true 时才会使用, 它与第一个参数一道被放进中括号中, 并最终输出到文档中.
+
+于是, \cmdat{citex} 命令开始充当~\cmd{cite} 与~\cmdat{cite} 之间桥梁的角色:
+\label{citex}
+%
+\begin{listing}{1}
+\def\@citex[#1]#2{%
+  \let\@citea\@empty
+  \@cite{\@for\@citeb:=#2\do
+\end{listing}
+
+这里调用了~\cmdat{cite}, 当有数条文献被引用时, 该命令的第一个参数需要用~\cmdat{for} 命令计算得到.\index{latex}{citea@\texttt{\protect\bs\protect\at citea}}
+%
+\begin{listingcont}
+    {\@citea\def\@citea{,\penalty\@m\ }%
+\end{listingcont}
+%
+从~\cmdat{for} 循环中的第二项开始, 加入一个逗号和一个换行罚分, 以保证不会在文献引用项之间换行, 缺省行为是在所有文献引用项之间都不会换行.
+%
+\begin{listingcont}
+     \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
+\end{listingcont}
+%
+这里重新定义了循环内部变量~\cmdat{citeb}. 整个~\cmdat{for} 命令顺次地将~\cmdat{citeb} 的值设定为所有被引用值. 这里重新定义~\cmdat{citeb} 只是为了去除额外的空白符. 这种处理看起来怪怪的, 不过很有效.
+\label{citation}
+
+\begin{listingcont}
+     \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+\end{listingcont}
+%
+这里在~\ext{aux} 文件中写入一条~\cmd{citation} 命令, 以表明~\cmdat{citeb} 已经在文档中被引用了. 
+其实这种处理在这里并不那么有用, 但在使用~\bt 生成参考文献表时将非常关键~(参看第~\ref{bibtex} 节).
+
+\begin{listingcont}
+     \@ifundefined{b@\@citeb}{\mbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Citation `\@citeb' on page \thepage \space undefined}}%
+\end{listingcont}
+%
+这段代码用来处理所引文献不存在时的情形, 此时被引文献会用一个加粗的问号来代替, 同时一条警告消息将回显到~\ext{log} 文件中.
+
+\begin{listingcont}
+       {\@cite@ofmt{\csname b@\@citeb\endcsname}}}}{#1}}
+\end{listingcont}
+如果被引文献存在, 则现在使用~\nicmd{b\at...} 命令将其写入, 注意到这些~\nicmd{b\at...} 命令是在读取~\ext{aux} 文件时创建的~(参看第~\pageref{bibcite} 页).
+\cmdat{cite\protect\at ofmt} 命令其实等价于~\cmd{hbox}\footnote{在较早版本~(早于~2003 年) 的~\LaTeX{} 中, \cmdat{citex} 命令是用~\cmd{hbox} 来定义的.}.
+在对所有待引用的文献完成循环处理后, 结果传给~\cmdat{cite} 命令, 同时还附带一个可选的第二参数, 即这里的~\verb+#1+. 
+
+\medskip
+由上面描述可知, 这些处理关系似乎有点复杂, 不过不要紧, 使用起来还是挺简单的: 为了得到~\cite{latex:lc,latex:dps}, 你只需要键入~\verb+\cite{companion, lamport}+ 即可, 同时还会在文档中生成前一节末尾那样的参考文献表.
+
+
+
+\mysection{更多小技巧}\label{truc1}
+
+\mysubsection{\protect\nicmd{DeclareRobustCommand} 命令是什么?}
+\label{DRC}
+
+如果一条命令有一个可选参数, 例如~\cmd{cite}, 则称该命令是\emph{脆弱的~(fragile)}: 粗略地说, 这些命令不能直接用在其它命令的参数中~(例如, 在~\cmd{section} 中不能使用~\cmd{cite} 命令). 一种解决办法是在脆弱命令之前写一个~\cmd{protect}, 不过这种写法常会令生手们迷惑不解. 另一种解决办法是将该命令声明为~``健壮的~(robust)'', 即在定义时使用~\cmd{DeclareRobustCommand} 而不是~\cmd{newcommand}.
+
+
+\mysubsection{修改参考文献表的标题}
+
+从~\env{thebibliography} 环境的定义可知这种需求很容易实现: 只要重新定义~\cmd{refname}, 将其缺省值从~\emph{\refname} 修改为所需内容. 不过这种方法只适用于文档类~\cls{report}, 而文档类~\cls{book} 和~\cls{article} 则使用~\cmd{bibname}, 其缺省值为~\emph{\bibname}. 
+
+例如, 在使用文档类~\cls{report} 时, 可以这样修改:
+\begin{verbatim}
+   \renewcommand{\refname}{参考书目}
+\end{verbatim}
+而在使用文档类~\cls{book} 或~\cls{article} 时, 则应为:
+\begin{verbatim}
+   \renewcommand{\bibname}{参考书目}
+\end{verbatim}
+如前文所述, 在处理页眉时, \sty{apalike} 不使用~\cmd{refname}, 而是将文献列表标题名进行了硬编码.
+
+\mysubsection{在第一条参考文献表之前增加一些文本内容}
+
+仅仅将所需文本放置到~\env{thebibliography} 环境起始处的后面是行不通的, 将会发生一个错误, 这是因为在~\env{list} 环境中是需要有~\cmd{item} 命令的. 于是, 我们索性放一个真正的~\cmd{item}, 然后增加一些负的水平距离, 以便达到恰当的左边距值, 并将我们的文本包装在一个~\env{minipage} 环境中~(这是为了避免由于使用列表而带来的缩进):
+
+\begin{verbatim}
+\begin{thebibliography}{GMS93}
+\item[]
+\hskip-\leftmargin
+\begin{minipage}{\textwidth}
+Here are some useful references about \LaTeX. They are
+available in every worthy bookshop. Many other good documentations
+might be found on the web (the FAQ of \textsf{comp.text.tex} for
+instance). 
+\end{minipage}
+\bigskip
+\bibitem[GMS93]{companion} Michel Goossens, Franck Mittelbach and
+     Alexander 
+     Samarin, \emph{The \LaTeX{} Companion}, Addison Wesley, 1993.
+\bibitem[Lam97]{lamport} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+     System}, Addison Wesley, 1997.
+\end{thebibliography}
+\end{verbatim}
+其效果为:
+
+\begin{myex}
+\begin{thebibliography}{AAA00}
+\item[]
+\hskip-\leftmargin
+\begin{minipage}{\textwidth}
+Here are some useful references about \LaTeX. They are
+available in every worthy bookshop. Many other good documentations
+might be found on the web (the FAQ of \textsf{comp.text.tex} for
+instance). 
+\end{minipage}
+
+\bigskip
+\bibitem[GMS93]{companion2} Michel Goossens, Franck Mittelbach and
+     Alexander 
+     Samarin, \emph{The \LaTeX{} Companion}, Addison Wesley, 1993.
+\bibitem[Lam97]{lamport2} Leslie Lamport, \emph{\LaTeX: A Document Preparation
+     System}, Addison Wesley, 1997.
+\end{thebibliography}
+\end{myex}
+
+
+\mysubsection{重新定义\protect\nicmd{bibitem}}\label{redefbibitem}
+
+
+有些样式文件中需要重新定义~\cmd{bibitem} 命令~(或者更直接地, 修改~\cmdat{bibitem} 与~\cmdat{lbibitem}), 以便每个条目项以一个~\cmd{par} 命令~(或一个空白行) 结束. \sty{backref} 就是一个这样的例子. 还有一些样式文件则将~\cmd{bibitem} 命令的可选参数转换成了强制参数, 例如~\sty{apalike} 即是如此.
+了解这些或许可以在调试时避免花费过多时间.
+
+
+
+\mysubsection{将方括号换成圆括号}
+
+
+如前文所述, \cmdat{biblabel} 负责为参考文献列表中的文献项标签两侧添加中括号, 因此通过重新定义该命令就很容易得到圆括号的形式: 
+
+\begin{verbatim}
+\makeatletter		% @ is now a letter
+\def\bibleftdelim{(}
+\def\bibrightdelim{)}
+\def\@biblabel#1{\bibleftdelim #1\bibrightdelim}
+\makeatother		% @ is a symbol
+\end{verbatim}
+
+这里使用了一点小技巧, 以后再需要改变文献项标签两侧的内容时, 只要重新定义~\nicmd{bibleftdelim} 和~\nicmd{bibrightdelim} 即可. 
+
+不过要注意, 这并不改变~\cmdat{cite} 的行为, 它仍然在被引文献标签两侧添加中括号. 因此为改变该行为, 需要重新定义~\cmdat{cite}:
+\begin{verbatim}
+\makeatletter
+\def\@cite#1#2{\bibleftdelim{#1\if@tempswatrue , #2\fi}\bibrightdelim}
+\makeatother
+\end{verbatim}
+
+\mysubsection{更多技巧}
+
+有许多宏包可以修改参考文献表格式和引用格式, 例如: 宏包~\sty{cite} 修改了~\cmd{cite} 命令的效果: 不仅将方括号换成了圆括号, 而且会对同时多个引文序列进行压缩与排序; 又如宏包~\sty{overcite} 还允许将引文放到上标的位置去.
+
+宏包~\sty{splitbib} 修改了参考文献列表的输出格式: 它允许将参考文献表分割成多个分类, 并且对列表进行重新排序. 更多细节参看~\cite{splitbib} 的文档.
+
+\mysubsection{内部引用标签可以使用~\$ 符号吗?}
+
+回答大概是~``不能'', 但我并不确切地知道哪些字符能哪些字符不能用, 不过显然字母与数字是合法的, 这通常就足够了. 此外, 逗号, 尖括号以及反斜杠符是禁用的, 除此之外的其它字符, 我就不能确定了, 通常采用尝试的办法来确定.
+
+
+\mysection*{结论}
+
+至此, 我们已经知道如何写参考文献表了, 似乎可以结束本手册了. 不过手工编排每一条文献既费时又易错, 而且在撰写多篇相关的文章时, 经常会引用同一批文献, 但可能采用不同的文献书写样式. 假设能将大量文献整理成一个\emph{数据库}的形式, 则每次从中选择一部分, 并用~\LaTeX{} 对其格式化及排版, 那将可以大大地简化工作. 这样的假设是存在的, 将在后文加以描述.
+
+
+%% ttb_en.sec2.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt 
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey  
+% 
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+
+\mypart{如何使用~\bt?}
+\parttoc
+\mtcskip
+
+\mysection{\bt 的工作机理} \label{bibtex}
+
+如前所述, 可将~\bt 视为一个数据库管理程序: 它从数据库中提取某些项, 对其进行排序, 并以~\env{thebibliography} 环境将结果导出, 以供~\LaTeX{} 处理. 
+
+这种描述有点乐观和粗略, 现实情况则要更复杂些: 为了告诉~\bt 哪些条目需要导出, 需要首先对你的文档运行一次~\LaTeX{}; 一旦~\bt 完成任务, 需要再次运行~\LaTeX{} 以便将生成的参考文献表内容一并考虑在内. 具体来说:
+
+\begin{itemize}
+\item 首先, 需要对文档运行~\LaTeX{}. 由于这是第一遍的编译, 没有任何文献引用信息可供利用, 因此参考文献表是空的. 每当~\LaTeX{} 遇到文档中的一个文献引用项时, 它将引用的键~(key, 即引用标签) 写入到~\ext{aux} 文件中\footnote{这正是由~\cmd{cite} 命令中的
+~\cmd{citation} 命令所完成的~(参看第~\pageref{citation} 页).}. 在编译期间, \LaTeX{} 也会在~\ext{aux} 文件中表明使用了哪个数据库, 以及使用了哪种参考文献样式来排版参考文献表的格式.
+
+\item 其次, 执行~\bt: 该命令的参数为~\ext{aux} 文件, 该文件中包含着用于导出文献条目的所有相关信息: 样式文件~(\ext{bst} 文件) 用来指导文献表的排版, 数据库文件~(\ext{bib} 文件) 指明了所引文献项的来源. 利用这些信息, \bt 就能有效地从数据库中导出所引文献项, 并按照指定排版样式输出到一个~\ext{bbl} 文件中, 操作过程中的日志信息记入~\ext{blg} 文件.
+
+\item 第三步, 重新执行一次~\LaTeX. 此时, 上一步生成~\ext{bbl} 文件就会被包含进来, 其中每条文献项中的~\cmd{bibitem} 命令就会被执行. 在这一步中, 会根据需要将交叉引用信息写入到~\ext{aux} 中去. 不过, 由于这一步中交叉引用项并未正确地定义好, 因此生成的文档中参考文献表仍然是空的.
+
+\item 最后, 第三次运行~\LaTeX: 这一次编译开始时就会读入~\ext{aux} 文件, \LaTeX{} 将会将所引文献存储下来, 并在参考文献表中正确地排版列出所引文献.
+\end{itemize}
+
+
+由此可见, 在最佳情形下, 我们需要对文档~\LaTeX{} 编译~3 遍, 运行~\bt 一遍. 有时, 仅这几遍仍然不够, 例如: 当一条文献项条目的内容中又包含了对另一条文献项条目的引用时, 就需要再增加一遍~\bt 和~\LaTeX{}. 总而言之, 编译过程的总模式可以归纳成如下的正则表达式:
+\begin{center}
+\LaTeX (\bt {} \LaTeX )$^+$ \LaTeX.
+\end{center}
+
+
+至于其它过程就完全与第~\ref{part1} 部分相同, 这是因为~\bt 通常就是创建一个完整的~\env{thebibliography} 环境而已, 在该环境中, 包含了所有文档中所引用的文献项的~\cmd{bibitem}{}.
+不过, 也有两条~\LaTeX{} 命令是新的, 它们分别用于定义文献样式文件和文献数据库文件:
+\begin{itemize}
+\item \cmd{bibliographystyle} 命令用于声明~\bt 所用的文献样式文件. 其定义为:
+\begin{listing}{1}
+\def\bibliographystyle#1{%
+  \ifx\@begindocumenthook\@undefined\else
+    \expandafter\AtBeginDocument
+  \fi
+    {\if@filesw
+       \immediate\write\@auxout{\string\bibstyle{#1}}%
+     \fi}}
+\end{listing}
+
+
+该命令简单地往~\ext{aux} 文件中写入一条~\cmd{bibstyle} 命令, 其参数是文献样式文件的名称. \cmd{bibstyle} 命令本身带有一个参数, 不过该命令没什么任务. 事实上, 只有~\bt 才需要文献样式文件名, \LaTeX{} 并不需要它.
+
+\item \cmd{bibliography} 命令用于定义所使用的文献数据库. 与前一条命令相反, \cmd{bibliography} 命令的参数可以一个逗号分隔的文献数据库文件名列表, 这里所说的~``逗号分隔'', 不允许有空白符和换行符. 除此之外, 这条命令的行为与前一条命令的行为方式非常相似: 它也将其参数作为另一条名为~\cmd{bibdata} 的命令~(该命令会由~\bt 读取, 但对~\LaTeX{} 无什么意义) 的参数写入到~\ext{aux} 文件中. 最后, \cmd{bibliography} 命令将~\ext{bbl} 文件包含进来用于输出参考文献表. 以下是该命令的精确定义:
+\begin{listing}{1}
+\def\bibliography#1{%
+  \if@filesw
+    \immediate\write\@auxout{\string\bibdata{#1}}%
+  \fi
+  \@input@{\jobname.bbl}}
+\end{listing}
+
+这里正如你所猜测到的, \cmd{jobname} 返回当前正被编译的文档的文件名.
+\end{itemize}
+
+
+最后再明确一点: \ext{aux} 文件中也包含着需要导出的条目的键~(key) 列表, 这是通过~\cmd{citation} 命令来实现的, 该命令则是通过~\cmd{cite} 命令回显到~\ext{aux} 文件中的. \cmd{citation} 命令同~\cmd{bibstyle} 与~\cmd{bibdata} 这两条命令完全一样, 呵, 那就是什么也不干.
+
+
+\mysection{一些参考文献样式}
+
+由于每个出版机构都有自己独特的需求与喜好, 因此存在量大量不同的文献样式. 本节将举一些典型文献样式文件的例子. 
+
+\mysubsection{传统的文献样式}
+
+以下四种文献格式由~Oren \textsc{Patashnik} 原创, 哦, 忘记交待了, 他也是~\bt 的作者. 这四种样式分别是~\bst{plain}, \bst{alpha},
+\bst{unsrt} 和~\bst{abbrv}. 例如, 如果你想使用~\bst{plain} 样式, 则需要在文档~(任何位置均可) 中书写~\verb+\bibliographystyle{plain}+.
+
+
+大体上说, 文献样式要管理所有关于文献的排版事务, 可归纳为以下三方面: 一是定义可用的文献条目类型\footnote{我坚持认为文献条目类型与文献中所使用的字段名应当由文献样式所确定, 而不是由~\bt 来固定不变.}及其相关的字段, 二是对所需文献的提取与排序, 三是对文献表的排版.
+
+
+因此, 文献样式文件的第一种角色就是定义文献条目类型, 例如在传统文献样式中定义~\ent{book}, \ent{article} 以及~\ent{inproceedings} 等, 对于每种文献条目类型, 还要定义哪些字段是必需的, 哪些字段是可选的, 还有哪些字段会被忽略等等\footnote{具体规则是, 如果一个字段即不是必需的, 也不是可选的, 那么它就是被忽略的. 因此, 我们可以在文献库中加入一些注释性字段或供个人使用的字段.}.
+下面的表描述了传统的文献样式中所使用的字段的角色与功能. 这里只给出简略的描述, 详细信息可在任何一本~\LaTeX{} 的书中找到.\label{champ}
+
+\begin{center}
+%\centerline{%
+\begin{longtable}{|>{\vrule height8pt depth0pt width 0pt\noindent\bgroup\bfseries}p{.17\textwidth}<{\egroup}>{\noindent}p{.77\textwidth}<{\vrule height0pt depth7pt width 0pt}|}
+\hline\endfirsthead
+\hline\endhead
+\hline\endfoot
+\hline\endlastfoot
+address & Generally the city or complete address of the publisher.
+\\
+author & For author names. The input format is quite special, since
+\bt 
+has to be able to distinguish between the first and last
+names. Section~\ref{author} and~\ref{noms-start} are completely 
+dedicated to this topic.
+\\
+booktitle & For the title of a book one part of which is cited.
+\\
+chapter & The number of the chapter (or any part) of a book being
+cited. If not a chapter, the \texttt{type} field might be used for
+precising the type of sectioning.
+\\
+crossref & This one is quite peculiar. It's used to cross-reference
+within the bibliography. For instance, you might cite a 
+document, and a part of it. In that case, the second one 
+can reference
+the first one, or at least inherit some of its fields from the first
+one. This deserves some more comments, see section~\ref{crossref}.
+\label{cetaitla} \\
+edition & The edition number. Or in fact its ordinal, for instance
+\texttt{edition = "First"}. This  might raise
+problems when trying to export a bibliography into another language.
+\\
+editor & The name of the editor(s) of the entry. The format is the 
+same as for authors.
+\\
+howpublished & Only used in rare cases where the document being cited
+is not a classical type such as a \ent{book}, an \ent{article} or an
+\ent{inproceedings} publication.
+\\
+institution & For a technical report, the name of the institution that
+published it.
+\\
+journal & The name of the journal in which the cited article has 
+been published. 
+\\
+key & Used for defining the label, in case it cannot be computed by
+\bt. It does not force the label, but defines the label when
+\bt needs one but can't compute it.
+\\
+month & Well... The month during which the document has been
+published. This also raises the problem of the translation of the
+bibliography: It's better having a numerical value, or an abbreviation,
+instead of the 
+complete name of the month. Having the number would also allow \bt
+to sort the entries more precisely (even though, as far as I know, no
+bibliography style does this at the present time).
+\\
+note & For any additional data you would want to add. Since classical
+styles were written in 1985, they don't have a \texttt{url} field, and
+\texttt{note} is often used for this purpose, together with the
+\sty{url} package.
+\\
+number & A number... Not whichever, but the number of a report. For
+volume numbers, a special 
+\texttt{volume} field exists.
+\\
+organization & The organizing institution of a conference.
+\\
+pages & The relevant pages of the document. Useful for the reader when
+you cite a huge book; Note that such a precision could be added
+through the optional argument of \cmd{cite} (see
+page~\pageref{citeopt}), in which case it would appear in the document
+but not in the bibliography. 
+\\
+publisher & The institution that published the document.
+\\
+school & For theses, the name of the school the thesis has been
+prepared in.
+\\
+series & The name of a collection of series or books.
+\\
+title & The title of the document being cited. There are some rules to
+be observed when entering this field, see section~\ref{title}.
+\\
+type & The type. Which type? It depends... The type of publication, if
+needed. For thesis, for instance, in order to distinguish between
+a masters thesis and a PhD. Or the type of section being cited (see
+\texttt{chapter} above). 
+\\
+volume & The volume number in a series or collection of books.
+\\
+year & The publication year.
+\\
+%\hline
+%\caption{ }\label{chp}
+\end{longtable}
+\end{center}
+\label{fin-champ}
+
+
+下表则列出了不同的文献条目类型, 同样更详细的信息可从~\LaTeX{} 文档中获得. \label{type}
+{%
+\hfuzz=50pt%
+\begin{longtable}{|>{\vrule height11pt depth0pt width 0pt}p{.45\textwidth}
+%>{\noindent}p{.27\textwidth}
+>{\noindent\raggedright\relax}p{.22\textwidth}
+>{\noindent\raggedright\relax}p{.25\textwidth}<{\vrule height0pt depth9pt width 0pt}|}
+\hline\endfoot
+\hline\endlastfoot
+\hline
+\vrule depth7pt height 10pt width 0pt\normalfont 条目类型 & 
+必需字段 & 可选字段 \tabularnewline\hline\endhead
+\hline\vrule depth7pt height 10pt width 0pt\normalfont 条目类型  &
+必需字段 & 可选字段 \tabularnewline\hline\endfirsthead
+
+\ent{article} :  An article published in a journal. &
+\chp{author}, \chp{title}, \chp{year}, \chp{journal}. &
+\chp{volume}, \chp{number}, \chp{pages}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{book} :  Well... A book. &
+\chp{author} or \chp{editor}, \chp{title}, \chp{publisher}, \chp{year}.&
+\chp{volume} or \chp{number}, \chp{series}, \chp{address}, \chp{edition}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{booklet} :  A \emph{small} book, that has no \chp{publisher} field.&
+\chp{title}.&
+\chp{author}, \chp{howpublished}, \chp{address}, \chp{address}, \chp{month}, \chp{year}, \chp{note}. \tabularnewline
+
+\ent{conference} : Article that appeared in the proceedings of a
+conference, a meeting... &
+\chp{author}, \chp{title}, \chp{booktitle}, \chp{year}.&
+\chp{editor}, \chp{volume} or \chp{number}, \chp{series}, \chp{pages},
+\chp{address}, \chp{month}, \chp{organization}, \chp{publisher}, \chp{note}.\tabularnewline
+
+\ent{inbook} :  Part (generally a chapter) of a book.&
+\chp{author} or \chp{editor}, \chp{title}, \chp{chapter} or \chp{pages}.&
+\chp{volume}, \chp{number}, \chp{series}, \chp{type}, \chp{address},
+\chp{edition}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{incollection} :  Part of a book having its own title. &
+\chp{author}, \chp{title}, \chp{booktitle}, \chp{publisher}, \chp{year}.&
+\chp{editor}, \chp{volume} or \chp{number}, \chp{series}, \chp{type},
+\chp{chapter}, \chp{pages}, \chp{address},
+\chp{edition}, \chp{month}, \chp{note}. \tabularnewline
+
+\ent{inproceedings} & \multicolumn{2}{c|}{Same as \ent{conference}.}
+\tabularnewline
+
+\ent{manual} :  A little manual, such as this one for instance. &
+\chp{title}.&
+\chp{author}, \chp{organization}, \chp{year}, \chp{address},
+\chp{edition}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{mastersthesis} :  Masters thesis, or something equivalent. &
+\chp{author}, \chp{title}, \chp{school}, \chp{year}.&
+\chp{type}, \chp{address}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{misc} :  When nothing else fits...&
+at least one of the optional fields. &
+\chp{author}, \chp{title}, \chp{howpublished}, \chp{year}, \chp{month}, \chp{note}.
+\tabularnewline
+
+\ent{phdthesis} :  PhD dissertation, or similar. &
+\chp{author}, \chp{title}, \chp{school}, \chp{year}.&
+\chp{type}, \chp{address}, \chp{month}, \chp{note}.\tabularnewline
+
+\ent{proceedings} :  Conference proceedings. &
+\chp{title}, \chp{year}.&
+\chp{editor}, \chp{volume} or \chp{number}, \chp{series},
+\chp{address}, \chp{month}, \chp{organization}, \chp{publisher}, \chp{note}.
+\tabularnewline
+
+\ent{techreport} :  Technical report, published by a laboratory, a
+research center, ... &
+\chp{author}, \chp{title}, \chp{institution}, \chp{year}.&
+\chp{type}, \chp{address}, \chp{number}, \chp{month}, \chp{note}.
+\tabularnewline
+
+\ent{unpublished} :  A document that has not been published. Very
+close to \ent{misc}, but \texttt{author} and \texttt{title} are needed
+here. &
+\chp{author}, \chp{title}, \chp{note}.&
+\chp{month}, \chp{year}.\tabularnewline
+%\hline
+\end{longtable}
+%\end{center}
+}
+
+
+关于文献项内容的次序与排版格式, 这几种传统样式都非常类似. 虽然也跟具体的文献类型有关, 不过大都是先写作者名和文献标题, 然后是文献来源的期刊名称或会议录名称, ... 当然最好的理解是亲手试一试, 或者看一下相关目录下的样式文件内容~(不过如果你并不清楚~\bt 样式文件的细节的话, 请先阅读第~\ref{bst} 部分的内容).
+\medskip
+
+
+以上都是讲四种传统样式文件的共同点, 它们之间的主要差别在于所使用的标签与排版格式方面不同.
+
+
+\begin{itemize}
+\item \bst{plain} 样式对文献表条目按作者名进行排序~(使用字母序\footnote{标准的字母表包含~26 个字母, 不过有些语种的字母表并非如此, 例如在瑞典语中, 
+``\texttt{\aa}'' 与~``\texttt{\"o}'' 都会被视为字母, 并排在~``\texttt{z}''之后.}), 如果作者完全相同, 则按出版年份排序~(发表时间早的排在前面). 若作者时间均相同, 再比较标题. 如果还分不出先后, 那么在正文中引用在前的文献排在前面. 引用标签为数字, 从~1 开始. 
+
+\item \bst{alpha} 样式的命名是由于它采用了字母~- 数字~(alphanumerical) 标签: \bt 负责为每个文献条目计算标签, 它取作者名的前三个字母~(若有多个作者, 则使用作者名的首字母), 后面紧接着是表示出版年份的两位数字. 对文献表条目排序时, 先比较标签值, 若标签值相同, 则使用与~\bst{plain} 相同的规则\footnote{通常当然并不希望多个文献表条目具有相同的标签, 因此在计算标签值时, 分两步完成: 第一步使用上述的标准规则求标签值, 第二步对多个相同的标签值追加一个补充字符~(``a'',  ``b'',~...). 排序过程就在这两个步骤之间完成了}.
+
+\item  \bst{unsrt} 样式也很简单: 它不对文献表条目进行特别的排序, 而按它们在正文中首次引用的次序自然排列. 除此之外, 它跟~\bst{plain} 的处理完全一样;
+
+\item \bst{abbrv} 样式则对作者名以及内置的期刊名称、月份名称都进行了缩略处理.
+这里要补充一点, 文献样式最初应用于计算机科学方面的期刊~(Oren \textsc{Patashnik} 本人是一位计算科学家). 因此有许多计算机科学的期刊名缩写被内置到了文献样式文件中, 这是~\bst{abbrv} 与~\bst{plain} 的唯一区别.
+\end{itemize}
+
+
+以上即是四种传统的文献样式. 这些文献样式有许多不足, 例如, 它们都没有~\texttt{url} 字段, 也没有多语种支持, 排序机制异常复杂, 等等. 此外, 出版机构经常会针对文献表的排版提出一些具体精确的排版规则. 基于上述原因, 人们又发展了许多新的文献样式, 下面仅举几例.
+
+
+
+
+\mysubsection{部分其它文献样式}
+
+%There are numerous other bibliography style files. I really can't
+%describe all of them, just mentionning some of them together with
+%their main characteristics.
+
+\mysubsubsection{\protect\nibst{apalike} 样式}
+
+\bst{apalike} 的作者也是~Oren \textsc{Patashnik}. 它使用了一种特殊的标签格式, 即所谓的\emph{作者~- 年代}格式.
+以下我们用例子来说明:
+
+\begin{myex}
+\makeatletter
+\def\@cite#1#2{(#1\if@tempswa , #2\fi)}
+\def\@biblabel#1{}
+\makeatother
+
+在~\cite{latex:lc} 的第~$384$ 页, 有一个使用~\bst{apalike} 的完整例子.
+
+\begin{thebibliography}{}
+\bibitem[Goossens et~al., 1993]{latex:lcici}
+Goossens, M., Mittelbach, F., and Samarin, A. (1993).
+\newblock {\em the \LaTeX{} Companion}.
+\newblock Addison-Wesley.
+
+\bibitem[Lamport, 1997]{latex:dpsici}
+Lamport, L. (1997).
+\newblock {\em \LaTeX{}: A Document Preparation System}.
+\newblock Addison-Wesley.
+\end{thebibliography}
+\end{myex}
+
+使用~\bst{apalike} 样式时, 必需包含~\sty{apalike} 宏包. 只要你回忆一下~\cmdat{biblabel} 和~\cmd{cite} 的定义, 你就知道这么做的理由了. 此外, 使用~\bst{apalike} 创建得到的标签可能会很长, 你通常需要允许~\LaTeX{} 根据需要对标签进行合理断行, 但缺省的~\cmd{cite} 命令中并不允许断行~(参看第~\ref{cite} 节).
+
+%Last, I always like to quote the following comments
+%written in the \bst{apalike} file:
+%\begin{verbatim}
+%% Many journals require a style like `apalike', but I recommend that you
+%% not use it if you have a choice---use something like `plain' instead.
+%\end{verbatim}
+
+另外, 还有一些其它的\emph{作者~- 年代}的样式文件, 如
+~\bst{authordate1}, \bst{authordate2}, \bst{authordate3},
+\bst{authordate4}, 它们仅与~\bst{apalike} 略有不同.
+使用它们时, 必需配合地包含~\sty{authordate1-4} 宏包.
+
+最后, 要特别注意的是: \sty{apalike} 重新定义了~\cmd{bibitem} 命令, 从而将其可选参数变成了强制参数~(仍然需要放在方括号内). 不过你可能并不需要特别关心这一点, 因为文献样式文件会告诉~\bt, 总是要输出可选参数.
+
+
+\mysubsubsection{\protect\nisty{natbib} 宏包}
+
+Patrick~W. \textsc{Daly} 写的~\sty{natbib} 宏包则实现得更彻底: 它通过对~\cmd{cite} 的重新定义, 使得可以用一种更有优雅的方法来使用\emph{作者~- 年代}引用标签或数字式引用标签.
+
+传统文献样式中, 除了~\bst{alpha} 外~(因为它本身已经是一种\emph{作者~- 年代}样式), 均已移植到~\sty{natbib} 中, 移植后的样式名称为
+~\bst{plainnat}, \bst{abbrvnat} 和~\bst{unsrtnat}. 
+此外, 这些样式均增加了~\texttt{url} 字段. \sty{natbib} 还可以跟~\bst{apalike}, \bst{authordate1}, ..., \bst{authordate4} 等配合使用. 
+
+最后提醒一下: \sty{natbib} 有一个非常清晰的文档~\cite{natbib}, 非常值得一读.
+
+\mysubsubsection{\protect\nisty{jurabib} 宏包}
+
+Jens Berger 写的宏包~\sty{jurabib}, 特别适合于法律学研究方面的文档. 与它关联的有一个文献样式~\bst{jurabib}, 其中使用~\cmd{bibitem} 命令的可选参数定义了一种非常特别的格式. 此外, 该文献样式也重新定义了~\cmd{cite} 命令, 补充定义了许多有意思的命令. 关于~\sty{jurabib} 的详细内容请参看~\cite{jurabib}.
+
+\mysubsubsection{\textsf{custom-bib}}
+
+由于可能有许多种可能的文献样式组合, 
+Patrick~W. \textsc{Daly} 写了一个小软件用以自动生成用户定制的文献样式, 该程序大约会提问~$20$ 多个问题, 最后生成立即可用的文献样式文件.
+
+与~Patrick~\textsc{Daly} 的一贯风格一样, 其文档~\cite{merlin} 写得非常好. 这里不准备展开解释, 仅就如何创建一个自定义的~\ext{bst} 文件说明如下:
+键入
+~\verb+latex makebst.tex+, 然后依提示回答问题. 随着程序的执行, 最后就生成了所需的文献样式文件, 非常直观方便. 
+
+
+
+\mysection{问题与解答}
+
+本节用一些常见问题来结束本手册关于~\LaTeX{} 的讨论部分, 后面我们将转入中心话题: \bt 部分.
+
+
+
+\mysubsection{如何得到多个参考文献表?}
+
+虽然不是强烈坚持, 但我还是建议每个文档中只使用一个~\cmd{bibliography} 和~\cmd{bibliographystyle} 命令.
+那样做的话, 对于~\LaTeX{} 倒不会有任何影响, 但对于~\bt 而言, 它将无法确定究竟该使用哪个文献样式或文献库.
+
+
+因此, 唯一一种可能是写入多个~\ext{aux} 文件, 每个~\ext{aux} 文件对应于一个参考文献表, 包含该参考文献表中所有数据.
+\sty{multibib}, \sty{chapterbib} 以及~\sty{bibunit} 等宏包就是这种做法. 
+\begin{itemize}
+\item \sty{multibib} 宏包的作者为~Thorsten \textsc{Hansen}, 该宏包可以精确化地指定参考文献表的位置, 这是通过使用不同的~\cmd{cite} 来实现的, 每个文献表使用一种~\cmd{cite} 命令.
+对于本手册而已, 我就可以通过使用~\sty{multibib} 宏包来定义特殊的~\nicmd{citelatex} 和~\nicmd{citebibtex} 命令, 从而可以达到定义两个独立参考文献表的目标\footnote{熟悉能产生多个索引表的~\sty{multind} 宏包的读者应该比较容易其中的原理.}. 
+当然, 这就需要为每个~\ext{aux} 文件运行一次~\bt, 更详细的内容请参看其文档~\cite{multibib}, 这也是非常值得一读的文档. 文档中也同时指出这种方法的一个主要不足: 在不同的参考文献表中可能会为不同的文献项条目使用相同的标签, 当然你可以仔细些避免出现这种问题.
+
+\item \sty{chapterbib} 宏包的主要作者为~Donald \textsc{Arseneau}, 它为长文档中的每一章或每一部分提供了一个参考文献表~(短文章不需要参考文献表). 确实, 一篇长文档通常用若干个~\cmd{include}{} 命令将各部分内容包含进来.
+\sty{chapterbib} 会为每个包含的文件创建一个~\ext{aux} 文件, 其中包含所需要的~\cmd{bibstyle}, \cmd{bibdata} 与
+~\cmd{citation} 命令. 其文档可在宏包本身的末尾找到.
+
+\item \sty{bibunit} 宏包的作者也是~Thorsten \textsc{Hansen}, 其处理方式类似于~\sty{chapterbib}:
+可以为每个~``单元''(unit) 创建一个参考文献表, 一个单元可以是文档中的任何一块, 它用~\verb+\begin{bibunit}+ 开始, 用~\verb+\end{bibunit}+ 结束. 
+
+在每个单元内, 所有出现的~\cmd{cite} 命令均是指当前单元内的参考文献项, 详细文献参看~\cite{bibunit}.
+\end{itemize}
+
+
+还有其它一些宏包也能实现多个参考文献表, 例如: 
+\sty{camel}, \sty{bibtopic} 等, 这里不再一一细述.
+
+
+\mysubsection{如何使参考文献表离引用处更近些?}
+
+根据具体目的的不同, 可以使用两种解决办法: 第一种解决办法是将被引文献项放在脚注中, 这可能对于读者比较方便, 因为他们无需在正文与书末的文献表之间来回翻页. \sty{footbib} 宏包就是为此而设计的, 其详细文档见~\cite{footbib}.
+
+第二种解决办法是在正文中书写被引文献, 即在正文中直接书写
+~Michel Goossens, Franck Mittelbach et Alexander
+     Samarin, \emph{The \LaTeX Companion}, Addison Wesley, 1993. 
+而不是像~\cite{latex:lc} 这样的引用. 
+这种处理可以增强文档, 但可能会给读者造成迷惑. 如果对这种方式想进行详细的了解, 可以参考宏包~\sty{bibentry} 及其文档~\cite{bibentry}.
+
+
+注意, 上面提到的两个宏包很可能会跟其它一些宏包~(例如~\sty{hyperref}) 造成冲突, 这是因为它们都希望自已定义新的~\env{thebibliography} 环境或~\cmd{bibitem} 命令, 通常最后导入的宏包会~``获胜'', 而其余宏包则会~``抱怨''. 对于这种冲突, 似乎没有什么简单的解决办法, 如果说有的话, 那就是手工合并它们各自的新定义.
+
+
+\mysubsection{如何在参考文献表中增加未被引用的文献?}
+
+通过使用~\cmd{nocite} 可以做到这点, 该命令与~\cmd{cite} 的工作原理完全相同, 只是不会向文档写入任何东西, 它只是在~\ext{aux} 文件中包含了~\cmd{citation} 命令而已.
+
+
+该命令的一个变种是~\verb+\nocite{*}+: 它相当于是一次性地~\cmd{nocite} 了整个文献数据库中的所有文献条目. 
+除了真正在正文中被引用的文献外, 其余文献将按它们在~\ext{bib} 文件中的书写次序依次包含进文档中.
+注意~\verb+\cite{*}+ 命令也是正确的, 只不过它的实际意义实在有点...
+
+
+\bigskip
+
+
+好, 本部分至此也结束了.
+下面我们将暂时不再考虑~\LaTeX{}, 而考虑问题的更核心部分. 下一节将介绍如何创建~\ext{bib} 文件.
+
+
+%% ttb_en.sec3.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt 
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey  
+% 
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+
+\mypart{\protect\niext{bib} 文件}\label{part3}
+\parttoc
+\mtcskip
+
+\ext{bib} 文件用于存放文献数据库, 其内容一般依赖于将要使用的文献样式文件~(尽管文献样式通常是与相应的数据库兼容的). 这里我们将仅关注标准的文献样式\footnote{因此将主要使用第~\pageref{champ}--\pageref{fin-champ} 页里的文献项类型与字段.}. 
+不过还要要提醒一下, \bt 还有处理文献之外的其它一些事情, 我们将在第~\ref{autres} 篇里看到一些这方面的例子. 
+
+\mysection{\protect\niext{bib} 文件的结构}
+
+我们用一个例子开始:
+
+\begin{verbatimtab}
+@book{companion,
+  author 	= "Goossens, Michel and Mittelbach, Franck and Samarin, Alexander",
+  title 	= "The {{\LaTeX}} {C}ompanion",
+  publisher 	= "Addison-Wesley",
+  year 		= 1993,
+}
+\end{verbatimtab}
+现在我们只注意这个文献项条目的结构, 而忽略其内容. 其一般形式为\footnote{最外层的大括号可以用圆括号代替: 
+ \texttt{\at{\itshape 条目类型}({\itshape 内部键值}, ...)}.}:
+\bigskip
+
+\noindent\begin{minipage}{\textwidth}
+\obeylines
+\ttfamily \at{\itshape 条目类型}\{内部键值, 
+\ \ {\bfseries 字段名~1}\ \ \ \ \ \ \ = " 字段值~1",
+\ \ {\bfseries 字段名~2}\ \ \ \ \ \ \ = " 字段值~2",
+\ \ ...
+\ \ {\bfseries 字段名~n}\ \ \ \ \ \ \ = " 字段值~n"
+\}
+\end{minipage}
+
+\bigskip
+
+\noindent 几点注释:
+\begin{itemize}
+\item 新条目总是以~\texttt\at{} 开始, 任何出现在以~\texttt\at{} 打头的命令的参数范围之外的内容均被当作注释, 这也给出注释掉一个条目的一种简单办法: 只要去除头部的~\texttt\at{} 即可. 与其它编程语言代码一样, 不要吝惜注释. 与之相反, 所有以~\texttt\at{} 开头的内容都会被视为是一个新的条目\footnote{有一种特殊的条目类型, 名为~\ent{comment}, 其主要用途是方便地注释掉一大块内容.}.
+
+\item \bt 对于文献项条目及字段名称中的大小写字符不加区分. 如果两个条目具有相同的内部键值~(不区分大小写), 则~\bt 就会提出警告, 例如不能为两个文献项条目的内部键值分别取为~\texttt{Example} 与~\texttt{example}. 
+
+  同样, 如果你同时引用~\texttt{example} 和~\texttt{Example}, \bt 也会抱怨的, 因为它会将同一条目包含两次, 这大约不是你的本意.
+
+
+\item 空白与换行除了影响可读性外, 不会对文献条目有任何影响. 相反, 在两个字段之间使用逗号是强制性要求.
+
+
+\item 字段值~(即每个等号右边的部分) 既可以用大括号也可以用双引号包围, 二者的主要差别在于如果使用大括号, 则字段值中可以使用双引号字符本身, 而后者则不行. 例如, 为了引用~Franck \textsc{Mittelbach} 的~\emph{{Comments on "Filenames and Fonts"}}, 可以采用如下的写法:
+\begin{verbatimtab}
+  title 	= "Comments on {"}Filenames and Fonts{"}",
+  title 	= {Comments on "Filenames and Fonts"},
+\end{verbatimtab}
+
+大括号必需配对使用, 因为它们会出现在将被~\LaTeX{} 编译的输出文档中. 如果你只需要一个大括号~(比如说左大括号) 就会出现问题, 这时, 仅仅在内容中用~\verb+\{+ 代替并不行, 因为在这种情况下还是需要与其匹配的右大括号的. 正确的解决办法是使用~\LaTeX{} 的命令, 如~\cmd{leftbrace}. 另一解决办法是在文献项条目中增加一个额外的~\cmd{bgroup} 命令, 以便让~\LaTeX{} 和~\bt 都能找到合适数量的括号.
+
+\item 当字段值为数值时, 大括号与双引号均可省略.
+\end{itemize}
+
+
+如前所述, 你可以自定义新的字段, 例如, 关于~\LaTeX Companion 一书, 可以这样书写:
+\begin{verbatimtab}
+@book{companion,
+  author 	= "Goossens, Michel and Mittelbach, Franck and Samarin, Alexander",
+  title 	= "The {{\LaTeX}} {C}ompanion",
+  booktitle 	= "The {{\LaTeX}} {C}ompanion",
+  publisher 	= "Addison-Wesley",
+  year 		= 1993,
+  month		= "December",
+  ISBN 		= "0-201-54199-8",
+  library 	= "Yes",
+}
+\end{verbatimtab}
+其中包含有该书的额外信息\footnote{为一本书同时使用~\nichp{title} 与~\nichp{booktitle} 字段比较有趣, 后面我们在关于交叉引用部分~(第~\ref{crossref} 节) 将会看到更详细的原因).}, 
+如该书是否被当地的图书馆收藏等仅供个人用的信息, 等等\footnote{你可以会发问, ``这些自定义字段究竟有多大用途''? 首先, 添加的这些内容都很简短, 其次我们后面将会看到, 通过设计特殊的文献样式文件, 你还可以使用这些新定义的字段.}.
+
+
+\mysection{\protect\nient{string} 与\protect\nient{preamble} 条目}\label{strpre}
+
+它们并不是真正的文献条目类型: \ent{string} 条目可用来定义词汇缩写. 例如, 假如我们引用了~Addison-Wesley 出版社的两本书, 那么为该出版社名称定义一条缩写就会很方便, 即:
+\begin{verbatimtab}
+@string{AW	= "Addison-Wesley"}
+
+@book{companion,
+  author 	= "Goossens, Michel and Mittelbach, Franck and Samarin, Alexander",
+  title 	= "The {{\LaTeX}} {C}ompanion",
+  booktitle 	= "The {{\LaTeX}} {C}ompanion",
+  publisher 	= AW,
+  year 		= 1993,
+  month		= "December",
+  ISBN 		= "0-201-54199-8",
+  library 	= "Yes",
+}
+\end{verbatimtab}
+
+这样做不仅仅是为了节约时间, 而且可以避免拼写错误, 同时也便于对数据库进行一致性维护.
+我还发现真正有用的是把作者的名字做成缩写, 这样可以保证你总是使用正确的拼写~(或者, 总是使用错误的拼写, 不过在这种情形就会增大发现错误的机会, 从而也增加了纠正的机会).
+
+
+而~\ent{preamble} 主要用于在~\bt 创建的文件中插入一些命令或文本, 凡是在~\ent{preamble} 中声明的内容都会被拼接在一起, 统一放在一个名为~\fn{preamble} 的变量中, 然后就可以在文献样式中使用, 或者更常见地放置到~\ext{bbl} 文件的开头去~(\env{thebibliography} 环境之前). 这对于定义一些文献表中将要使用到的新命令而言非常有用, 以下是一个小例子:
+\begin{verbatimtab}
+@preamble{ "\makeatletter" }
+@preamble{ "\@ifundefined{url}{\def\url#1{\texttt{#1}}}{}" }
+@preamble{ "\makeatother" }
+\end{verbatimtab}
+这样, 你就可以放心地在文献项中使用~\nicmd{url} 命令了, 因为如果它没有在文献表的开头定义的话, 就会使用~\ent{preamble} 中的新定义.  
+
+请注意, 决不应该在文献库的~\ent{preamble} 中定义一些样式选项的内容, 因为那样做会对所有使用该文献库的文档都起作用..
+
+
+
+
+
+
+\mysection{\nichp{title} 字段}\label{title}
+
+下面我们来看如何正确书写~``title'' 字段. 以~\emph{\LaTeX Companion} 一书的标题为例: 
+\begin{verbatimtab}
+  title 	= "The {{\LaTeX}} {C}ompanion"
+\end{verbatimtab}
+
+在展开深入研究之前我们先来定义几个概念.
+\emph{括号深度~(brace depth)} 是指围在两侧的括号的个~(对) 数, 这并不是一个非常正规的定义, 不过较易理解, 例如上例中的标题中~\verb+\LaTeX+ 的括号深度为~$2$, \verb+C+ 的括号深度为~$1$, 而其余内容的括号深度则为~$0$\footnote{注意, 将包围字段值的两侧的双引号换成大括号并不改变括号深度.}.
+\emph{特殊字符~(special character)} 是指字段值中的一个特殊段, 该段以括号深度为~$0$ 的左大括号开始, 其后紧跟着一个反斜杠符, 最后以相配对的右大括号结束. 在上例中没有出现特殊字符, 注意~\verb+\LaTeX+ 的括号深度为~$2$, 故不属于特殊字符. 对于特殊字符, 虽然其两侧也有括号, 但应当将其括号深度视为~$0$.
+
+有了这些定义, 我们可以展开讨论了.
+通常文献样式会对文献的标题进行一些修正处理:
+\begin{itemize}
+\item 首先, 文献的标题可用于排序. 在排序时, \bt 会为每个文献条目计算一个名为~\fn{sort.key} 的字符串值. \fn{sort.key} 字符串通常是一个很长的串, 用它的值来确定当前文献条目的排列次序. 为了避免二义性, \fn{sort.key} 只包含字母数字字符. 除了特殊字符外, 传统的非字母非数字的字符\footnote{例外的情况是: 连字符与波浪符会被换成空白符, 空白符本身会保留. 关于~\fn{purify} 精确行为的描述参看第~\pageref{purify} 页.}都会被~\bt 的一个名为~\fn{purify} 的函数过滤掉. 而对于特殊字符来说, \fn{purify} 会过滤其中的空白符和~\LaTeX{} 命令~(即以反斜杠开头的字串), 即使它们放在大括号中也会被过滤掉. 其余的所有字符均原样不变. 例如~\verb+t\^ete+, \verb+t{\^e}te+ 和~\verb+t{\^{e}}te+ 将会转换成~\verb+tete+, 
+而~\texttt{t\^ete} 会变成~\texttt{t\^ete};
+\verb+Bib{\TeX}+ 变成~\verb+Bib+, 
+\verb+Bib\TeX+ 则变成~\verb+BibTeX+.
+共有~13 个~\LaTeX{} 命令并不遵守上述规则, 它们是:
+\verb+\i+, \verb+\j+, \verb+\oe+
+\verb+\OE+, \verb+\ae+, \verb+\AE+, \verb+\aa+, \verb+\AA+, 
+\verb+\o+, \verb+\O+, \verb+\l+, \verb+\L+, \verb+\ss+.
+这些命令对应于~\i, \j, \oe,
+\OE, \ae, \AE, \aa, \AA, \o, \O,
+\l, \L, \ss, 
+如果它们包含在特殊字符内, 则~\fn{purify} 会把它们分别转换成
+~\verb+i+, \verb+j+, \verb+oe+, 
+\verb+OE+, \verb+ae+, \verb+AE+, \verb+aa+, \verb+AA+, \verb+o+, \verb+O+, 
+\verb+l+, \verb+L+, \verb+ss+. 
+
+
+\item 对标题的第二种转换是将它变成全部小写~(首字符除外), 函数~\fn{change.case} 就是干这个事的. 不过它只针对括号深度为~0 且不为特殊字符的字母. 在特殊字符内~(其括号深度总是~0),  \LaTeX{} 命令不变, 其余字符也要变成小写.
+\end{itemize}
+标准文献样式可能会对~\chp{title} 字段施加这两种转换, 因此必需保证标题的书写能同时适应这两种转换处理. 
+
+好, 我们马上来实践一下, 仍以~\emph{The \LaTeX Companion} 为例, 可以采用如下几种写法:
+\begin{itemize}
+\item \verb+ title = "The \LaTeX Companion"+: 这种书写不行, 因为将其转换为小写后得到~\verb+The \latex companion+,
+  \LaTeX{} 不会认识的...
+\item \verb+ title = "The {\LaTeX} {C}ompanion"+ : 这种写法转换到小写没问题, 不过使用~\fn{purify} 处理后得到~\verb+The  Companion+, 从而导致排序错误.
+\item \verb+ title = "The {\csname LaTeX\endcsname} {C}ompanion"+:
+  这种写法也不行, 因为~\texttt{LaTeX} 会变成~\texttt{latex}.
+\item \verb+ title = "The { \LaTeX} {C}ompanion"+ : 这种情况下,
+  \verb+{ \LaTeX}+ 并不是特殊字符, 而是一组括号深度为~1 的字母. \fn{change.case} 不会对其进行任何修改. 不过~\fn{purify} 将会同时保留两处空白, 得到~\verb+The  LaTeX Companion+ 的结果, 从而影响了正常排序.
+\item \verb+ title = "The{ \LaTeX} {C}ompanion"+: 这种写法正确, 不过没有下一种写法那么优雅.
+\item \verb+ title = "The {{\LaTeX}} {C}ompanion"+ : 这是我采用的正确写法, 它克服了上述的所有困难.
+\end{itemize}
+
+为了排版标题中字符的重音符号, 例如法语单词~\emph{\'Ecole} 中的大写字符~\emph{\'E}, 我们可以写为
+~\verb+{\'{E}}cole+, \verb+{\'E}cole+ 或者~\verb+{{\'E}}cole+, 前两个将允许转换成小写, 最后一个在转换成小写时保持不变. 所有三种写法经过~\fn{purify} 处理后的结果相同.
+这里要注意, 第三种写法中并不是一个特殊字符. 假如你用~\fn{text.prefix} 函数让~\bt 提取每个单词串的第一个字符的话, 第一种写法得到~\verb+{\'{E}}+, 第二种得到~\verb+{\'E}+, 而第三种得到~\verb+{{\}}+. 
+
+
+关于标题就介绍至此, 下面我们将讨论更为复杂的作者名字.
+
+
+\mysection{\nichp{author} 字段}\label{author}
+
+
+我们用~\emph{\LaTeX Companion} 一书的文献条目开始: 
+\begin{verbatim}
+  author 	= "Goossens, Michel and Mittelbach, Franck and Samarin, Alexander"
+\end{verbatim}
+有两点要注意: 一是两个作者之间要用~\texttt{and}\index{bibtex}{and}分隔开, 二是人名的书写格式为: 先写~last name, 然后是~first name, 二者之间要用逗号分开. 除此之外, \bt 还认识其它一些人名的书写格式.
+
+在深入讨论之前, 再提醒一点: 通常~\bt 不得不靠\emph{猜测}的办法来确定哪部分是~first name, 哪部分是~last
+name. 更麻烦的是, 有时还需要区分人名中的~``von'' 部分~(例如人名: John von Neumann) 以及可能存在的~``Jr'' 部分.
+
+下面的说明将显得更加技术化, 我们将把~first name 记作~\verb+First+, last name 记作~\verb+Last+, ``von'' 记作~\verb+von+, 以及~``Jr'' 部分记作~\verb+Jr+.
+
+
+为了正确区分~\chp{author} 字段中人名中的各部分, \bt 只能识别以下三种格式的写法:
+\begin{itemize}
+\item \verb+First von Last+; 
+\item \verb+von Last, First+;
+\item \verb+von Last, Jr, First+.
+\end{itemize}
+
+一种写法究竟属于哪种格式, 只要数一数其中的逗号个数就行了. 以下是这几种格式的主要特征描述:
+
+\begin{itemize}
+\item \verb+First von Last+: 假设你录入了
+~\verb+Jean de La Fontaine+, 由于名字中无逗号, 因此可以辨认出这是
+~\verb+First von Last+ 格式. 除非整个字段值为空, 否则~\verb+Last+ 部分不能为空, 因此最简略也应当写成~\verb+Fontaine+. 
+之后, \bt 会检查每一个剩余单词的第一个字符\footnote{这里及后文中, ``第一个字符'' 是指~``第一个括号深度为~0 的非括号字符~(一个特殊字符中的所有内容其括号深度均为~0, 哪怕它用了~15 个大括号包围也是如此).''. If there is 
+  no 
+  character at depth $0$, then the item will go with its neighbour,
+  first and foremost with the \texttt{First}, then with the \texttt{Last}. It 
+  will be in the \texttt{von} if, and only if, it is surrounded with
+  two \texttt{von} items. Moreover, two words in the same group
+  (in \LaTeX sense) will go to the same place. Last, for a
+  \LaTeX command outside a special character, the backslash is removed
+  and \bt considers the remaining word. If you did not understand,
+  please take a while for reading this note anew, since it will be
+  used 
+  in the sequel.}, 如果在这些~``第一字符'' 中存在着小写的字母, 那么从第一个~``小写第一字符'' 到最后一个~``小写第一字符'' 之间的内容均被视为~\verb+von+ 部分. 而所有位于~\verb+von+ 左边的内容为~\verb+First+, 位于其右边的内容为~\verb+Last+. 反之, 如果所有~``第一字符'' 均不是小写, 则除了已经归类于~\verb+Last+ 部分之外, 所有内容均当作为~\verb+First+. 
+
+在~\verb+Jean de La Fontaine+ 中, \verb+La Fontaine+ 是~\verb+Last+ 部分, \verb+Jean+ 是~\verb+First+ 部分, 而~\verb+de+ 是~\verb+von+ 部分. 
+
+这里给出其它几种组合, 你可以检验一下理解的程度:
+\begin{center}
+\begin{longtable}{|>{\vrule height 4mm depth 2mm width 0pt}p{.3\textwidth}|p{.15\textwidth}|p{.15\textwidth}|p{.18\textwidth}|}
+\hline
+Name & \verb+First+ & \verb+von+ & \verb+Last+ \endfirsthead
+\hline
+Name & \verb+First+ & \verb+von+ & \verb+Last+ \endhead
+\hline
+\verb+jean de la fontaine+ & \verb++ & \verb+jean de la+ & \verb+fontaine+ \\
+\hline
+\verb+Jean de la fontaine+ & \verb+Jean+ & \verb+de la+ & \verb+fontaine+ \\
+\hline
+\verb+Jean {de} la fontaine+ & \verb+Jean de+ & \verb+la+ & \verb+fontaine+ \\
+\hline
+\verb+jean {de} {la} fontaine+ & \verb++ & \verb+jean+ & \verb+de la fontaine+ \\
+\hline
+\verb+Jean {de} {la} fontaine+ & \verb+Jean de la+ & \verb++ & \verb+fontaine+ \\
+\hline
+\verb+Jean De La Fontaine+ & \verb+Jean De La+ & \verb++ & \verb+Fontaine+ \\
+\hline
+\verb+jean De la Fontaine+ & \verb++ & \verb+jean De la+ & \verb+Fontaine+ \\
+\hline
+\verb+Jean de La Fontaine+ & \verb+Jean+ & \verb+de+ & \verb+La Fontaine+ \\
+\hline
+\end{longtable}
+\end{center}
+表中, 只有最后一行是正确的.
+当然, 肯定有人要反驳说可以举出人名中的~\verb+von+ 部分含有大写字符的例子, 我们将在第~\ref{trucsbib} 节讨论这个问题.
+
+\item \verb+von Last, First+: 思路是相似的, 只是识别~\verb+First+ 部分更容易些: 逗号之后均为~\verb+First+ 部分. 而在逗号之前, 最后一个单词归于~\verb+Last+(即使它以小写字母打头也是如此). 如果除此之外还存在词首小写的单词, 则从第一个词首小写的单词开始, 一直到最后一个词首小写的单词为止, 期间的部分都被视为~\verb+von+ 部分, 剩余未归类部分均视为~\verb+Last+ 部分. 
+还是用几个例子来说明吧:
+
+\begin{center}
+\begin{longtable}{|>{\vrule height 4mm depth 2mm width 0pt}p{.3\textwidth}|p{.15\textwidth}|p{.15\textwidth}|p{.18\textwidth}|}
+\hline
+Name & \verb+First+ & \verb+von+ & \verb+Last+ \endfirsthead
+\hline
+Name & \verb+First+ & \verb+von+ & \verb+Last+ \endhead
+\hline
+\verb+jean de la fontaine,+\footnotemark & \verb++ & \verb+jean de la+ & \verb+fontaine+ \\
+\noalign{\footnotetext{在这种情形下, \bt 会报告一个错误说人名不能用逗号结尾, 这是最经常出现的人名没有用~``\texttt{and}'' 分隔而是用逗号分隔时才会报告的消息.}}%
+\hline
+\verb+de la fontaine, Jean + & \verb+Jean+ & \verb+de la+ & \verb+fontaine+ \\
+\hline
+\verb+De La Fontaine, Jean+ & \verb+Jean+ & \verb++ & \verb+De La Fontaine+ \\
+\hline
+\verb+De la Fontaine, Jean+ & \verb+Jean+ & \verb+De la+ & \verb+fontaine+ \\
+\hline
+\verb+de La Fontaine, Jean+ & \verb+Jean+ & \verb+de+ & \verb+La Fontaine+ \\
+\hline
+\end{longtable}
+\end{center}
+%\medskip
+
+\item \verb+von Last, Jr, First+: 这种情形下辨识各部分也比较简单, 只要先把两个逗号之间部分划分给~\verb+Jr+ 即可.
+\end{itemize}
+
+如上所见到的那样, 人名中的各部分通常都是用空白分隔的, 但也有例外, 如在~``Jean-Fran\c cois'' 中, 两个~first names 之间用连字符分隔. \bt 会自动分隔这样的字串, 如果这两个字串~(及其连字符) 落在~\verb+First+ 的位置, 将来如果对其缩写时则写为~``J.-F.'' 这样的正确形式. 在人名中, 波浪符也可以充当分隔符, 这主要是为了解决一些特殊的问题, 例如在~\verb+Jean-baptiste Poquelin+ 写法中, \verb+baptiste+ 会被视为人名的~\verb+von+ 部分, 这是因为它的词首错写成了小写字母.
+\medskip
+
+现在重新回到我们先前提到的缩写上来: 你也许跟我一样感受到了人名录入的麻烦和易错特性. 因此，我个人建议为每个作者名定义一个缩写, 在作者字段中使用时, 只要将这些缩写用~\verb+``and''+ 和~\verb+#+\index{bibtex}{\#@\texttt{\#}(concatenation)}\index{bibtex}{concatenation@concatenation (\texttt{\#})}相连接起来即可. 
+
+例如, 在我的~\ext{bib} 文件中, 总有以下数行:
+\begin{verbatimtab}
+@string{goossens    	= "Goossens, Michel"}
+@string{mittelbach  	= "Mittelbach, Franck"}
+@string{samarin		= "Samarin, Alexander"}
+\end{verbatimtab}
+以及:
+\begin{verbatimtab}
+@string{AW		= "Addison-Wesley"}
+\end{verbatimtab}
+而在我的文献库中则使用\footnote{这并完全真实, 因为其中的~\texttt{September} 仍然跟使用的语种有关, 因此, 我更喜欢使用~\texttt{9} 并让文献样式文件根据所使用的语种将其翻译成合适的单词.}:
+\begin{verbatimtab}
+@book{companion,
+  author	= goossens #" and "# mittelbach #" and "# samarin,
+  title		= "The {{\LaTeX}} {C}ompanion",
+  booktitle	= "The {{\LaTeX}} {C}ompanion",
+  year 		= 1993,
+  publisher	= AW,
+  month		= "December",
+  ISBN 		= "0-201-54199-8",
+  library 	= "Yes",
+}
+\end{verbatimtab}
+这样, 当添加一个文献条目时就非常方便, 而且使用第~\ref{bibexport} 节提到的~\texttt{bibexport.sh} 工具也很容易转换成自包含的条目格式.
+
+
+
+\mysection{交叉引用~(\protect\nichp{crossref})}\label{crossref} 
+
+正如先前所述~(都不记得哪里说过了, 呵, 对了, 在第~\pageref{cetaitla} 页), \bt 允许使用交叉引用. 这对于引用一本书的部分章节, 或者会议录中的一篇论文等场合都非常有用. 例如, 为了引用~\LaTeX~Companion 一书的第~$13$ 章, 可以这样书写:
+\begin{verbatimtab}
+@incollection{companion-bib,
+  crossref 	= "companion",
+  title		= "Bibliography Generation",
+  chapter	= 13,
+  pages		= "371-420",
+}
+\end{verbatimtab}
+这就解释了为什么我们要为~\verb+companion+ 条目定义一个~\chp{booktitle} 字段: 它不是为~\ent{book} 类型的条目使用的, 而是为了让~\ent{incollection} 类型的条目继承而用的. 当然我们可以手工为每个继承条目增加~\chp{booktitle} 字段, 只是必需为所要引用的每一个章节都添加一遍.
+
+另一个比较有意思的特征是, 当多次交叉引用同一个文献条目时, \bt 会自动识别, 并将该条目加入到参考文献列表中去, 然后在每个条目中直接引用它. 但另一方面, 如果一个文献条目只被交叉引用了一次, 则自动将其字段继承给交叉引用者条目, 被引用条目就不会放到参考文献列表中去. 以下是这两种行为的例子:
+
+\medskip
+\begin{myex}
+\begin{thebibliography}{1}
+
+\bibitem{bib}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Bibliography generation.
+\newblock In {\em The {{\LaTeX}} {C}ompanion\/} \cite{latex:lc}, chapter~13,
+  pages 371--420.
+
+\bibitem{math}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Higher mathematics.
+\newblock In {\em The {{\LaTeX}} {C}ompanion\/} \cite{latex:lc}, chapter~8,
+  pages 215--258.
+
+\bibitem{ind}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Index generation.
+\newblock In {\em The {{\LaTeX}} {C}ompanion\/} \cite{latex:lc}, chapter~12,
+  pages 345--370.
+
+\bibitem{companion4}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock {\em The {{\LaTeX}} {C}ompanion}.
+\newblock Addison-Wesley, December 1993.
+
+\end{thebibliography}
+\end{myex}
+
+\medskip \noindent 或\medskip
+
+\begin{myex}
+\begin{thebibliography}{1}
+
+\bibitem{bib2}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Bibliography generation.
+\newblock In {\em The {{\LaTeX}} {C}ompanion}, chapter~13, pages 371--420.
+  Addison-Wesley, December 1993.
+
+\bibitem{math2}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Higher mathematics.
+\newblock In {\em The {{\LaTeX}} {C}ompanion}, chapter~8, pages 215--258.
+  Addison-Wesley, December 1993.
+
+\bibitem{ind2}
+Michel Goossens, Franck Mittelbach, and Alexander Samarin.
+\newblock Index generation.
+\newblock In {\em The {{\LaTeX}} {C}ompanion}, chapter~12, pages 345--370.
+  Addison-Wesley, December 1993.
+
+\end{thebibliography}
+\end{myex}
+
+为了精确控制这两种行为, 我们可以告诉~\bt 只有被交叉引用多少次后才会将该条目单列到文献表中去, 这要通过~\bt 的命令行参数~\verb+-min-crossrefs+ 值来确定. 对于前述第一个例子, 我使用的命令为~\verb+bibtex biblio+, 而第二个例子中使用的命令为
+~\verb+bibtex -min-crossrefs=5 biblio+.
+
+另外一条重要原则是: 被交叉引用的条目必需放在包含相应~\chp{crossref} 字段的条目后面. 此外, 交叉引用不能嵌套, 即不能用~\chp{crossref} 去交叉引用一个已经包含有~\chp{crossref} 的条目.
+
+最后要注意, \chp{crossref} 字段有一种特殊的行为, 即不论文献样式是什么, 它总是存在于每一个文献条目中的. 具体来说, 如果参考文献表中包含了一个被交叉引用的条目~(不管是通过~\cmd{cite} 命令显式地引用, 还是由于被交叉引用的次数足够多而由~\bt 加入文献表), 那么那些对它交叉引用的条目中的~\chp{crossref} 字段跟其原始书写一致; 除此之外, 该字段为空. 
+
+
+
+\mysection{小技巧}\label{trucsbib}
+
+\mysubsection{如何得到人名~\emph{Christopher} 缩写为~\emph{Ch.} 的效果?}
+
+人名中的~first name 缩写发生在从~\chp{author} 字段中提取人名之时. 如果需要其对~first name 进行缩写, 它将会返回人名中该部分内容各个~``单词'' 的首字母缩写, 如将~\emph{Christopher} 缩写成~\emph{C.} 使用特殊字符是解决这一问题的办法: 若键入~\verb+{\relax Ch}ristopher+, 则缩写为~\verb+{\relax Ch}.+, 其结果为~\emph{Ch.}, 而其全写版本为~\verb+{\relax Ch}ristopher+, 即~\emph{{Ch}ristopher}. 
+
+\mysubsection{如何实现大写的~\texttt{von} 部分?}
+
+注意: 这部分的回答偏重技术性, 为了更好地理解, 你应当阅读并理解~\bt 提取人名的规则~(见第~\pageref{noms-start} 页和第~\pageref{noms-end} 页).
+
+由于某种原因, 有时人名的~\verb+von+ 部分是以大写字母开头, 标准的例子是~\emph{Maria De La Cruz}. 
+
+基本解决办法是写为
+~\verb+"{\uppercase{d}e La} Cruz, Maria"+. \bt 对这个人名进行解析时, 会将~\verb+Cruz+ 放到~\verb+Last+ 部分, 将~\verb+Maria+ 看到~\verb+First+ 部分, 而~\verb+{\uppercase{d}e La}+ 是一个特殊字符, 其首字母为~\verb+d+, 因此会把它放到~\verb+von+ 部分.
+
+然而, 如果此时你使用~``字母数字'' 文献样式~(例如~\bst{alpha}) 的话, \bt 就会在标签中使用~\verb+von+ 部分的第一个字符\footnote{有人反驳说~\texttt{von} 部分不应当用于计算标签值, 但传统样式文件确实是这样做的.}. 但这种情形下, 第一个字符为~\verb+{\uppercase{d}e La}+, 因此标签取值为~\verb+{\uppercase{d}e La}C+, 从而得到~\texttt{[{\uppercase{d}e La}C]}.
+你可能更希望取为~\texttt{[DLC]} 或~\texttt{[Cru]}, 于是第二种解决办法是
+\begin{verbatimtab}
+  author = {\uppercase{d}}e {\uppercase{l}}a Cruz, Maria.
+\end{verbatimtab}
+此时, 标签值为~\verb+{\uppercase{d}}{\uppercase{l}}C+, 这是正确的.  
+另一种更简便些的方法是
+\begin{verbatimtab}
+  author = {D}e {L}a Cruz, Maria.
+\end{verbatimtab}
+这同样可以解决问题, 这是因为~\bt 在确定一个单词属于人名的哪一部分时, 只考虑括号深度为~0 的内容, 而在提取第一个字符时则要考虑所有字符的内容.
+
+
+\mysubsection{如何将人名的~\texttt{Last} 部分变成小写?}
+
+这个问题恰好与上个问题相反, 但解决方法却不相同. 
+假定你要引用著名的西班牙科学家~\emph{Juan de la Cierva y Codorn\'\i u} 的文章. 基本想法的书写是
+\begin{verbatimtab}
+  author = de la Cierva {\lowercase{Y}} Codorn{\'\i}u, Juan
+\end{verbatimtab}
+或
+\begin{verbatimtab}
+  author = de la Cierva {y} Codorn{\'\i}u, Juan
+\end{verbatimtab}
+不过, 此时会得到~\verb+CYC+ 或~\verb+CyC+ 这种形式的标签, 而我们更希望产生的标签是~\verb+CC+.
+
+几种解决办法是:
+\begin{verbatimtab}
+  author = de la Cierva{ }y Cordon{\'\i}u, Juan
+\end{verbatimtab}
+或
+\begin{verbatimtab}
+  author = de la {Cierva y} Cordon{\'\i}u, Juan
+\end{verbatimtab}
+这两种方法均可: 在第一种写法中, \bt 将看不到空白符, 并将~\verb+y+ 视为属于前一单词; 第二种写法中, \verb+Cierva y+ 位于括号深度为~$1$ 的层次, 从而进入到了~\verb+Last+ 部分~(该部分比~\verb+von+ 部分具有更高的优先级).
+
+\mysubsection{如何去除人名中~\texttt{von} 与~\texttt{Last} 之间的空白?}
+
+这里以人名~\emph{Jean d'Ormesson} 为例, 最好的书写方式是
+\begin{verbatimtab}
+  author = "d'\relax Ormesson, Jean"
+\end{verbatimtab}
+原因是, \nicmd{relax} 命令会吞掉空白, 直到遇到下一个非空字符时为止. 
+
+\mysubsection{如何将多作者列表表示成~\emph{et al.} 的形式?}
+
+有些特殊的文献样式会自动将多位作者人名列表转换成第一作者人名跟上一个~\emph{et al} 的形式, 不过标准的~\bt 不会进行这种转换. 当然, 你也可以通过使用特殊的人名~\verb+others+ 来实现相同的功能, 比如
+\begin{verbatimtab}
+  author = "Dupont, Jean and others"
+\end{verbatimtab}
+在生成的文献列表中将会得到"Jean Dupont \emph{et al.}" 这样的结果.
+
+\mysubsection{\protect\nichp{key} 字段}
+
+实践中也会碰到文档没有作者的情况, 对于这样的文献条目, 有些文献样式~(例如~\bst{alpha}) 在计算~``标签'' 时会使用~\chp{key} 字段~(对于~\bst{alpha} 来说只需用其前三个字符, 但对于~\bst{apalike} 而言则需要使用整个字段内容). 
+如果没有提供~\texttt{key} 字段, 则会使用内部键值的前三个字符.
+
+\bigskip
+
+各位至此感觉还不错吧. 那好, 我们马上进入下一章, 也是本手册最激动人心的一部分: 创建与修改文献样式文件...
+
+
+%% ttb_en.sec4.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt 
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey  
+% 
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+
+\mypart{参考文献表样式~(\protect\niext{bst}) 文件}\label{bst}
+\parttoc
+\mtcskip
+
+\mysection{什么是文献样式文件?}
+
+\ext{bst} 文件的主要功能是创建参考文献表. 有两点需要区分清楚: 一是要分清~\bt 与~\LaTeX{} 二者的角色, 二是在~\bt 内部要分清哪些工作是由文献样式文件完成的, 哪些工作是由~\ext{bib} 文件完成的. 
+
+粗略地讲, \bt 会读入三个文件, 依次分别为: 首先读入~\ext{aux} 文件, 从中获得了文献样式文件名, 文献数据库文件名以及所引用文献的清单; 其次是读入~\ext{bst} 文件; 最后是读入~\ext{bib} 文件. 
+
+\ext{bst} 文件告诉~\bt 该如何处理每一条被引文献, 即
+\begin{itemize}
+\item 文献条目类型是什么?
+\item 根据条目类型确定哪些字段是强制性的, 哪些是可选的?
+\item 最主要的, 是如何处理这些条目和字段, 以便产生清晰可被~\LaTeX{} 编译的参考文献表.
+\end{itemize}
+
+为了实现功能, \bt 使用了一种特殊的语言, 其中包含两种类型的指令: 一种是所谓的\emph{命令}\index{bibtex}{command}, 另一中是\emph{内部函数}\index{bibtex}{internal function}. 下一节先介绍命令, 再后面一节将介绍内部函数.
+
+
+\mysection{\protect\niext{bst} 文件的结构组成}
+
+这里是一个~\ext{bst} 文件的大体结构组成:
+
+\begin{myexv}
+\begin{verbatimtab}
+ENTRY 
+  {  ...  }
+  {  ...  }
+  {  ...  }
+
+INTEGERS {  ...  }
+STRINGS {  ...  }
+
+MACRO {  ...  }{  ...  }
+FUNCTION {  ...  }{  ...  }
+
+READ
+EXECUTE {  ...  }
+ITERATE {  ...  }
+SORT
+ITERATE {  ...  }
+REVERSE {  ...  }
+EXECUTE {  ...  }
+\end{verbatimtab}
+\end{myexv}
+
+这个例子中列出了~\bt 使用的所有命令\index{bibtex}{command}. 它们的含义分别为:
+\begin{description}
+\item[\texttt{ENTRY}]\index{bibtex}{entry@\texttt{ENTRY}}: 该命令定义了所有可能用到的字段名称列表. 更确切地说, 它有三个参数~(用大括号包围), 分别定义可能使用的~``外部'' 条目名称列表~(字串类型的变量)\footnote{\chp{crossref} 字段是个例外, 不用定义, 它会被~\bt 自动添加.}, ``内部'' 整数变量列表, 以及~``内部'' 字串变量列表. 这些变量主要供~\bt 在进行内部计算时使用, 例如在~\bst{alpha} 文献样式中建立标签时所进行的计算.
+
+  在大括号内部, 多个变量名之间用空白分开. 同时~\bt 对于函数和变量的名字并不区分大小写, 我在书写时, 通常将命令写成大写形式, 而将其余都表示成小写.
+
+  例如, \bst{plain} 样式的开头是:
+\begin{myexv}
+\begin{verbatimtab}
+ENTRY
+  { address
+    author
+    booktitle
+    ...
+    volume
+    year
+  }
+  {}
+  { label }
+\end{verbatimtab}
+\end{myexv}
+\noindent 这里定义了传统的字段名称以及一个表示标签的变量~\verb+label+. 事实上, \bst{plain} 样式中是使用数字作为标签的, 不过要注意, 由于必需评估最长标签的长度以便作为参数提供给~\env{thebibliography} 环境, 因此这里仍需定义~\verb+label+ 变量.
+
+注意, 在一个文献样式文件中, \texttt{ENTRY} 必需且只能出现一次. 
+
+\item[\texttt{INTEGERS}]\index{bibtex}{integers@\texttt{INTEGERS}}: 该命令声明了所用到的整数变量\footnote{这些变量与任何文献条目都没有关系, 这与前面所述的~\texttt{ENTRY} 的第二个参数中的变量完全不同}. 命令的参数是用空白符分隔开的变量名列表. 
+
+\item[\texttt{STRINGS}]\index{bibtex}{strings@\texttt{STRINGS}}: 与~\texttt{INTEGERS} 命令相类似, 该命令声明用到的字串变量. 与整数变量相比, 字串变量更显得要~``金贵'' 些, \bt 所允许定义这类变量的最大数目为~20 个. 因此如果打算开发较大型的样式文件时, 一定要仔细规划一下定义哪些字串变量. 
+
+\item[\texttt{MACRO}]\index{bibtex}{macro@\texttt{MACRO}}: 该命令与前面所述的~\ent{string} 一样, 用于定义一些缩略语\footnote{这里注意, \ent{string} 与~\texttt{STRINGS}\index{bibtex}{strings@\texttt{STRINGS}}毫无关联.}. 
+如果一个缩略语同时在~\ext{bst} 文件和~\ext{bib} 文件中进行了定义, 那么最后只有~\ext{bib} 文件中的定义才有效. 另外也可以在~\ent{string} 的定义内容中包含~\texttt{MACRO} 的定义, 不过还是不建议这样书写.
+
+  在语法上, \texttt{MACRO} 需要两个参数, 第一个参数是要定义的缩略名称, 第二个参数则是定义内容本身, 定义内容必需是用双引用包起来的字串, 例如, 在标准的文献样式文件中都有如下的定义:
+\begin{myexv}
+\begin{verbatimtab}
+MACRO {jan} {"January"}
+MACRO {feb} {"February"}
+MACRO {mar} {"March"}
+...
+\end{verbatimtab}
+\end{myexv}
+\item[\texttt{FUNCTION}]\index{bibtex}{function@\texttt{FUNCTION}}: 这是最有用的一条命令, 用于定义后续处理中需要执行的宏函数. 它的第一个参数是函数名称, 第二个参数是宏函数的定义. 后面的例子将会很多, 这里就不举例了.
+\item[\texttt{READ}]\index{bibtex}{read@\texttt{READ}}: 该命令的功能是告诉~\bt 要将~\ext{bib} 文件读入. 与~\texttt{ENTRY} 命令一样, 这条命令在~\ext{bst} 文件中也需要且只能出现一次, 这是因为如果读入多次不会带来什么不同, 不读取则无法严重限制了样式文件处理的范围. 因此, 这条命令主要负责将那些在~\ext{aux} 文件中被引用的文献条目从~\ext{bib} 文件中提取出来. 注意~\texttt{ENTRY} 命令与~\texttt{MACRO} 命令应当放在~\texttt{READ} 命令之前, 而~\texttt{ITERATE} 命令与~\texttt{REVERSE} 命令则应当放在其后.
+\item[\texttt{EXECUTE}]\index{bibtex}{execute@\texttt{EXECUTE}}: 该命令将会执行其参数指定的函数. 注意该函数必需提前定义好. 另外该命令的参数也可以是一系列~\bt 内部函数, 更多解释参看下文中对~\texttt{ITERATE} 的描述部分.
+\item[\texttt{ITERATE}]\index{bibtex}{iterate@\texttt{ITERATE}}: 
+该命令也会执行其参数指定的函数, 但与~\texttt{EXECUTE} 不同, 这里指定的函数会执行多次, 其执行次数等于用~\texttt{READ} 命令提取得到的文献条目的数目. 被执行的函数可以使用每个文献条目的字段. \texttt{EXECUTE} 命令只会执行一次其参数对应的函数, 并且该函数不能使用任何条目中的任何字段.
+\item[\texttt{SORT}]\index{bibtex}{sort@\texttt{SORT}}: 
+该命令将按变量~\fn{sort.key} 的取值对所有文献条目进行排序. \fn{sort.key} 是一个字串型的特殊变量, 每个文献条目都隐式地声明了该变量, 其取值可以在~\texttt{ITERATE} 函数中设定, 然后所有文献条目就可以按照该变量取值的字母顺序进行重新排序了. 当然, 有些文献样式并不需要对条目进行排序, 此时文献条目会依它们在文档中出现的次序排列.
+\item[\texttt{REVERSE}]\index{bibtex}{reverse@\texttt{REVERSE}}: 
+与~\texttt{ITERATE} 完全类似, 只是顺序相反.
+\end{description}
+
+以上就是所有的命令了, 据此你可以想像一个文献样式如何有效组合这些命令达到预定目标. 这里还没有定义相关的函数~\texttt{FUNCTION}, 下两节将涉及这方面: 首先介绍~\bt 用到的一些记号, 然后介绍如何定义函数.
+
+\mysection{逆波兰语法}
+
+\bt 使用一种所谓的逆波兰语法, 这也是人们反映~\bt 语言难以理解的主要原因. 它是一种堆栈式语言: 你需要将所有参数推入堆栈, 每个函数从栈顶取走所需数目的参数, 并把处理后的结果推入栈顶. 例如, 对于加法来说, 先从栈顶取出两个元素, 求和后再将结果推入栈顶. 另一个例子\footnote{这一部分很关键, 因此我不厌其烦地举例说明, 当然如果你确实真实理解了其工作机理, 可以跳过这个例子的解释.}: \verb/ 1 3 5 + 2 3 * - /的执行过程如下: 
+\begin{itemize}
+\item 将~\verb+1+ 推入栈顶. 假定堆栈初始内容为空, 则现在堆栈内包含着~\verb+1+;
+\item 将~\verb+3+ 推入栈顶, 则现在堆栈内容为~\verb+1+ 和~\verb+3+(其中~\verb+3+ 位于栈顶);
+\item 将~\verb+5+ 推入栈顶, 现在堆栈内容~(从底至顶) 依次为~\verb+1+, \verb+3+ 和~\verb+5+;
+\item \verb/+/是一个二元运算符, 它读取~(并移走) 堆栈顶部的两个元素~\verb+5+ 和~\verb+3+, 然后对它们求和, 并将所得的结果~\verb+8+ 推入栈顶. 现在堆栈内容为~\verb+1+ 和~\verb+8+(\verb+8+ 位于栈顶);
+\item 将~\verb+2+ 推入栈顶;
+\item 将~\verb+3+ 推入栈顶. 堆栈内容~(从底至顶) 依次为~\verb+1+, \verb+8+, \verb+2+ 和~\verb+3+. 
+\item \verb+*+ 运算符取走栈顶两个元素, 并将运算结果\footnote{本例中, 我们假定~$\mathtt *$ 表示乘法, 但实际在~\bt 中并非如此, \bt 中并没有定义乘法运算符, $\mathtt{*}$ 在~\bt 中代表两个字串的连接.}~$3\times 2=6$
+推入栈. 现在堆栈内容~(从底至顶) 依次为~\verb+1+, \verb+8+ 和~\verb+6+. 
+\item \verb+-+ 运算符应用于栈顶的~\verb+6+ 和~\verb+8+. 按照~\bt 对减法的定义\footnote{This operator is not commutative, and it could have been
+  defined in the other way.}, 将从第二个值~\verb+8+ 中减去第一个值~\verb+6+, 所得结果推入栈顶, 于是堆栈的当前内容为~\verb+1+ 和~\verb+2+.
+\end{itemize}
+
+如果你没有理解这个例子, 请多看几遍或通过阅读其它材料, 务求弄懂其原理. 这些是~\bt 语言的核心, 如果本例都没有弄懂的话, 那么后面的内容可能更无法理解.
+
+我相信大多数读者已经弄明白了, 我们现在进入最令人激动的核心部分去.
+
+
+\mysection{内部函数}
+
+下表将列出所有的内部函数\index{bibtex}{internal function}. 对于每个内部函数, 都包含以下要素:
+\begin{itemize}
+\item 左边是该函数所需要的堆栈顶部内容项, 其中最右边的项位于栈顶;
+\item 右边是该函数处理完毕后要推入到栈顶的内容.
+\end{itemize}
+我们使用以下约定: \el I 代表一个整数, \el S 代表一个字串, \el F 代表一个函数, \el N 代表一个变量名字\footnote{一个变量名字是指在~\texttt{STRINGS} 或~\texttt{INTEGERS} 或~\texttt{ENTRY} 中声明过的名字. 而且在它左边必需使用一个单引号, 以便让~\bt 明确地理解这是在取变量的名字, 而不是取其值. 例如~\texttt{'label}.}, \el C 代表一个在~\texttt{ENTRY} 中声明过的字段的名字\footnote{它也可以是被~\bt 隐式声明的字段~\chp{crossref}.}, \el E 代表一个或者取整数, 或者取字串的项. 
+
+\begin{longtable}{|>{\vrule height9pt depth5pt width0pt}rlr|p{.58\textwidth}<{\vrule height5pt depth7pt width0pt}|}
+\hline\endhead
+\hline\endfirsthead
+\hline\endfoot
+\hline\endlastfoot
+\eli I1 \eli I2 & \texttt+ & (\eli I1$+$\el I2) & 
+整数加法\footnotemark; \\
+\noalign{\footnotetext{整数必需在其前加一个~\texttt\# 号, 例如, 若希望计算~$2+5$, 则应书写为~\texttt{\#2 \#5 +}. 负数则应书写为形如~\texttt{\#-3} 的格式. }}
+\eli I1 \eli I2 & \texttt- & (\eli I1$-$\eli I2) &
+整数减法; \\
+\eli I1 \eli I2 & \texttt> & \el I & 
+若~\eli I1 严格大于~\eli I2, 则返回~$1$, 否则返回~$0$\footnotemark;\\ 
+\noalign{\footnotetext{在~\bt 中没有布尔型, 通常用整数类型代替: 负数和~0 表示~\texttt{false}, 正数表示~\texttt{true}.}}
+\eli I1 \eli I2 & \texttt< & \el I & 若~\eli I2 严格大于~\eli I1, 则返回~$1$, 否则返回~$0$; \\
+\eli I1 \eli I2 & \texttt= & \el I & 若两个整数相等, 则返回~$1$, 否则返回~$0$;\\
+\eli S1 \eli S2 & \texttt = & \el I & 若两个字串相同, 则返回~$1$, 否则返回~$0$;\\
+\eli S1 \eli S2 & \texttt* & (\eli S1\eli S2) & 将两个字串连接成一个串\footnotemark; \\
+\noalign{\footnotetext{如前文所述, 在~\bt 中没有乘法运算符\footnotemark.}}%
+\noalign{\footnotetext{乘法运算还是比较有用的, 我们后面会自定义一个.}}
+\el E \el N & \texttt{:=} & & 赋值运算: 假定变量~\el
+N 与 ~\el E 具有相同的数据类型, 则将 ~\el E 的值赋以该变量; \\
+\el S & \fn{add.period} & \el S & 在字串~\el S 的末尾添加一个句点, 但当~\el S 的末尾已经是句点、叹号、问号三者之一时~(这里指去除右大括号后), 就不再添加了; \\
+& \fn{call.type} && 执行一个名字为当前文献条目的类型名的函数. 例如, 对于一个类型为~\nient{book} 的文献条目而言, 就会执行名为~\texttt{book} 的函数. 显然, 该函数不能通过~\texttt{EXECUTE} 命令来调用, 只能用在~\texttt{ITERATE} 命令或~\texttt{REVERSE} 命令中. 
+这也间接说明了应该如何添加一种新的文献条目类型: 你需要简单地定义一个函数, 该函数的名字就是新文献条目类型. 如果使用了一种文献条目类型, 但在~\texttt{READ} 命令之前却没有定义相应的同名函数, 那么~\bt 就会抱怨; \\
+\el S \texttt{"t"} & \fn{change.case} & \el S & 
+将~\el S 转换成小写, 但对于第一个字符以及那些括号深度大于~0 的字符不进行转换. 再次提醒特殊字符的括号深度为~0; \\
+\el S \texttt{"l"} & \fn{change.case} & \el S & 
+将~\el S 转换成小写, 括号深度为大于~0 的字符除外; \\
+\el S \texttt{"u"} & \fn{change.case} & \el S & 
+将~\el S 转移成大写, 括号深度为大于~0 的字符除外; \\
+\el S & \fn{chr.to.int} & \el I & 
+如果 ~\el S 仅包含一个字符~(指传统意义上的字符, 即不考虑特殊字符), 则返回其~ASCII 码值; \\
+& \fn{cite} & \el S & 将当前文献条目的内部键值推入堆栈. 当然, 此函数只有在~\texttt{ITERATE} 中~\texttt{REVERSE} 使用才有意义;\\
+\el E & \fn{duplicate} & \el E \el E & 
+将堆栈顶部的一个元素复制一份并推入栈顶;\\
+\el E & \fn{empty} & \el I & 如果~\el E 为一空的字串或空字段值~(但该字段仍然是定义过的), 则将~$1$ 推入堆栈, 否则将~$0$ 入栈; \\
+\eli S1 \el I \eli S2 & \fn{format.name} & \el S & 
+提取出字串~\eli S1 中的第~\el I 个人名~(注意人名是用~\texttt{and} 来分隔的), 并按照字串~\eli
+S2 指定的格式进行格式化处理. 这里无法详细说明, 细节参看下一节; \\
+& \fn{global.max} & \el I & 
+将所允许字串的最大长度值推入堆栈, 这个数值通常比较大~(5000 个字符). 使用该函数可以有效保证在对字串进行连接时不至于产生过长的字串; \\
+\el I \eli F1 \eli F2 & \fn{if} && 若~\el I 取正值, 则执行~\eli F1, 否则执行~\eli F2; \\
+\el I & \fn{int.to.chr} & \el S & 按照~ASCII 表将数值~\el I 转换成对应的字符. \el I 的取值必需为~$0--127$; \\
+\el I & \fn{int.to.str} & \el S & 将整数值转换成等价的字串\footnotemark; \\
+\noalign{\footnotetext{学究式的科学家们可能要质疑了: ``你还没有对等价关系下个严格的定义啊'', 我想只用一个例子便可说明问题: 如果~\el I 的值为~147, 则其等价的字串就是~\texttt{"147"}.}}
+\el C & \fn{missing} & \el I & 如果当前文献条目中定义了字段~\el C, 则返回~$1$, 否则返回~$0$;\\
+& \fn{newline} & & 将缓存的输出立即写入到~\ext{bbl} 文件中去, 并另起一行~(开始一个新行); \\
+\el S & \fn{num.names} & \el I & 返回字串~\el S 中所包含的人名的数目.
+计算方法很简单: 计算一下括号深度~0 的~\texttt{and}(其两侧各有一个空白符) 的出现次数, 并将结果加~$1$ 即可; \\
+\el E & \fn{pop} & & 将栈顶的一个元素移走; \\
+& \fn{preamble} & \el S & 把~\ext{bib} 文件中所有~\chp{preamble} 声明中的内容连接在一起, 并推入堆栈顶部; \\
+\el S & \fn{purify} & \el S & 
+移除字串~\el S 中的所有非字母非数字的字符. 更精确地讲, 该函数会保留字母、数字和空格符, 将每一个制表符、连字符、波浪号都转换成空格符, 其余的标准字符~(是指出现在~\TeX{}book 的附录~C 中的表格内的那些字符) 都会被移除. 特殊字符有些例外: \LaTeX{} 命令、空格符、连字符、波浪号都会被移除. 只有出现在~\LaTeX{} 命令外部的数字与字母才会保留.%
+\label{purify}
+
+在实践中, 这个函数主要用于对文献条目排序时, 这时一般先对字串进行清理然后再进行比较, 这也是为什么它只保留那些~``已知'' 字符的原因. 我坚持认为~``\texttt{\bs'e}'' 与~``\texttt{\'e}'' 是不同的, 由于第一个会被转换成~\texttt e, 第二个不会变化, 但在排序时, 第二个应当放在标准的~26 个字母之后. \\
+& \fn{quote} & \el S & 将单个字符~\verb+"+ 推入栈顶;\\ 
+& \fn{skip} && 空操作~(什么也不干); \\
+& \fn{sort.key} & \el S & 该函数实际上只是一个字串变量, 它被隐式地声明, 存在于每一个文献条目中, 并会被~\texttt{SORT} 所使用. 由此可见, 在排序之前它必需要进行适当的定义; \\
+... \el E \el E& \fn{stack} && 清空堆栈内容, 并将其内容输出到标准输出设备~(而不是输出文件) 中; \\
+\el S \eli I1 \eli I2 & \fn{substring} & \el S & 从字串~\el S 中提取从位置~\eli I1 开始、长度为~\eli I2 的子串. 约定第一个字符的位置为~$1$. 注意这里不考虑特殊字符和大括号, 因此字串~\verb+{\LaTeX}+ 中从位置~2 开始、长度为~3 的子串为~\verb+\LaT+; \\
+\eli E1 \eli E2 & \fn{swap} & \eli E2 \eli E1 & 
+将栈顶的两个元素互相交换位置; \\
+\el S & \fn{text.length} & \el I & 返回~\el S 中所含字符的个数, 其中特殊字符看作一个字符, 括号忽略.; \label{textlength} \\
+\el S \el I & \fn{text.prefix} & \el S & 
+返回字串~\el S 的前~\el I 个字符, 仍旧将特殊字符看作一个字符, 并省略括号~(但括号会输出). 例如~\verb+{{\LaTeX}}1234+ 的长度为~3 的前缀为~\verb+{{\LaT}}+, 但~\verb+{\LaTeX}1234+ 的长度为~3 的前缀则为~\verb+{\LaTeX}12+; \\
+\el E & \fn{top} && 将栈顶一个元素回显到标准输出设备~(不是输出文件) 中, 并将其从堆栈中移除; \\
+& \fn{type} & \el S & 将当前文献条目的类型推入堆栈; \\
+\el S & \fn{warning} && 将字串~\el S 作为警告消息写入到标准输出设备中; \\
+\eli F1 \eli F2 & \fn{while} & & 
+只要~\eli F1 返回正值就连续执行~\eli F1 和 ~\eli F2, 其中~\eli F1 必需返回一个整数值; \\
+\el S & \fn{width} &\el I& 返回字串~\el S 的宽度, 度量标准是当使用~\emph{cmr}10 字体~(1987 年~6 月版) 输出字串时所占用的宽度值, 单位是~0.01 磅~(point). 你不必太关心其细节, 该函数主要用于比较标签的宽度值, 其中的标签值会作为参数传递给~\env{thebibliography} 环境; \\
+\el S & \fn{write} && 将字串 ~\el S 写入到~\ext{bbl} 文件.
+\end{longtable}
+
+好了, 以上这些内部函数足以用来定义大量的新函数, 从而完成对文献条目的管理、排序、计算标签、排版等处理. 在正式使用它们之前, 我再详细解释一下~\fn{format.name} 的用法.
+
+
+\mysection{\protect\nifn{format.name} 函数}\label{noms-start}
+
+这个函数比较复杂, 其语法如下:
+\begin{center}
+\begin{minipage}{.8\textwidth}
+\eli S1 \el I \eli S2 \ \fn{format.name}\ \el S
+\end{minipage}
+\end{center}
+
+第一个参数~\eli S1 通常是字段~\chp{author} 或~\chp{editor} 的内容, 是一个用~\verb+and+ 分割的人名列表. 只要人名采用了~\bt 所能识别的三种格式~(参看第~\ref{author} 节) 之一, 那么~\bt 就能有效地将人名解析成~last name, first
+name, ``von'' 和~``complement'' 四个部分. 字串~\eli S2 用于定义输出格式.
+这里是一个示例:
+\begin{center}
+\begin{minipage}{.8\textwidth}
+\begin{verbatimtab}
+"{ff }{vv }{ll}{, jj}"
+\end{verbatimtab}
+\end{minipage}
+\end{center}
+这里的格式指定描述如下:
+\begin{itemize}
+\item 从整体上看, 它是由一系列字串组成的, 每个字串两侧为大括号;
+\item \verb+ff+ 代表了人名的~\verb+First+ 部分, 即~first name;
+  \verb+ll+ 代表了人名的~\verb+Last+ 部分, 即~last name, 而~\verb+vv+ 和~\verb+jj+ 则分别代表了人名的~\verb+von+ 部分和~\verb+jr+ 部分; 
+\item \fn{format.name} 会把~\el S 中所包含的每个字串中的~\verb+ff+, \verb+ll+, \verb+vv+ 和~\verb+jj+ 等部分用相应的取值进行替换. 如果某个取值为空串, 则它所属于的整个字串部分就移除不要了; 否则就会连同其余字面内容一同输出. 例如, 在上述例子中, 若~\verb+jr+ 部分的取值为空, 则逗号及其后的空格也不会输出; 又如: 若~\verb+First+ 部分取值不为空, 则会在其后附着一个空格符. 
+\end{itemize}
+
+通过上述介绍, 关于这个函数的用法基本就清楚了. 另外, 整数~\el I 表明我们正在处理的是~\eli S1 中的第~\el I 个人名. 
+
+最后要提到的是, 人名还有各种缩略形式, 比如为了只取~first name 的首字母, 我们只要将格式串~\verb+{ff }+ 换成~\verb+{f }+ 即可. 如果在一个人名的某个部分~(如~first name 部分) 中仍然包含着若干个子名字~(例如多个~first name), 则缩略的输出格式是: 取每个子名字的首字母, 每个首字母后面会跟一个句点. 不同的子名字之间必需由空格符、制表符、波浪号或连字符分隔开来, 制表符会转换成空格符, 而波浪号与连字符则原样保留. 注意最后一个子名字缩写后没有句点, 如果需要必需通过~\verb+{f. }+ 来手工指定. 例如:
+\begin{myexv}
+\begin{verbatimtab}
+"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander"
+#2 "{f. }{vv }{ll}{, jj}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 结果为~\textit{F. Mittelbach}. 
+再来看几个有趣的例子:
+\begin{myexv}
+\begin{verbatimtab}
+"Charles Jean Gustave Nicolas de La Vall{\'e}e Poussin"
+#1 "{vv }{ll}{, f}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 
+产生的结果为~\emph{de La Vall\'ee Poussin, C.J.G.N}, 其中末尾没有句点~(我们没有手工指定).
+\begin{myexv}
+\begin{verbatimtab}
+"Doppler, {\relax Ch}ristian Andreas"
+#1 "{f. }{vv }{ll}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 结果为~\emph{Ch.~A. Doppler}. 
+又如
+\begin{myexv}
+\begin{verbatimtab}
+"Jean-Baptiste Poquelin" #1 "{f. }{vv }{ll}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 输出为~\emph{J.-B. Poquelin}.
+
+似乎还有一个问题没有解决: 为了从作者人名中抽取文献条目的标签, 我们自然也想到应该使用~\fn{format.name}. 比如一条文献是~La Vall\'ee Poussin 写的一本书, 我们希望使用~\verb+LVP+ 作为标签. 第一种能想到的写法是:
+\begin{myexv}
+\begin{verbatimtab}
+"Charles Jean Gustave Nicolas de La Vall{\'e}e Poussin"
+#1 "{l}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 
+但很不幸, 其输出为~\emph{L. V. P}, 用它来作标签可不怎么漂亮. 实际上, 子名字之间的句点是缺省取值, 完全可以通过显式指定来更换它. 在本例中, 我们就希望有空串来替换掉它:
+\begin{myexv}
+\begin{verbatimtab}
+"Charles Jean Gustave Nicolas de La Vall{\'e}e Poussin"
+#1 "{l{}}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 
+这下可以得到期望的结果~\emph{LVP} 了. 
+跟在~\verb+l+ 后面的一对括号意思就是要在多个子名字~(或其首字母缩写) 之间放上空串. 除此之外, 还可以为子名字左侧或右侧指定其它的文本内容, 其中空格可以直接录入, 而文本与命令则要放在大括号内, 以便让~\bt 可以将它们与~\verb+ff+,
+\verb+ll+,~... 等格式串相区别开. 一个例子胜过千言万语:
+\begin{myexv}
+\begin{verbatimtab}
+"Charles Jean Gustave Nicolas de La Vall{\'e}e Poussin"
+#1 "{{\scshape\bgroup}ff{ }{\egroup}" format.name$
+\end{verbatimtab}
+\end{myexv} %$
+\noindent 输出为
+~\verb+{\scshape\bgroup}Charles Jean Gustave Nicolas{\egroup}+, 进而输出
+~<<~{\scshape\bgroup}Charles Jean Gustave Nicolas{\egroup}~>>. 
+注意这里用了点小伎俩, 将左大括号用~\cmd{bgroup} 表示, 以便让~\bt 与~\LaTeX{} 正确处理, 并要将其以字面输出\footnote{译者注: 这段译得实在别扭, 以下为原文: 
+Note that we had to trick \bt and \LaTeX regarding the \cmd{bgroup}: braces,
+which are necessary in \bt name specifications, are copied verbatim in the
+output...}.
+\label{noms-end}
+
+\medskip
+好, 实在应用打住了, 因为你已经知道了所有的内容, 起码理论上是如此. 不过, 下一节还是要介绍一些例子与技巧.
+
+\clearpage
+\mysection{一些实践性技巧}
+
+实际上, 为了测试~\bt 的各种行为, 比如测试各种人名的格式, 最主要的技巧莫过于如何构建一个最小的样式文件了. 这个最小的样式文件只是将其结果输出到标准输出设备上. 以下假定希望测试~\bt 是如何处理下面的人名的:
+%\begin{myexv}
+\begin{center}
+\begin{minipage}{.8\textwidth}
+\begin{verbatimtab}
+de la Cierva y Codorn{\'\i}u, Juan
+\end{verbatimtab}
+\end{minipage}
+\end{center}
+%\end{myexv} %$
+
+最短的~\ext{bst} 文件也必需包含~\texttt{ENTRY}\index{bibtex}{entry@\texttt{ENTRY}}和~\texttt{READ}\index{bibtex}{read@\texttt{READ}}命令, 哪怕我们在其中根本就用不到任何文献条目时也是如此. 当然, 也还需要有计算输出的函数. 综合这两点, 我们最短的样式文件~\verb+min.bst+ 内容如下:
+\begin{myexv}
+\begin{verbatimtab}
+ENTRY {}{}{}
+
+FUNCTION {test}
+{"de la Cierva y Codorn{\'\i}u, Juan"
+#1 "{ff - }{vv - }{ll}" format.name$ top$}
+
+READ
+
+EXECUTE{test}
+\end{verbatimtab}
+\end{myexv} 
+\noindent 该样式文件效果是将人名分隔成不同的部分, 期间用连字符分开, 并将结果输出.
+
+现在~\ext{aux} 的内容也很简单, 它只定义了所要用到的文献样式文件:
+\begin{myexv}
+\begin{verbatimtab}
+\bibstyle{min}
+\end{verbatimtab}
+\end{myexv} 
+
+在这个名为~\verb+min.aux+ 的文件中, 既没有用于指定文献数据库~\ext{bib} 的~\cmd{bibdata} 命令, 也没有用来声明文献条目的~\cmd{citation}{} 命令. \bt 对此当然会有抱怨, 不过仍然会顺利运行.
+
+最终结果如下:
+\begin{myexv}
+\begin{verbatimtab}
+% bibtex min
+This is BibTeX, Version 0.99c (Web2C 7.4.5)
+The top-level auxiliary file: min.aux
+The style file: min.bst
+I found no \citation commands---while reading file min.aux
+I found no \bibdata command---while reading file min.aux
+Warning--I didn't find any fields--line 1 of file min.bst
+Juan - de~la Cierva~y - Codorn{\'\i}u
+(There were 2 error messages)
+\end{verbatimtab}
+\end{myexv}
+
+其中既有错误消息, 也有输出结果, 输出结果表明我们使用的人名格式指定不正确~(因为~\verb+von+ 部分应当只包含~\verb+de la+). 
+至于不间断空白符~\verb+~+, 那是~\bt 自动加上的.
+
+通过本例, 你就明白了如何测试自己的~\bt 函数. 由于~\bt 的出错消息难以理解, 因此这个实践过程更显得有价值. 你同样可以测试一下我先前提到的函数~\fn{purify} 的行为.
+
+
+\mysection{部分简单函数实例}
+
+\mysubsection{布尔函数}
+
+如前所述, \bt 没有布尔类型. 特别地, 没有与、或、非等这些非常有用的布尔运算. 这些运算可以定义为如图~\ref{fig1} 的函数.
+
+\begin{figure}[!htbp]
+\begin{myexv}
+\begin{verbatimtab}
+FUNCTION {not}
+{   { #0 }
+    { #1 }
+  if$
+}
+
+FUNCTION {and}
+{   'skip$
+    { pop$ #0 }
+  if$
+}
+
+FUNCTION {or}
+{   { pop$ #1 }
+    'skip$
+  if$
+}
+\end{verbatimtab}
+\end{myexv} %$
+\caption{实现基本布尔运算的函数}\label{fig1}
+\end{figure}
+这里只对前两个进行解释: 对于“非”运算, 先假定当前的栈顶有一个布尔值~(即一个整数). 首先, 函数~\fn{if} 对这个布尔值进行测试, 如果测试结果为~\verb+true+, 则该函数返回~\verb+#0+(即~\verb+false+), 否则它会返回~\verb+#1+(即~\verb+true+).
+这正是我们希望的语义.
+
+对于“与”运算: 假定堆栈中有两个布尔值. 函数~\fn{if} 先对第一个进行测试, 若其值为~\verb+true+, 则什么也不干~(相当于将第二个布尔值留在栈顶, 作为“与”运算的最终结果). 若第一个值为~\verb+false+, 则“与”运算的最终结果也应为~\verb+false+, 于是将第二个参数移除掉, 然后将~\verb+#0+ 推入堆栈.  
+
+\mysubsection{乘法}
+
+图~\ref{fig2} 则是计算两个整数乘法的函数.
+我不想涉及过多细节, 代码中的注释已经足够清楚了. 同样你还可以定义除法、求两个整数的最大公约数、素数测试等函数.
+不过我无法确定那些是否真的有用.
+
+\begin{figure}[!htbp]
+\begin{myexv}
+\begin{verbatimtab}
+INTEGERS { a b }
+
+FUNCTION {mult}
+{
+ 'a := 			    %% 保存第一个值
+ 'b :=			    %% 保存第二个值
+
+ b #0 <			    %% 先记住 b 的符号, 
+    {#-1 #0 b - 'b :=}	    %% 然后再考虑其绝对值. 
+    {#1}		    %% 
+ if$			    %%
+
+ #0			    %% 将 0 推入堆栈.
+ {b #0 >}		    %% 当 b 为正数时, 
+ {			    %% 把 a 值累加到栈顶元素中
+   a +			    %% 并将 b 的值减 1. 
+   b #1 - 'b :=		    %% 
+ }			    %% 
+ while$			    %%
+
+ swap$ 	  		    %% 最后, 若 b 为负数
+   'skip$  		    %% 则取其相反数.
+   {#0 swap$ -}		    %% 
+ if$			    %% 
+}
+\end{verbatimtab}
+\end{myexv}
+\caption{两个整数的乘法函数}\label{fig2}
+\end{figure}
+
+
+\mysubsection{将字符串转换成整数}
+
+没有一种可将一个字串~(由数字组成) 转换成相应的整数的直接方法, 我们也定义一个函数来实现, 并且当该字串不是一个数字时, 返回一条错误消息. 实现中采用了递归方法, 如图~\ref{fig3} 所示.
+
+\begin{figure}[!htbp]
+\begin{myexv}
+\begin{verbatimtab}
+FUNCTION {chr.to.value}	      %% 一个字符的 ASCII 码值
+{
+  chr.to.int$ #48 -	      %% 字符 "0" 的 ASCII 码值 = 48
+  duplicate$ duplicate$	      %% 字符 "1" 的 ASCII 码值 = 49
+  #0 < swap$ #9 > or	      %% ...
+  {			      %% 字符 "9" 的 ASCII 码值 = 57
+      #48 + int.to.chr$ 
+      " is not a number..." * 
+      warning$		      %% 若它不是一个数字, 则返回 0.
+      pop$ #0		      %% 
+    }
+  {}
+  if$
+}
+
+FUNCTION {str.to.int.aux}     %% 辅助函数
+{
+  {duplicate$ empty$ not}     %% 当字串不为空时
+    {			      %% 考虑其第一个字符
+      swap$ #10 mult 'a :=    %% 并将它``累加''到结果的末尾.
+      duplicate$ #1 #1 substring$   %%
+      chr.to.value a +
+      swap$
+      #2 global.max$ substring$
+    }
+  while$
+  pop$
+}
+
+FUNCTION {str.to.int}
+{			      %% 处理负值
+  duplicate$ #1 #1 substring$ "-" = 
+    {#1 swap$ #2 global.max$ substring$}
+    {#0 swap$}
+  if$
+			      %% 初始化, 并开始调用
+  #0 swap$ str.to.int.aux     %% 辅助函数.
+  swap$ 
+    {#0 swap$ -}	      %% 处理符号.
+    {}
+  if$
+}
+\end{verbatimtab}
+\end{myexv}  %$
+\caption{将字符串转换成整数}\label{fig3}
+\end{figure}
+
+本例中有几个有趣的特点: 首先, 它需要使用布尔函数和乘法函数, 因此这些函数必需提前定义好, 放在本函数之前. 其次, 函数~\verb+chr.to.value+ 还说明了设计函数的一条重要原则: 一条函数必需在任何时间都要行为一致, 即使用相同数目和相同类型的输入参数, 使用相同数目和相同类型的输出. 例如本例中, 当输入参数中的一个字符不是整数时, 虽然会抱怨, 但我们还是返回了一个整数~(就好像没有任何错误一样). 除非你刻意为了调试程序, 否则遵循这条规则很重要.
+
+
+\mysubsection{对字符串中的字符进行计数}
+
+前面我们在第~\pageref{textlength} 页看到, \fn{text.length} 会对一个字串中的字符进行计数, 但这里所说的~``字符'' 是~\bt 所理解意义下的字符. 事实上, 只有~\fn{substring} 这一个内部函数使用的是常规意义下标准字符概念. 现在我们利用~\fn{substring} 函数, 反复计算给定字串的连续前缀, 直到某个前缀串等于原始串本身时为止, 其中重复的次数就是给定字串中所有字符的个数.
+
+\begin{figure}[!htbp]
+\begin{myexv}
+\begin{verbatimtab}
+INTEGERS{ l }
+FUNCTION{ string.length }
+{
+  #1 'l :=
+  {duplicate$ duplicate$ #1 l substring$ = not}
+    {l #1 + 'l :=}
+  while$
+  pop$ l
+}
+\end{verbatimtab}
+\end{myexv} %$
+\caption{计算字符串中所含字符\emph{真实}数目的函数}\label{fig4}
+\end{figure}
+
+作为一个练习, 请读者自己尝试实现另一种算法: 依次移除字串的首字符, 直到所剩余的串为空时为止.
+
+\mysubsection{``查找与替换'' 函数}
+
+利用上面定义这些函数, 现在可以设计一个用于在给定文献中查找与替换某个字串的算法了. 再次重申, 我们不能使用~\fn{text.length} 和~\fn{text.prefix}, 因为它们使用的字符有特殊含义. 我们只使用~\verb+string.length+ 和~\fn{substring} 函数. 算法思想是相继地提取文本的前~$n$ 个字符, 将其与模式进行比较, 然后根据比较的结果决定是否对其进行替换.
+
+\begin{figure}[!htbp]
+\begin{myexv}
+\begin{verbatimtab}
+STRINGS{replace find text}
+INTEGERS{find_length}
+FUNCTION{find.replace}
+{ 'replace :=
+  'find :=
+  'text :=
+  find string.length 'find_length :=
+  ""
+    { text empty$ not }
+    { text #1 find_length substring$ find =
+        {
+          replace *
+          text #1 find_length + global.max$ substring$ 'text :=
+        }
+        { text #1 #1 substring$ *
+          text #2 global.max$ substring$ 'text :=
+        }
+      if$
+    }
+  while$
+}
+\end{verbatimtab}
+\end{myexv} %$
+\caption{在~\bt 中进行查找与替换}\label{fig5}
+\end{figure}
+
+该函数会将文本中出现的所有模式都进行替换, 但很容易将其修改成只对第一次出现的模式进行替换. 作为一个练习, 读者可以尝试只使用两个字串变量实现同样的算法\footnote{提示: 尝试将~\texttt{find} 放到堆栈中去.} (尽可能少占用字串变量, 因为它们的总数非常有限).
+
+
+%% ttb_en.sec5.tex
+%% Copyright 2003-2005  Nicolas Markey
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt 
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Nicolas Markey  
+% 
+% This work consists of the files
+%       ttb_en.tex
+%       ttb_en.sec1.tex  ttb_en.sec2.tex  ttb_en.sec3.tex
+%       ttb_en.sec4.tex  ttb_en.sec5.tex  ttb_style.sty
+%       local.bib        idxstyle.ist     Makefile
+% and the derived ttb_en.dvi, ttb_en.ps and ttb_en.pdf
+
+
+\mypart{\bt 的其它用途}\label{autres}
+%\parttoc
+%\mtcskip
+
+本部分是对~\bt 的一些扩展, 主要介绍一下如何使用~\bt 完成一些其他任务.
+我本人也正在开发一些这样的扩展, 最新消息可参考我的个人主页: 
+\begin{center}
+\url{http://www.lsv.ens-cachan.fr/~markey/bibla.php}.
+\end{center}
+敬请提出您的宝贵意见或思路.
+
+\mysection{发表论著清单}
+
+这其实不是一个真正的扩展, 因为毕竟它还是用~\bt 来处理文献信息的. 在本例中, 为了提取某一个人的论著, 我们仍使用传统的~\ext{bib} 文件, 但在结果中会标示出其余的合作者人名. 例如:
+\begin{myex}
+\def\refname{Books by Michel \textsc{Goossens}}
+\begin{thebibliography}{9}
+\bibitem{companion} 
+{\em the \LaTeX{} Companion}.
+Addison-Wesley, 1993.
+Joint work with Frank Mittelbach  and  Alexander Samarin. 
+
+\bibitem{graphics}
+{\em the \LaTeX{} Graphics Companion}.
+Addison-Wesley, 1999.
+Joint work with  Sebastian Rahtz and Frank Mittelbach.
+
+\bibitem{webc}
+{\em the \LaTeX{} Web Companion}.
+Addison-Wesley, 1999.
+Joint work with Sebastian Rahtz.
+
+\end{thebibliography}
+\end{myex}
+
+这里有三点值得注意:
+\begin{itemize}
+\item 被引文献条目是通过文献样式文件提取得到的;
+\item 人名的排版方面有些差别.
+\end{itemize}
+
+第三点差异是关于文献样式文献的配置机制方面的, 它不是靠用户修改~\ext{bst} 文件完成的, 而是增加一种文献条目类型~\nient{config}, 一个~\nient{config} 条目中就指定要提取的论著的作者名字, 以及其它一些配置变量的值.
+
+\mysection{通讯录}
+
+一系列的地址信息其实就构成了一个数据库, 对它可排序、分组、排版等处理, 所以~\bt 应该能做到这些的.
+
+为此, 必需对字段, 条目类型, 函数等进行重新定义. 字段主要包括~names, addresses, phone numbers, e-mail
+addresses,~... 以下是输出结果的一个例子:
+
+\bigskip
+\makeatletter
+\font\lettre=cmssdc10 at 20pt
+\def\at{@}
+\ifx\sautepage\@undefined%
+\def\sautepage{\null\cleardoublepage}\fi
+\ifx\ecritlettre\@undefined%
+\def\ecritlettre#1#2#3#4#5{
+\vbox to 0pt{
+\vspace{#3mm}\hspace{#1mm}
+\smash{\colorbox[rgb]{.8,.8,.8}{\lettre \ \
+\vrule height #2mm depth #2mm width 0pt%
+\vrule height 8mm depth 0mm width 0pt%
+\hbox to #4mm{#5\hfil\null}%
+}}
+\vspace{-#3mm}\hspace{-#1mm}}}\fi
+\small
+\makeatother
+\ecritlettre{157}{5}{10}{20}{mn}
+\noindent
+\begin{center}
+\begin{tabular}{|p{.30\textwidth}|p{.4\textwidth}p{.18\textwidth}|}
+\hline
+{\vrule height 5mm width 0mm
+{\normalsize \textsc{Markey} Nicolas
+}} \vrule height 0mm depth 5mm width 0mm &
+\vrule height 5mm width 0mm
+LSV -- ENS Cachan\endgraf
+61, avenue du Pr\'esident Wilson\endgraf
+94235 \textsc{Cachan} C\'edex\vrule depth 3mm width 0mm
+& \vrule height 5mm width 0mm
+\Telefon \hfill01.47.40.75.32\endgraf
+\Faxmachine \hfill01.47.40.24.64\endgraf
+\\ &
+\multicolumn{2}{l|}{\texttt{markey\at lsv.ens-cachan.fr}} \vrule depth 2mm
+  width 0mm
+\\ \hline
+\end{tabular}
+\end{center}
+
+与前一个例子一样, 为了定义将字符分组功能, 我们定义了一个~\nient{config} 的条目类型...
+
+\mysection{文献表的导出、提取与整理}
+\label{bibexport}
+
+有时我们还需要从一个较大的文献库中抽取部分记录, 比如为了把~\LaTeX{} 文档及其相关的文献发送给合作者时就需要这么做. 目前已经有好几种工具来完成这种工作, 不过它们大多不对正确地支持交叉引用~(crossref)、宏以及字串缩写等. 实际上, \bt 本身就能完成这种事: 你只需将文献表的输出格式指定为一个~\ext{bib} 数据库格式即可~(当然, 由于无法告诉~\bt 写入文件的名字, 输出结果是一个~\ext{bbl} 文件). 这种方法有几个好处: 首先它能保证所得到的字段正确无误; 其次它能将缩略写法自动展开; 第三, 它可以很方便地导出某一个指定作者的所有文献~(要知道人名在~\ext{bib} 数据库中可能有各种各样的编码方式); 等等. 宏包~\verb+bibexport+ 中就实现了这种技术, 见:
+\url{http://www.ctan.org/tex-archive/biblio/bibtex/contrib/bibexport/}
+
+\mysection{在一个参考文献表中使用多种语言}
+
+传统的文献样式只能处理一种语言~(通常是英语). 如果混合处理多种语言, 则需要使用点技巧: 首先, 在写入~\ext{bib} 文件时, 必需保证写入的内容都是与具体语种无关的. 例如, 月份要写成数字式的; 又如, \bt 在处理每个条目时, 要添加的一些单词, 如最后一个人名前的~``and'' 等等. 
+
+为了能在一个参考文献表中使用多种语言, 有几种解决办法:
+\begin{itemize}
+\item 为每种语种设计一个样式文件. 这种方案有点麻烦, 但也并不复杂, 目前就有不少这样的翻译版本存在.
+
+  法语版的样式文件可以参看
+  ~\url{http://www.ctan.org/tex-archive/biblio/bibtex/contrib/bib-fr/}. 在这些样式文件中, 我把每个翻译过的单词放在文件头部, 这样可为其它语种的翻译者提供一些方便.
+
+\item 另外一种方案是用~\LaTeX{} 命令把那些与语种相关的单词替换掉. 这方面的例子有~Harald Harders 开发的~\textsf{babelbib}
+  (\url{http://www.ctan.org/tex-archive/biblio/bibtex/contrib/babelbib/}).
+  这些样式文件都需要使用~\sty{babel} 宏包, 利用它们可以为每一个文献条目定义一种语言~(从而也可以使用恰当的分词模式).
+\end{itemize}
+
+
+\mysection{词汇术语表}
+
+词汇术语表是将文档中出现的科技术语组织到一起形成的词典, 这通常是通过的~\LaTeX{} 的索引机制来实现的.
+不过也可以用~\bt 来做这件事~(由于它还能从一个更大的词典中提取部分定义, 因此有时它甚至比~\nicmd{index} 做得更好些). 此外, 还可以借助~\sty{backref} 宏包为术语添加其在正文中出现的位置~(页码) 信息. 这方面例子可以参看~Jose Luis Diaz de Arriba 和 ~Javier Bezos 开发的~\sty{gloss} 宏包.
+
+
+
+%\nocite{merlin}
+\def\addcontentsline#1#2#3{}
+\cleardoublepage
+\bibliographystyle{alpha}
+\bibliography{local}
+\printindex{latex}{\LaTeX} 
+\clearpage
+\let\oldendindex\endtheindex
+\def\copyright{\vfill
+\null\hfill\begin{minipage}{.5\textwidth}
+\setlength\parindent{0pt}
+\obeyspaces
+Copyright \textcopyright{} 2003-\the\year{} Nicolas \textsc{Markey}
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License, either version 1.3
+of this license or (at your option) any later version.
+The latest version of this license is in\par
+\hfil\url{http://www.latex-project.org/lppl.txt}\par
+and version 1.3 or later is part of all distributions of LaTeX
+version 2003/12/01 or later.
+
+This work has the LPPL status "maintained".\par
+The current maintainer of this work is Nicolas \textsc{Markey}.
+	   \end{minipage}}
+
+
+\def\endtheindex{\label{lastpage}\copyright\oldendindex}
+\printindex{bibtex}{\bt}
+
+\end{document}
