@@ -1,0 +1,411 @@
+%% Last Change: Fri Apr 22 11:06:09 2005
+
+%D \module
+%D   [       file=t-layout,
+%D        version=2003.03.26,
+%D          title=\CONTEXT\ User Module, 
+%D       subtitle=show layout,
+%D         author=Patrick Gundlach,
+%D           date=\currentdate,
+%D      copyright={Patrick Gundlach}]
+
+
+%C filename: t-layout.tex
+%C module layout, shows layout of current page
+
+
+%C copyright 2003,2007 Patrick Gundlach, patrick@gundla.ch
+%C may be distributed under the terms of the GNU General Public License
+%C URL: http://levana.de/context/
+
+%D \subject{Introduction}
+%D This third-party module \quote{layout} draws a representation of
+%D the of the layout of the
+%D current page and displays the sizes of the widths and heights of the
+%D margins, header, footer and text body.
+
+%D \subject{Usage}
+%D Include this module into your ConTeXt files: 
+%D \type{\usemodule[t][layout]} and show the layout with \type{\ShowLayout}.
+
+%D You can set some parameters using \type{\SetupShowLayout}. The
+%D parameters are: units, digits, round, showmore and graphonly.
+%D If graphonly (0/1) is 0, this module shows the lenghts of some text areas. 
+%D units (cm, mm, in or pt) sets the unit in which the lengths will be
+%D displayed, digits (any number $\geq 0$)
+%D sets the number of digits after the decimal period, round (any
+%D number $\neq 0$) states
+%D the place where rounding of the displayed numbers should occur
+%D (\TeX\ is bad at calculating such things) and showmore (0/1) tells
+%D this module to display information about the edge and top/bottom. 
+
+%D Example: 
+%D \starttyping
+%D \ShowLayout
+%D    [units=cm,
+%D     digits=2,
+%D     round=0.1,
+%D     showmore=1,
+%D     graphonly=1]
+%D 
+%D \stoptyping
+
+%D The idea was taken from the \type{\layout} command from the layout LaTeX
+%D package. (Kent McPherson and others)
+
+%C the following settings will be recognized:
+%C units  = cm, mm, in or pt
+%C digits = any number >= 0, those are the digits after the decimal period
+%C round  = any number != 0, just play with it, example 0.1 or 0.01.
+%C          Explanation will be done later
+
+%D \subject{The code}
+
+%D This section is not meant as documentation
+ 
+\newdimen\ShowLayoutdimen
+
+\setvalue{Layoutmm}{0.351459804}  % 2.54/72.27 * 10
+\setvalue{Layoutcm}{0.0351459804} % 2.54/72.27
+\setvalue{Layoutin}{0.0138370001} %    1/72.27
+\setvalue{Layoutpt}{1}
+
+\def\ShowLayoutB(#1.#2)#3{%
+ \counttokens #2\to\scratchcounter 
+ #1\ifnum#3>0%
+    \ifnum#3 > \the\scratchcounter \else \scratchcounter=#3 \fi
+   \splitofftokens \scratchcounter \from #2 \to\test .\test \fi}
+
+% taken from ConTeXt source
+\def\LayoutConvert#1#2#3%
+  {\ShowLayoutdimen=\getvalue{ShowLayoutround}pt
+   \begingroup
+   \scratchdimen#1\relax
+   \scratchdimen\getvalue{Layout#2}\scratchdimen 
+   \advance\scratchdimen by 0.5\ShowLayoutdimen
+   \divide\scratchdimen by \ShowLayoutdimen
+   \multiply\scratchdimen by \ShowLayoutdimen
+   \expandafter\ShowLayoutB\expandafter(\number\withoutpt{\the\scratchdimen}){#3}\thinspace #2
+   \endgroup}
+
+\def\ShowLayoutA#1{%
+ \LayoutConvert{#1}%
+ {\getvalue{ShowLayoutunits}}%
+ {\getvalue{ShowLayoutdigits}}}%
+
+\startuniqueMPgraphic{ShowLayout}{showmore}
+% make sure that the label is on the same side as the posa 
+vardef swapifnecessary (suffix posa, posb)(expr labelpos) =
+  if     ( (labelpos < posa) and (posa > posb))
+      or ( (labelpos > posa) and (posa < posb)) : 
+      save c; %swap 'em
+      c:=posa;
+      posa:=posb;
+      posb:= c;
+  fi
+enddef;
+% num:        labelnumber
+% vertical:   horizontal or vertical label?
+% pos:        for horizontal the y coord, for vertical the x corrd
+% posa, posb: positions of the borders (x coord for horizontal)
+% labelpos:   position for label, only for outer labels, given in the
+%             same direction as posa, posb
+def layoutshowmark(expr num, vertical, pos, posa, posb, labelpos) =
+    save    b,e,c,p,arrow;   
+    numeric b,e;  pair p[];   path arrow[],c;
+
+    b:=posa;
+    e:=posb;
+
+    % p0 is labelposition
+    % p1 is from
+    % p2 is to
+    % p3 is opposite arrow in outer marking
+
+    if labelpos = 0 : % inner label   |<----(n)---->|
+       p0 := (.5[b,e], pos);
+    else:             % outer label   --->|  |<----(n)
+       swapifnecessary (b,e, labelpos);
+       p0 := (labelpos, pos);
+       p3 := ( if b < labelpos: e-5mm else: e+5mm fi ,pos);
+    fi
+
+    p1 := (b,pos);
+    p2 := (e,pos);
+
+    if vertical:
+       p0:=(ypart p0,xpart p0);
+       p1:=(ypart p1,xpart p1);
+       p2:=(ypart p2,xpart p2);
+       p3:=(ypart p3,xpart p3);
+    fi
+    c:= fullcircle scaled .7cm shifted p0;
+    
+    if (center(c) -- p1) intersectiontimes c = (-1,-1):
+      % don't draw the arrows, because there is not enough room for them.
+    else:
+        arrow1 :=center(c) -- p1 cutbefore (center(c) -- p1) intersectionpoint c ;
+        arrow2 :=  
+           if labelpos = 0 : % inner
+                 center(c) -- p2 cutbefore (center(c) -- p2) intersectionpoint c 
+           else: 
+                 p3 -- p2
+           fi;
+      
+        label (decimal (num), center(c));
+        draw c;
+        drawarrow arrow1;
+        drawarrow arrow2;
+    fi
+    
+enddef;
+
+
+
+StartPage;
+numeric xpos,ypos;
+
+path body,leftmargin,header,footer,rightmargin;
+
+
+% backspace:
+draw llcorner Page shifted (BackSpace,0) --
+      ulcorner Page shifted (BackSpace,0) dashed evenly;
+
+%topspace
+draw urcorner Page shifted (0,-TopSpace) --
+      ulcorner Page shifted (0,-TopSpace) dashed evenly;
+
+
+header     := Field [Header]     [Text];
+footer     := Field [Footer]     [Text];
+leftmargin := Field [LeftMargin] [Text];
+rightmargin:= Field [RightMargin][Text];
+body       := Field [Text]       [Text];
+
+pickup pencircle scaled 2pt;
+
+draw Page;
+draw leftmargin;
+draw rightmargin;
+draw header;
+draw footer;
+draw body;
+
+
+
+label ("Body", center (body));
+label ("Header",center (header));
+label ("Left Margin", center (leftmargin));
+label ("Right Margin", center (rightmargin));
+label ("Footer", center (footer));
+%% label (textext("\tfb Body"), center (body));
+%% label (textext("\tfa Header"),center (header));
+%% label (textext("Left Margin"), center (leftmargin));
+%% label (textext("Right Margin"), center (rightmargin));
+%% label (textext("\tfa Footer"), center (footer));
+
+
+if \MPvar{showmore}=1:
+   path top, bot, leftedge, rightedge;
+
+   top       := Field [Top]      [Text];
+   bot       := Field [Bottom]   [Text];
+   leftedge  := Field [LeftEdge] [Text];
+   rightedge := Field [RightEdge][Text];
+
+   draw top;
+   draw bot;
+   draw leftedge;
+   draw rightedge;
+fi
+
+pickup pencircle scaled 1pt;
+
+%        (num, vertical, pos, from, to, labelpos)
+
+%backspace
+layoutshowmark (1, false, .5[ypart(ulcorner Page),Vstep[Top]], 0,BackSpace,0)
+
+
+ypos := Vstep[HeaderSeparator] -1cm;
+
+% leftmargin
+layoutshowmark (2, false, ypos,
+                Hstep[LeftMargin],
+                Hstep[LeftMargin]+Hsize[LeftMargin],0);
+ 
+% leftmargindistance
+layoutshowmark (3, false, ypos -1cm,
+                Hstep[LeftMarginSeparator],
+                Hstep[Text],
+                Hstep[Text]+1cm);
+
+% makeupwidth
+layoutshowmark (4, false, Vstep[Text]+2cm,
+                Hstep[Text], Hstep[Text]+Hsize[Text],0);
+
+% rightmargin
+layoutshowmark (5, false, ypos,
+                Hstep[RightMargin],
+                Hstep[RightMargin]+Hsize[RightMargin],0);
+ 
+% rightmargindistance
+layoutshowmark (6, false, ypos-1cm,
+                Hstep[RightMargin],
+                Hstep[RightMarginSeparator],
+                Hstep[RightMarginSeparator] -1cm);
+
+
+%topspace
+
+xpos:=xpart(ulcorner Page)+BackSpace+1cm;
+layoutshowmark (7, true, xpos, PaperHeight,PaperHeight-TopSpace,0)
+
+%header
+xpos:=xpos+1cm;
+ypos:=.5[PaperHeight,PaperHeight-TopSpace];
+layoutshowmark (8, true, xpos ,
+                Vstep[Header],
+                Vstep[Header]+Vsize[Header],ypos);
+
+%headerseparator
+xpos:=xpos+1cm;
+layoutshowmark (9, true,xpos,
+                Vstep[HeaderSeparator],
+                Vstep[HeaderSeparator]+Vsize[HeaderSeparator],ypos);
+
+xpos:=xpos+1cm;
+
+if \MPvar{showmore}=1:
+   % top 
+   layoutshowmark (17, true, xpos,
+                   Vstep[Top],
+                   Vstep[Top]+Vsize[Top], ypos);
+
+   xpos:=xpos+1cm;
+   layoutshowmark (18, true, xpos,
+                   Vstep[TopSeparator],
+                   Vstep[TopSeparator]+Vsize[TopSeparator], ypos);
+              
+fi
+     
+% makeupheight
+layoutshowmark (10, true,Hstep[RightMarginSeparator]-2cm,
+                Vstep[Header]+Vsize[Header],
+                Vstep[Footer],0);
+
+
+%footerseparator
+xpos:=xpart(ulcorner Page)+BackSpace+2cm;
+ypos:=.5(Vstep[Footer]);
+
+layoutshowmark (11, true,xpos,
+                Vstep[FooterSeparator],
+                Vstep[FooterSeparator]+Vsize[FooterSeparator],ypos);
+
+%footer
+xpos:=xpos+1cm;
+layoutshowmark (12, true,xpos,
+              Vstep[Footer],Vstep[Footer]+Vsize[Footer],ypos);
+
+xpos:=xpos+1cm;
+
+if \MPvar{showmore}=1:
+   % bottom
+   layoutshowmark (19, true, xpos,
+                   Vstep[Bottom],
+                   Vstep[Bottom]+Vsize[Bottom], ypos);
+   xpos:=xpos+1cm;
+   layoutshowmark (20, true, xpos,
+                   Vstep[BottomSeparator],
+                   Vstep[BottomSeparator]+Vsize[BottomSeparator], ypos);
+
+fi
+
+if \MPvar{showmore}=1:
+
+   ypos := Vstep[HeaderSeparator] -3cm;
+
+   % LeftEdge
+   layoutshowmark (13, false, ypos,
+                   Hstep[LeftEdge],
+                   Hstep[LeftEdge]+Hsize[LeftEdge],Hstep[Text]+1cm);
+   ypos := ypos-1cm;
+   % LeftEdgeSeparator
+   layoutshowmark (14, false, ypos,
+                   Hstep[LeftEdgeSeparator],
+                   Hstep[LeftEdgeSeparator]+Hsize[LeftEdgeSeparator],
+                   Hstep[Text]+1cm);
+
+   ypos := Vstep[HeaderSeparator] -3cm;
+
+   layoutshowmark (15, false, ypos,
+                   Hstep[RightEdge],
+                   Hstep[RightEdge]+Hsize[RightEdge],
+                   Hstep[RightMarginSeparator] -1cm);
+
+   ypos := ypos-1cm;
+
+   layoutshowmark (16, false, ypos,
+                   Hstep[RightEdge],
+                   Hstep[RightEdgeSeparator],
+                   Hstep[RightMarginSeparator] -1cm);
+
+   
+
+fi
+
+currentpicture := currentpicture scaled .5;
+
+\stopuniqueMPgraphic
+\defineoverlay[ShowLayout][\uniqueMPgraphic{ShowLayout}]
+
+\def\SetupShowLayout{\dosingleempty\getparameters[ShowLayout]}
+\SetupShowLayout[units=pt,digits=1,round=0.1,showmore=0,graphonly=0]
+
+\def\ShowLayout{\dosingleempty\doShowLayout}
+
+
+\def\doShowLayout[#1]{%
+   \getparameters[ShowLayout][#1]
+   \setMPvariables[ShowLayout][showmore=\getvalue{ShowLayoutshowmore}]
+   \framed[width=.5\paperwidth, 
+           height=.5\paperheight,
+           background=ShowLayout,
+           frame=off,
+%           frame=on,
+           ]{}%
+\ifnum\getvalue{ShowLayoutgraphonly}=0
+      \bgroup\tfxx
+\startcolumns[n=2]
+\starttabulate[|r|l|]
+\NC 1 \NC backspace      \ShowLayoutA{\the\backspace} \NR
+\NC 2 \NC leftmargin     \ShowLayoutA{\the\leftmarginwidth}\NR
+\NC 3 \NC leftmargindistance \ShowLayoutA{\the\leftmargindistance}\NR
+\NC 4 \NC width          \ShowLayoutA{\the\makeupwidth}\NR
+\NC 5 \NC rightmargin    \ShowLayoutA{\the\rightmarginwidth}\NR
+\NC 6 \NC rightmargindistance \ShowLayoutA{\the\rightmargindistance}\NR
+\NC 7 \NC topspace       \ShowLayoutA{\the\topspace}\NR
+\NC 8 \NC header         \ShowLayoutA{\the\headerheight}\NR
+\NC 9 \NC headerdistance \ShowLayoutA{\the\headerdistance}\NR
+\NC 10\NC height         \ShowLayoutA{\the\makeupheight}\NR
+\NC 11\NC footerdistance \ShowLayoutA{\the\footerdistance}\NR
+\NC 12\NC footer         \ShowLayoutA{\the\footerheight}\NR
+\ifnum\getvalue{ShowLayoutshowmore}=1%
+\NC 13\NC leftedge       \ShowLayoutA{\the\leftedgewidth}\NR
+\NC 14\NC leftedgedistance  \ShowLayoutA{\the\leftedgedistance}\NR
+\NC 15\NC rightedge         \ShowLayoutA{\the\rightedgewidth}\NR
+\NC 16\NC rightedgedistance  \ShowLayoutA{\the\rightedgedistance}\NR
+\NC 17\NC top         \ShowLayoutA{\the\topheight}\NR
+\NC 18\NC topdistance         \ShowLayoutA{\the\topdistance}\NR
+\NC 19\NC bottom         \ShowLayoutA{\the\bottomheight}\NR
+\NC 20\NC bottomdistance         \ShowLayoutA{\the\bottomdistance}\NR
+\fi
+\NC   \NC paperwidth     \ShowLayoutA{\the\paperwidth}\NR
+\NC   \NC paperheight    \ShowLayoutA{\the\paperheight}\NR
+\stoptabulate
+\stopcolumns
+\egroup
+\fi
+}

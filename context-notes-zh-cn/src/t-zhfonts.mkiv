@@ -1,0 +1,37 @@
+%D \module
+%D   [     file=t-zhfonts,
+%D      version=2010.01.06,
+%D        title=\CONTEXT\ User Module,
+%D     subtitle=zhfonts,
+%D       author=Li Yanrui,
+%D         date=\currentdate,
+%D    copyright=Li Yanrui,
+%D        email=liyanrui.m2@gmail.com,
+%D      license=Public Domain]
+
+\writestatus{loading}{ConTeXt User Module / zhfonts}
+\startmodule[zhfonts]
+\unprotect
+\setupmodule[style=rm,size=11pt]
+
+%D Lua code
+\ctxloadluafile{t-zhfonts}
+\ctxloadluafile{t-zhspuncs}
+
+\def\setupzhfonts{\dodoubleempty\dosetupzhfonts}
+\def\dosetupzhfonts[#1][#2]{%
+    \ctxlua{zhfonts.setup ('#1', '#2')}
+}
+
+\def\zhfonts[#1]{%
+    \ctxlua{zhfonts.use ("#1")}
+}
+
+\edef\@@@@??style{\currentmoduleparameter{style}}
+\edef\@@@@??size{\currentmoduleparameter{size}}
+\prependtoks \zhfonts[\@@@@??style, \@@@@??size] \to \everystarttext
+
+\protect
+\stopmodule
+\endinput
+

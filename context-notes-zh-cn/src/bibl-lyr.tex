@@ -1,0 +1,77 @@
+\setupcite[num][inbetween={, }, lastpubsep={, },compress=yes]
+
+\def\withbrackets#1{[#1]~~}
+\setuppublications
+    [sorttype=,
+     criterium=,
+     refcommand=num,
+     numbering=yes,
+     numbercommand=\withbrackets,
+     autohang=yes]
+
+\setuppublicationlist
+   [artauthor=\normalauthor,
+    editor=\normalauthor,
+    author=\normalauthor,
+    namesep={，},
+    lastnamesep={ and },
+    finalnamesep={ and },
+    firstnamesep={ },
+    juniorsep={ },
+    vonsep={ },
+    surnamesep={ },
+    authoretallimit=5,
+    editoretallimit=5,
+    artauthoretallimit=5,
+    authoretaldisplay=5,
+    editoretaldisplay=5,
+    artauthoretaldisplay=5,
+    authoretaltext={ etc},
+    editoretaltext={ etc},
+    artauthoretaltext={ etc},
+]
+
+\setuppublicationlayout[article]{%
+   \insertartauthors{}{\unskip．}{}%
+   \insertarttitle{\bgroup }{\egroup[J]．}{}%
+   \insertjournal{\bgroup }{\egroup}{}%
+   \insertpubyear{，}{}{}%
+   \insertvolume{，}{}{}%
+   \insertissue{（}{）}{}%
+   \insertpages{：}{．}{}%
+}
+
+\setuppublicationlayout[phdthesis]{%
+   \insertauthors{}{\unskip．}{}%
+   \inserttitle{}{\unskip[D]．}{}%
+   \insertpubname{}{，}{}%
+   \insertpubyear{}{．}{}%
+}
+
+\setuppublicationlayout[techreport]{%
+   \insertauthors{}{．}{}%
+   \inserttitle{}{[R]．}{}%
+   \insertpubname{}{}{}%
+   \insertpubyear{，}{．}{}%
+}
+
+\setuppublicationlayout[inproceedings]{%
+   \insertauthors{}{．}{}%
+   \insertarttitle{}{[C]．}{}%%
+   \inserttitle{}{}{}%
+   \insertpubyear{，}{．}{}%
+}
+
+\setuppublicationlayout[book]{%
+   \insertauthors{}{．}{}%
+   \inserttitle{}{[M]．}{}%
+   \insertpubname{}{}{}%
+   \insertpubyear{，}{．}{}%
+   \insertnote{}{}{}%
+}
+
+\setuppublicationlayout[unpublished]{%
+   \insertauthors{}{．}{}%
+   \inserttitle{}{．}{}%
+   \inserturl{}{}{}%
+}

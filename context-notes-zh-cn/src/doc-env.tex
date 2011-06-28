@@ -5,6 +5,11 @@
 \usemodule[chart]
 \usemodule[t][layout]
 
+\setupcolor[hex]
+\definecolor [BackgroundColor] [h=cccccc]
+\definecolor [OrnamentColor]   [h=99ccff]
+\definecolor [TitleColor] [h=336699]
+
 \setupinteraction
         [state=start,
 		 focus=standard,
@@ -14,7 +19,7 @@
          author={Li Yanrui},
          keyword={TeX, ConTeXt, MkIV, LuaTeX}]
 
-\setupinteractionscreen[option=max]
+%\setupinteractionscreen[option=max]
 
 \setuppapersize[A4][A4]
 \setuplayout[width=fit,height=middle,
@@ -33,9 +38,8 @@
 %-------- 标题设置 --------
 \setupheads[indentnext=yes]
 
-\setuphead[title][style=\bfb,header=empty,foote=empty]
-\setuphead[chapter]
-          [style=\bfb,header=empty,footer=empty]
+\setuphead[title][style=\bfb,align={broad,middle},header=empty,foote=empty]
+\setuphead[chapter][style=\bfb,header=empty,footer=empty]
 \setuphead[section][style=\bfa]
 \setuphead[subsubject][style=\bf]
 
@@ -59,7 +63,7 @@
 \setuplist
     [chapter]
     [alternative=a,
-     before={\page[preference]\blank},
+     before=\blank,
      after=\blank,
      style=\bf,
      width=fit,
@@ -67,7 +71,7 @@
      pagenumber=no,
      numbercommand=\ChapterNumber]
 
-\def\PageNumber#1{\color[darkgray]{#1}.}
+\def\PageNumber#1{\underbars{#1}.}
 \setuplist
     [section]
     [alternative=d,
@@ -99,18 +103,16 @@
 
 % 参考文献
 \setupbibtex[database=bibliography]
-\setuppublications[alternative=num]
+\setuppublications[alternative=lyr]
 
 %---- 其它一些零碎设置 ----
 \setupinterlinespace[line=1.5em]
 \setupwhitespace[big]
-%\setupindenting[always,first,2em]
 
 \setupfloats[indentnext=yes] 
 \setupcaptions[style=\tfx, headstyle=\normal]
 
-\definesymbol[1][{\color[darkgray]{\dag}}]
-\setupitemize[each][packed,serried,inmargin][symbol=1,margin=2em]
+\setupitemize[each][packed,serried,inmargin][margin=2em]
 
 \setupfootnotes[way=bychapter]
 
@@ -119,7 +121,7 @@
 \definedescription[definition]
         [location=top,hang=20,width=broad,indenting=always,style=\ss,headstyle=\bf]
 
-\def\mycite#1{\high{\cite[#1]}}
+\def\mycite#1{\cite[#1]}
 
 %% 阴影盒
 
