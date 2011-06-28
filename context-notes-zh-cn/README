@@ -1,6 +1,8 @@
 This is an introductory tutorial on ConTeXt in Chinese written by Yanrui Li.
 
-ConTeXt installation, fonts, layout design, cross-reference, project structure, metafun, presentation design are covered in this tutorial.
+ConTeXt installation, fonts, layout design, cross-reference, project structure, metafun are covered in this tutorial.
+
+This package is licensed in GFDL (GNU Free Documentation License).
 
 If you are interested in the process of development you may observe
 

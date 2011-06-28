@@ -223,10 +223,9 @@ Bib\TeX\ 与 \ConTeXt\ 的协同工作时，需要 \ConTeXt\ 文档编译命令�
 
 \subsubject{\ConTeXt\ 的 bib 模块}
 
-\ConTeXt\ 是通过 Taco 写的 bib 模块取得 Bib\TeX\ 的协同，用户可以在 \ConTeXt\ 文档中实现参考文献列表排版样式的设置。下面是一份最为简单的 \ConTeXt\ 参考文献示例文档 \type{example/ex-4.tex}：
+\ConTeXt\ 是通过 Taco 写的 bib 模块取得 Bib\TeX\ 的协同（现已集成至 \CONTEXT\ 中），用户可以在 \ConTeXt\ 文档中实现参考文献列表排版样式的设置。下面是一份最为简单的 \ConTeXt\ 参考文献示例文档 \type{example/ex-4.tex}：
 
 \startTEX
-\usemodule[bib] % 启用 bib 模块
 \setupbibtex[database=example]
 
 \starttext
@@ -251,7 +250,6 @@ $ context ex-4           # 完成文档编译
 
 \startTEX
 ...
-\usemodule[bib] % 启用 bib 模块
 \setupbibtex[database=example]
 \setuppublications[alternative=num]
 ...
@@ -349,4 +347,16 @@ Zotero 是 Firefox 的一款扩展 (Extension)，号称是下一代研究工具\
 \stopTEX
 
 \noindent 本文档目前正是使用这种方法去除书签中出现的格式化文本，勉强对付过去。
+
+\section{更多阅读……}
+
+如果上述内容有误或者你认为讲述的不够细致，那么请阅读以下文档：
+
+\startitemize
+\item “\CONTEXT\ 对参考文献的处理”：\crlf \hbox{\tt http://liyanrui.is-programmer.com/2009/12/17/bibliographic-in-ConTeXt.14078.html}
+\item “\CONTEXT\ 对参考文献的处理——整容篇”，讲述了 \CONTEXT\ Minimals 的安装方法：\crlf\hbox{\tt http://liyanrui.is-programmer.com/2009/12/18/bibliographic-style-in-ConTeXt.14103.html}
+\stopitemize
+
+我计划今年年底将这些外部文档归整到这份文档中。
+
 \stopcomponent

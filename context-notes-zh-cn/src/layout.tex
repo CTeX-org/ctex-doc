@@ -71,7 +71,7 @@
 \type{location} 这个参数让我费解了许久，历经多次尝试，总算知道一点所以然。当我们将版面尺寸与纸张尺寸设为相同时，\type{location} 这个参数无论如何设定都是看不到效果的。当纸张尺寸大于版面尺寸时，\type{location} 的值可以表示版面在纸张的位置，譬如 left、right、middle、singlesided 以及 doublesided。
 
 \page
-%\ShowLayout[digit=1,showmore=0]
+\ShowLayout[digit=1,showmore=0]
 \page
 
 \section[HFer]{页眉、页脚}
@@ -213,12 +213,21 @@ $ context --mode=screen ctxnotes
 
 \ConTeXt\ 默认是将段间距设置为 0，这碰巧符合中文的排版规范。如果有设定段间距的需求，就查一下 \tex{setupwhitespace} 命令的用法。
 
-对文档正文而言，行间距的设置对于排版的美观性是至关重要的：行间距过小则阅读困难；行间距过大又显得版面稀疏，浪费纸张。\ConTeXt\ 默认的文本行间距的值对于中文排版而言过小，可通过 \tex{setupinterlinespace} 命令结合自己的审美嗜好对行间距进行调整。我是这样设置行间距的：
+对文档正文而言，行间距的设置对于排版的美观性是至关重要的：行间距过小则阅读困难；行间距过大又显得版面稀疏，浪费纸张。\ConTeXt\ 默认的文本行间距的值对于中文排版而言过小，可通过 \tex{setupinterlinespace} 命令结合自己的审美嗜好对行间距进行调整。我习惯将行高设为 1.5em：
 
 \startniceTEX
-\setupinterlinespace[big]
+\setupinterlinespace[line=1.5em]
 \stopniceTEX
 
-\noindent 除了 \type{big} 参数之外，\tex{setupinterlinesapce} 命令还可以接受 \type{small}、\type{medium} 参数，但我以为只有 \type{big} 适合作为中文文本行距。值得注意的是，\type{small}、\type{medium} 和 \type{big} 并不表示真正的行间距尺寸，它们分别表示的正文字体尺寸的 1.0、1.25 和 1.5 倍。这份笔记所使用的正文字体是 11pt，那么行间距就是 16.5pt。
+\section{更多阅读……}
+
+如果上述内容有误或者你认为讲述的不够细致，那么请阅读以下文档：
+
+\startitemize
+\item “页面布局控制”：\crlf \hbox{\tt http://garfileo.is-programmer.com/2011/1/19/layout-control.23895.html}
+\item “\CONTEXT\ 文稿的逻辑结构”：\crlf \hbox{\tt http://garfileo.is-programmer.com/2011/1/16/context-manuscript-logic-structure.23826.html}
+\stopitemize
+
+我计划今年年底将这些外部文档归整到这份文档中。
 
 \stopcomponent

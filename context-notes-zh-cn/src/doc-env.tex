@@ -1,22 +1,14 @@
 \startenvironment doc-env
 
+\usemodule[zhfonts]
+
 \usemodule[chart]
 \usemodule[t][layout]
-\usemodule[bib]
-
-\usetypescriptfile[zhfonts]
-\usetypescript[myfont]
-\setupbodyfont[myfont,rm,11pt]
-\setscript[hanzi]
-
-\setupcolors[state=start]
-\setupcolor[hex]
-\definecolor[mygreen][h=669933]
 
 \setupinteraction
         [state=start,
-         focus=standard,
-         color=mygreen,
+		 focus=standard,
+		 color=darkblue,
          title={ConTeXt 学习笔记},
          subtitle={Using MkIV},
          author={Li Yanrui},
@@ -26,10 +18,10 @@
 
 \setuppapersize[A4][A4]
 \setuplayout[width=fit,height=middle,
-             leftmargin=3cm,rightmargin=3cm,
-             backspace=4cm,topspace=2cm,
+             leftmargin=2cm,rightmargin=2cm,
+             backspace=2.5cm,topspace=2cm,
              headerdistance=.5cm,footerdistance=.5cm,
-	    leftmargindistance=.5cm,rightmargindistance=.5cm,
+	         leftmargindistance=.5cm,rightmargindistance=.5cm,
              header=1cm,footer=1cm]
 \setuppagenumbering[style=\tfx,location=]
 
@@ -50,8 +42,8 @@
 % 代码环境
 \setuplinenumbering[color=darkgray,style=small]
 \setuptyping[option=color,palet=graypretty,
-			 before={\blank[.5em]\setupinterlinespace[medium]},
-        	 after={\blank[.5em]}]
+	     before={\blank[.5em]\setupinterlinespace[line=1.2em]},
+             after={\blank[.5em]}]
 
 \definetyping[niceTEX][option=TEX]
 
@@ -98,10 +90,7 @@
         \setupheadertexts
                 [\CurrentChapter][pagenumber]
                 [pagenumber][\CurrentSection]
-        \setupfootertexts[{\ConTeXt\ 学习笔记}][{\goto{\bfx 目录}[Content]}]
-                [{\goto{\bfx 目录}[Content]}][{\ConTeXt\ 学习笔记}]
         \setupheader[style=\bfx,color=darkgray]
-        \setupfooter[style=\bfx,color=darkgray]
 \stopsetups
 
 % 书签
@@ -113,7 +102,7 @@
 \setuppublications[alternative=num]
 
 %---- 其它一些零碎设置 ----
-\setupinterlinespace[big]
+\setupinterlinespace[line=1.5em]
 \setupwhitespace[big]
 %\setupindenting[always,first,2em]
 

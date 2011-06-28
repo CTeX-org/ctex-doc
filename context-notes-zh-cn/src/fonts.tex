@@ -128,15 +128,15 @@ Adobe Song Std L:style=L,Regular
 我们是在 typescript 环境中定义具体的字体，比如下面定义衬线字样的一组字体：
 
 \startniceTEX
-\starttypescript [serif] [zhfont]
+\starttypescript[serif] [zhfont]
   \definefontsynonym 
-    [Serif][name:Adobe Song Std][features=zh]
+    [Serif][name:adobesongstd]
   \definefontsynonym 
-    [SerifBold][name:Adobe Heiti Std][features=zh]
+    [SerifBold][name:adobeheitistd]
   \definefontsynonym
-    [SerifItalic][name:Adobe Kaiti Std][features=zh]
+    [SerifItalic][name:adobekaitistd]
   \definefontsynonym 
-    [SerifBoldItalic][name:Adobe Heiti Std][features=zh]
+    [SerifBoldItalic][name:adobeheitistd]
 \stoptypescript
 \stopniceTEX
 
@@ -146,8 +146,8 @@ Adobe Song Std L:style=L,Regular
 
 \startniceTEX
 \starttypescript[myfont]
-  \definetypeface[myfont][rm][serif][zhfont]
-  \definetypeface[myfont][ss][sans][zhfont]
+  \definetypeface[myfont][rm][serif][zhfont][features=zh]
+  \definetypeface[myfont][ss][sans][zhfont][features=zh]
   \definetypeface[myfont][tt][mono][zhfont]
 \stoptypescript
 \stopniceTEX
@@ -183,16 +183,14 @@ Adobe Song Std L:style=L,Regular
 下面展示一个小例子，用以说明如何使用 MkIV 的混合字体机制：
 
 \startniceTEX
-\definefontfeature
-  [zh][mode=node,script=hang,lang=zhs]
 \definefontsynonym
-  [zhserif][name:Adobe Song Std][features=zh]
+  [zhserif][name:adobesongstd]
 \definefontfallback
   [serifwhatever][lmroman10-regular][0x0000-0x0400][force=yes]
 \definefontsynonym 
   [ZhSerif][zhserif][fallbacks=serifwhatever]
 \definefont[FbSong][ZhSerif at 12pt]
-\definefont[Song][{name:Adobe Song Std} at 12pt][features=zh]
+\definefont[Song][name:adobesongstd at 12pt]
 
 \starttext
 \FbSong
@@ -205,30 +203,17 @@ Adobe Song Std L:style=L,Regular
 
 字体切换命令 \tex{ZhSerif} 使用的是混合字体，是 Adobe 宋体的 \type{0x0000-0x0400} 区域中掺入了 lmroman10 字体的对应区域；而 \tex{Song} 命令使用的则是纯的 Adobe 宋体。上面的例子也许看不出来混合字体的优势所在，这主要是因为 Adobe 宋体中的英文部分设计的还算不错。如果将 Adobe 宋体换成 SimSun，对比效果会更明显一些。
 
-我们可以将这种混合字体机制与 MkIV 的 typescript 机制相结合，在不同风格的中文字体中掺入类似风格的英文字符，这样中英文混合排版的问题就能够得到较好的解决。至于如何在 typescript 文件中设置整套的混合字体，请参考一下 zhfonts.tex 吧。
+我们可以将这种混合字体机制与 MkIV 的 typescript 机制相结合，在不同风格的中文字体中掺入类似风格的英文字符，这样中英文混合排版的问题就能够得到较好的解决。
 
-\section{字体装载加速}
+\section{更多阅读……}
 
-Wang Yue 在 \CONTEXT\ 邮件列表中询问是否可以加快 MkIV 的字体装载速度，Hans 给出了一个小魔法，我的理解就是在 typescript 文件中添加
+如果上述内容有误或者你认为讲述的不够细致，那么请阅读以下文档：
 
-\startniceTEX
-\let\synchronizetext\relax
-\stopniceTEX
+\startitemize
+\item “不仅仅是为了中文”，详细介绍了 \CONTEXT\ 的 Typescript 机制：\crlf \hbox{\tt http://liyanrui.is-programmer.com/2009/10/21/not-just-for-chinese.12264.html}
+\item “zhfonts 模块的用法”，zhfonts 模块可支持中文字体加载、标点间距调整等功能：\crlf \hbox{\tt http://garfileo.is-programmer.com/2011/1/10/zhfonts-usage.23740.html}
+\stopitemize
 
-\noindent 或者
-
-\startniceTEX
-\synchronizemathfontsfalse
-\stopniceTEX
-
-\noindent 其中内在机理，我不清楚，似乎是一个内存换时间的一个解决方案。Hans 也承认 MkIV 的运行效率还需要继续改进。
-
-\section{数学字体}
-
-To do or not to do, this is a question.
-
-\section{还有一些细节问题}
-
-有一些问题，我不知道如何来解决。比如在中文排版环境中如何设置英文字体的 micro-typography 特征。
+我计划今年年底将这些外部文档归整到这份文档中。
 
 \stopcomponent
