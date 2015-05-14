@@ -209,9 +209,14 @@
 \DisableCrossrefs %May stay; zapped by \EnableCrossrefs
 \CodelineNumbered %May stay
 
-\usepackage{ctex}
+\usepackage[UTF8, linespread = 1.2, fontset = founder]{ctex}
 \providecommand{\pkg}{\textsf}
+\providecommand{\bst}{\textsf}
+\providecommand{\file}{\textsf}
 \providecommand{\opt}{\texttt}
+\providecommand{\citekey}{\texttt}
+\providecommand{\env}{\texttt}
+\newcommand{\Arg}[1]{\texttt{\textbraceleft #1\textbraceright}}
 \begin{document}
    \DocInput{natbib.tex}
 \end{document}
@@ -339,65 +344,54 @@
 
 \newpage\tableofcontents\newpage
 
-\section{Introduction}
+\section{介绍}
 
-The \thestyle{} package is an extension to \LaTeX\ to allow author--year
-citations along with numerical citations. Standard \LaTeX\ permits only
-numerical, whereas all extensions for author--year prior to the release of
-\thestyle{} in 1993 were limited to just that. Since they normally added new
-commands (as \thestyle{} does  too), documents written with them could only be
-used with numerical citations after extensive editing.
+\thestyle{} 宏包扩展了 \LaTeX{} 的参考文献引用能力，支持数字格式的引用和
+作者--年份引用格式。
+标准的 \LaTeX{} 只提供了数字格式的引用，而在 \thestyle{} 发布的 1993 年之前，所有
+提供作者--年份引用格式的宏包，通常都是通过添加新的命令来支持作者--年份引用格式。
+由于这一限制，使用这些宏包的书写的文档在后续修改之时，很难改变引用格式。
 
-The \thestyle{} package has changed that; switching from author--year to
-numerical citations is a matter of an option, with no alterations to the
-source text. It has now become part of the standard \LaTeX\ installations,
-and is supported (demanded) by many journals. It is the citation package of
-choice by most of the \LaTeX\ community, mainly because of its flexibility
-and configurability.
+\thestyle{} 宏包的出现改变了这一现状；使用 \thestyle{} 宏包的文档在作者--年份格式与
+数字引用格式之间的切换非常简单，只需要修改宏包选项即可，不需要做任何额外的改动。
+\thestyle{} 宏包已作为标准 \LaTeX{} 的一部分随之安装，并且支持许多期刊（同时也被这些期刊
+作为依赖）。大多数 \LaTeX{} 社区选择 \thestyle{} 宏包，主要就是因为 \thestyle{} 宏包
+的灵活性和可定制性。
 
-Like all packages, it is loaded in the document preamble, with possible options,
-with, e.g.\
+和其他宏包一样，\thestyle{} 宏包需要在文章导言区中加载，例如：
 \begin{quote}
   |\usepackage[sectionbib,square]{natbib}|
 \end{quote}
-The option \texttt{sectionbib} specifies that, when used with the package
-\texttt{chapterbib}, the bibliography will appear as a section at the end of
-each chapter (Section~\ref{sec:chapbib}). The \texttt{square} option says
-that references are to be enclosed in square bracket rather than round
-parentheses. See Section~\ref{sec:opts} for a complete list of options.
+开启 \opt{sectionbib} 选项时，载入 \pkg{chapterbib} 宏包，则参考文献列表将出现在每一个
+章节之后（参阅~\ref{sec:chapbib}）。\opt{square} 选项则指明文中引用时，
+引用记号将放在一对方括号中，而不是一对圆括号中。第 \ref{sec:opts} 节列出了所有可用的选项。
 
-The document text itself begins with, e.g.
+本文档在正文开始处使用了如下参考文献格式，
 \begin{quote}
 \begin{verbatim}
 \begin{document}
 \bibliographystyle{plainnat}
 \end{verbatim}
 \end{quote}
-which specifies \texttt{plainnat} to be the bibliography style used by the
-\btx\ program that generates the actual bibliography from a database. The
-style \texttt{plainnat} is the \thestyle{} version of the standard \texttt{plain}
-(numerical only) style. See Section~\ref{sec:plainnat} for other styles, or
-search the installation for \texttt{.bst} files.
+此处，我们通过 \cs{bibliographystyle} 命令选择 \bst{plainnat} 为参考文献格式，\btx{}
+将会据此从数据库中抽取数据生成实际的参考文献列表。\bst{plainnat} 是 \thestyle{} 风格的
+\bst{plain} 格式，只支持数字引用格式。第~\ref{sec:plainnat} 节列出了所有可用的参考文献格式文件（\file{.bst} 文件）。
 
-The |\bibliographystyle| command can be given anywhere in the document, but
-it makes sense to add it at the start where it can be easily identified (and
-modified).
+\cs{bibliographystyle} 命令可以放在文档的任何位置，但放在正文开始处更加清晰明了且易于修改。
 
-To make a citation in the text, use
+在文章中，可以使用下列命令生成参考文献引用：
 \begin{quote}
-  |\citep{jon90}| for a \emph{parenthetical} citation (Jones et al.,
+  \cs{citep}\Arg{jon90} 生成解释性的引用，如 (Jones et al.
   1990),\\
-  |\citet{jon90}| for a \emph{textual} one, as Jones et al. (1990).
+  \cs{citet}\Arg{jon90} 生成文本类的引用，如 Jones et al. (1990)
 \end{quote}
-Both |\citep| and |\citet| are defined by \thestyle{} and are thus not
-standard. The standard \LaTeX\ command |\cite| should be avoided, because it
-behaves like |\citet| for author--year citations, but like |\citep| for
-numerical ones. There are many other commands for other special effects
-(Section~\ref{sec:excite}).
+\cs{citep} 和 \cs{citet} 都是 \thestyle{} 定义的命令，而非 \LaTeX{} 的标准命令。
+应当避免使用 \LaTeX{} 的标准命令 \cs{cite}。\cs{cite} 命令在作者--年份引用格式下行为
+和 \cs{citet} 命令相似，而在数字引用格式下行为与 \cs{citep} 命令相似。
+第~\ref{sec:excite} 节列出了其他有用的命令。
 
-In the above examples, \texttt{jon90} is the identifying key for the
-reference, as found in the \btx\ database, or in the \texttt{thebibliography}
-environment, Section~\ref{sec:bibitem}:
+这些例子中，\citekey{jon90} 是文献的引用标签。这一标签应与 \btx{} 数据库中的标签对应，或与
+\env{thebibliography} 环境中的标签对应（参见第~\ref{sec:bibitem} 节）：
 \begin{quote}
 \begin{verbatim}
 \begin{thebibliography}{1}
@@ -406,31 +400,26 @@ environment, Section~\ref{sec:bibitem}:
 \end{thebibliography}
 \end{verbatim}
 \end{quote}
-This environment prints the actual bibliography, and the |\bibitem| commands
-link the entries to the citations via the key, here \texttt{jon90}. The key
-may be perfectly arbitrary as long as it is unique. The text in square
-brackets contains the pieces of citation information, the authors \texttt{Jones et
-al.} and the year \texttt{1990}. Note that these are two pieces of text that
-may be packaged together in several different ways, depending on the citation
-command. In fact, if numerical citations are selected, they are (almost)
-ignored and only the sequence number is used as citation.
+该环境是实际生成参考文献列表的环境。\cs{bibitem} 通过引用标签（\citekey{jon90}）
+将参考文献列表中的文献条目与正文中的引用联系起来。
+引用标签可以任意指定，唯一的要求就是每个标签都是唯一的。
+方括号中的内容包含一些引用信息，这里作者是 \texttt{Jones et al.}
+年份是 \texttt{1990}。注意，这是两部分信息，它们可以根据不同的引用命令以不同形式组合在
+一起。
+实际上，如果文章使用的是数字引用格式，方括号中的这部分信息将会被忽略。
 
-The \texttt{thebibliography} environment can be made by hand, but it is
-better and safer to let \btx\ do it. For this, one needs the
-|\bibliographystyle| command already mentioned, and near the end of the
-document:
+你可以手写 \env{thebibliography} 环境的内容，但更好也更安全的做法是使用 \btx{} 生成
+它。为此，除了使用已经提到的 \cs{bibliographystyle} 命令之外，在文章末尾还应该使用：
 \begin{quote}
 \begin{verbatim}
 \bibliography{mybib}
 \end{document}
 \end{verbatim}
 \end{quote}
-Here \texttt{mybib} is the root name of the \btx\ database file
-(\texttt{mybib.bib}) containing the data for the references needed in the
-document.
+这里，\file{mybib} 是 \btx{} 数据库的文件名（不含扩展名，即 \file{mybib.bib} 中
+的 \file{mybib} 部分），它包含文档所需的参考文献数据。
 
-The rest of this document presents all the gorey details about everything
-possible with \thestyle.
+剩下的内容，将会介绍关于 \thestyle{} 宏包所有细节。
 
 \section{Using this Package}\label{sec:usage}
 

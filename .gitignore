@@ -1,0 +1,28 @@
+*.aux
+*.dmp
+*.fd
+*.glo
+*.gls
+*.hd
+*.idx
+*.ilg
+*.ind
+*.ins
+*.out
+*.swp
+*.synctex.gz
+*.synctex.gz(busy)
+*.tmp
+*.toc
+*.ver
+*.xdv
+*.zip
+*~
+*.fdb_latexmk
+*.log
+
+# Mac OS X
+.DS_Store
+
+# natbib
+natbib-zh-cn/natbib.pdf
