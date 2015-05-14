@@ -210,6 +210,9 @@
 \CodelineNumbered %May stay
 
 \usepackage[UTF8, linespread = 1.2, fontset = founder]{ctex}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+
 \providecommand{\pkg}{\textsf}
 \providecommand{\bst}{\textsf}
 \providecommand{\file}{\textsf}
@@ -284,7 +287,7 @@
 \GetFileInfo{natbib}
 
 \title{{\bfseries 自然科学引用与参考文献}\\
-        (作者--年份格式与数字格式)}
+        (作者--年份模式与数字模式)}
 
 \author{Patrick W. Daly\thanks{%
   模仿 \pkg{mcite} 宏包实现之数字参考文献合并之代码，由 Arthur Ogawa 提供，
@@ -312,22 +315,21 @@
 \begin{abstract}
 
 \thestyle\ 宏包重新实现了 \LaTeX\ 标准的 \cs{cite} 命令。
-新定义的命令同时支持「作者--年份格式」和「数字格式」两种引用方式。
+新定义的命令同时支持「作者--年份模式」和「数字模式」两种引用方式。
 \thestyle{} 与标准的 \pkg{bst} 文件兼容（如 \texttt{plain.bst}），
 同时也能兼容 \texttt{harvard}、\texttt{apalike}、\texttt{chicago}、
 \texttt{astron} 和 \texttt{authordate} 等 \pkg{bst} 文件。
 当然，也能兼容 \thestyle{} 本身。
 
-
-与上述宏包不同，\thestyle{} 宏包同时支持作者--年份格式和标准的数字格式两种引用方式。
-实际上，\thestyle{} 还能在引入作者--年份样式的同时，输出标准的数字格式。
-这使得在两种格式之间切换变得相当简单。
+与上述宏包不同，\thestyle{} 宏包同时支持作者--年份模式和标准的数字模式两种引用方式。
+实际上，\thestyle{} 还能在引入作者--年份样式的同时，输出标准的数字模式。
+这使得在两种模式之间切换变得相当简单。
 为此，\thestyle{} 还提供了一些 \pkg{.bst} 文件，用以替换 \LaTeX{} 标准的 \pkg{.bst}。
 
-你可以用 \thestyle{} 定义不同的引用\emph{格式}（例如：括号的样式、相邻引用之间的标点）。
-\thestyle{} 宏包还允许你将这些格式和 \pkg{.bst} 的名字关联起来，在使用特定 \pkg{.bst}
-的时候启用特定的格式。
-你也可以通过配置 \thestyle\pkg{.cfg} 文件，来为本地 \pkg{.bst} 配置引用格式。
+你可以用 \thestyle{} 定义不同的引用\emph{风格}（例如：括号的样式、相邻引用之间的标点）。
+\thestyle{} 宏包还允许你将这些风格和 \pkg{.bst} 的名字关联起来，在使用特定 \pkg{.bst}
+的时候启用特定的风格。
+你也可以通过配置 \thestyle\pkg{.cfg} 文件，来为本地 \pkg{.bst} 配置引用风格。
 
 \thestyle{} 宏包与下列宏包兼容：\pkg{babel}、\pkg{index}、\pkg{citeref}、
 \pkg{showkeys}、\pkg{chapterbib}、\pkg{hyperref}、\pkg{koma} 以及
@@ -346,14 +348,14 @@
 
 \section{介绍}
 
-\thestyle{} 宏包扩展了 \LaTeX{} 的参考文献引用能力，支持数字格式的引用和
-作者--年份引用格式。
-标准的 \LaTeX{} 只提供了数字格式的引用，而在 \thestyle{} 发布的 1993 年之前，所有
-提供作者--年份引用格式的宏包，通常都是通过添加新的命令来支持作者--年份引用格式。
-由于这一限制，使用这些宏包的书写的文档在后续修改之时，很难改变引用格式。
+\thestyle{} 宏包扩展了 \LaTeX{} 的参考文献引用能力，支持数字模式的引用和
+作者--年份引用模式的引用。
+标准的 \LaTeX{} 只提供了数字模式的引用，而在 \thestyle{} 发布的 1993 年之前，所有
+提供作者--年份引用模式的宏包，通常都是通过添加新的命令来支持作者--年份引用模式。
+由于这一限制，使用这些宏包的书写的文档在后续修改之时，很难改变引用模式。
 
-\thestyle{} 宏包的出现改变了这一现状；使用 \thestyle{} 宏包的文档在作者--年份格式与
-数字引用格式之间的切换非常简单，只需要修改宏包选项即可，不需要做任何额外的改动。
+\thestyle{} 宏包的出现改变了这一现状；使用 \thestyle{} 宏包的文档在作者--年份模式与
+数字引用模式之间的切换非常简单，只需要修改宏包选项即可，不需要做任何额外的改动。
 \thestyle{} 宏包已作为标准 \LaTeX{} 的一部分随之安装，并且支持许多期刊（同时也被这些期刊
 作为依赖）。大多数 \LaTeX{} 社区选择 \thestyle{} 宏包，主要就是因为 \thestyle{} 宏包
 的灵活性和可定制性。
@@ -375,7 +377,7 @@
 \end{quote}
 此处，我们通过 \cs{bibliographystyle} 命令选择 \bst{plainnat} 为参考文献格式，\btx{}
 将会据此从数据库中抽取数据生成实际的参考文献列表。\bst{plainnat} 是 \thestyle{} 风格的
-\bst{plain} 格式，只支持数字引用格式。第~\ref{sec:plainnat} 节列出了所有可用的参考文献格式文件（\file{.bst} 文件）。
+\bst{plain} 格式，只支持数字引用模式。第~\ref{sec:plainnat} 节列出了所有可用的参考文献格式文件（\file{.bst} 文件）。
 
 \cs{bibliographystyle} 命令可以放在文档的任何位置，但放在正文开始处更加清晰明了且易于修改。
 
@@ -386,8 +388,8 @@
   \cs{citet}\Arg{jon90} 生成文本类的引用，如 Jones et al. (1990)
 \end{quote}
 \cs{citep} 和 \cs{citet} 都是 \thestyle{} 定义的命令，而非 \LaTeX{} 的标准命令。
-应当避免使用 \LaTeX{} 的标准命令 \cs{cite}。\cs{cite} 命令在作者--年份引用格式下行为
-和 \cs{citet} 命令相似，而在数字引用格式下行为与 \cs{citep} 命令相似。
+应当避免使用 \LaTeX{} 的标准命令 \cs{cite}。\cs{cite} 命令在作者--年份引用模式下行为
+和 \cs{citet} 命令相似，而在数字引用模式下行为与 \cs{citep} 命令相似。
 第~\ref{sec:excite} 节列出了其他有用的命令。
 
 这些例子中，\citekey{jon90} 是文献的引用标签。这一标签应与 \btx{} 数据库中的标签对应，或与
@@ -406,7 +408,7 @@
 方括号中的内容包含一些引用信息，这里作者是 \texttt{Jones et al.}
 年份是 \texttt{1990}。注意，这是两部分信息，它们可以根据不同的引用命令以不同形式组合在
 一起。
-实际上，如果文章使用的是数字引用格式，方括号中的这部分信息将会被忽略。
+实际上，如果文章使用的是数字引用模式，方括号中的这部分信息将会被忽略。
 
 你可以手写 \env{thebibliography} 环境的内容，但更好也更安全的做法是使用 \btx{} 生成
 它。为此，除了使用已经提到的 \cs{bibliographystyle} 命令之外，在文章末尾还应该使用：
@@ -421,15 +423,17 @@
 
 剩下的内容，将会介绍关于 \thestyle{} 宏包所有细节。
 
-\section{Using this Package}\label{sec:usage}
+\section{使用宏包}
+\label{sec:usage}
 
+这里首先对几个名词做区分。本文档中，\emph{模式}指的是引用文献时的展示方式
+（比如作者--年份模式、数字模式）；\emph{风格}指的是引用文献时的标点风格；\emph{格式}指的是
+\file{.bst} 文件及其定义的内容。
 
- In this paper, I distinguish between the citation \emph{mode} (author--year
- or numerical) and citation \emph{style} (the type of punctuation used for
- citations). The citation style is something that is independent of the
- bibliography style and is not programmed in the \texttt{.bst} files.
+引用风格需要由宏包控制，而不是由 \file{.bst} 格式文件控制。
 
- \subsection{New Bibliography Styles}\label{sec:plainnat}
+\subsection{New Bibliography Styles}
+\label{sec:plainnat}
 
 I provide three new \texttt{.bst} files to replace the standard \LaTeX\
 numerical ones:
