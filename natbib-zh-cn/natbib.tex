@@ -219,7 +219,9 @@
 \providecommand{\opt}{\texttt}
 \providecommand{\citekey}{\texttt}
 \providecommand{\env}{\texttt}
-\newcommand{\Arg}[1]{\texttt{\textbraceleft #1\textbraceright}}
+\newcommand{\Marg}[1]{\texttt{\textbraceleft #1\textbraceright}}
+\newcommand{\Oarg}[1]{\texttt{[#1]}}
+\newcommand{\rmk}{\par\medskip\noindent\makebox[0pt][r]{\textbf{注：}}}
 \begin{document}
    \DocInput{natbib.tex}
 \end{document}
@@ -383,9 +385,9 @@
 
 在文章中，可以使用下列命令生成参考文献引用：
 \begin{quote}
-  \cs{citep}\Arg{jon90} 生成解释性的引用，如 (Jones et al.
+  \cs{citep}\Marg{jon90} 生成解释性的引用，如 (Jones et al.
   1990),\\
-  \cs{citet}\Arg{jon90} 生成文本类的引用，如 Jones et al. (1990)
+  \cs{citet}\Marg{jon90} 生成文本类的引用，如 Jones et al. (1990)
 \end{quote}
 \cs{citep} 和 \cs{citet} 都是 \thestyle{} 定义的命令，而非 \LaTeX{} 的标准命令。
 应当避免使用 \LaTeX{} 的标准命令 \cs{cite}。\cs{cite} 命令在作者--年份引用模式下行为
@@ -432,56 +434,49 @@
 
 引用风格需要由宏包控制，而不是由 \file{.bst} 格式文件控制。
 
-\subsection{New Bibliography Styles}
+\subsection{新的参考文献格式}
 \label{sec:plainnat}
 
-I provide three new \texttt{.bst} files to replace the standard \LaTeX\
-numerical ones:
+\thestyle{} 提供了三个新的 \file{.bst} 格式文件，用以取代标准 \LaTeX{} 的数字引用模式的
+格式文件。
 \begin{quote}\ttfamily
  plainnat.bst \qquad abbrvnat.bst \qquad unsrtnat.bst
 \end{quote}
 
- These produce reference lists in the same style as the corresponding
- standard \texttt{.bst} file, but work with \thestyle{}. The
- advantage is that they can be used in both numerical and author--year
- mode.
+这些格式文件效果与相应的标准格式文件相似，但能与 \thestyle{} 兼容。
+使用这些格式文件的好处在于，他们同时支持作者--年份模式和数字引用模式。
 
- These \texttt{.bst} files are not meant to be exhaustive by any means. Other
- style files conforming to the \thestyle{} format exist, or may be generated
- with my \texttt{custom-bib} (also known as \texttt{makebst}) program.
+除去这些 \file{.bst} 文件之外，还有其他一些格式文件能与 \thestyle{} 兼容。
+你也可以使用 \file{makebst} 来生成自己的格式文件。
 
+\subsection{\env{thebibliography} 环境的语法}
+\label{sec:bibitem}
 
- \subsection{The Syntax of the \texttt{thebibliography}}
- \label{sec:bibitem}
+引用条目的作者信息和年份信息是由 \env{thebibliography} 环境中的 \cs{bibitem}
+命令提供的。
+为了让 \thestyle{} 宏包正确工作，这些信息必须遵循固定的格式。与 \thestyle{} 宏包兼容的
+参考文献格式文件（\file{.bst} 文件）会自动处理好这些格式。（如上述提到的三个新的参考文献格式
+文件，又如 \pkg{harvard} 及 \pkg{chicago} 这些参考文献格式）
+如果你不想使用 \btx{} 来处理参考文献，那么你必须按照 \thestyle{} 的要求自行书写
+\env{thebibliography} 环境。
 
- The information on the cited author names and year are given as part of the
- |\bibitem| commands within the \texttt{thebibliography} environment. The
- \thestyle{} package expects that information to be in a certain format, which
- is maintained by the above bibliography styles. (It will also be able to
- interpret formats used by some earlier packages, such as \texttt{harvard} and
- \texttt{chicago}.) If one wishes to bypass \btx, one must make up the
- \texttt{thebibliography} oneself, such that it conforms to \thestyle.
-
- This syntax looks as follows:
+该环境的语法如下：
  \begin{quote}
- |\bibitem[Jones et al.(1990)]{jon90}...|\\[1ex]
- or alternatively\\[1ex]
- |\bibitem[Jones et al.(1990)Jones, Baker, |\\
- \hspace*{2em}|and Williams]{jon90}...|
+ \cs{bibitem}\Oarg{Jones et al.(1990)}\Marg{jon90}\\[1ex]
+ 或者\\[1ex]
+ \cs{bibitem}\Oarg{Jones et al.(1990)Jones, Baker, and Williams}\Marg{jon90}
  \end{quote}
- The text in square brackets contains the pieces of citation texts, the short
- author list, \texttt{Jones et al.}, the year \texttt{1990}, and the optional long
- author list \texttt{Jones, Baker and Williams}. If the long list is missing,
- the short list will be used instead. The parentheses around the year are
- \emph{not} part of the text, but merely delimit the year from the author
- lists. Round parentheses must always be used, even if square brackets are
- wanted for the citations. And there must be no space before or after the year
- parentheses, else it will become part of the author list.
+方括号中的内容包含了一些引用信息：缩略的作者列表，\texttt{Jones et al.}；年份信息，
+\texttt{1990}；以及可选的完整作者列表 \texttt{Jones, Baker and Williams}。
+如果完整作者列表为空，那么 \thestyle{} 就会使用缩略的作者列表。
+圆括号本身\textbf{并不是}引用信息的一部分，但是将年份信息和作者信息分割开来。
+在书写 \env{thebibliography} 时，圆括号是必须写出来的。即使你希望用方括号的引用风格，你也
+需要写出这些圆括号区分作者信息和年份信息。
+此外，圆括号的前后不能有任何空格；否则这些空格会作为作者列表的一部分。
 
- \medskip\noindent
- \textbf{Note:} if any single |\bibitem| entry does not conform to a syntax that
- \thestyle{} understands, it switches stubbornly to numerical mode, since it
- otherwise has no idea what the author and year texts could be.
+\rmk 如果整个 \env{thebibliography} 环境中的 \cs{bibitem} 条目提供的信息不符合
+\thestyle{} 宏包的要求，那么这条文献将被强制用数字模式输出。因为此时 \thestyle{} 无法
+确定该文献的作者和年份信息。
 
  \subsection{Basic Citation Commands}
 
