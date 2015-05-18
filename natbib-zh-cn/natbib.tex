@@ -478,64 +478,64 @@
 \thestyle{} 宏包的要求，那么这条文献将被强制用数字模式输出。因为此时 \thestyle{} 无法
 确定该文献的作者和年份信息。
 
- \subsection{Basic Citation Commands}
+\subsection{基本引用命令}
 
- The \thestyle{} package can be used with bibliography styles that were
- intended for other, older packages, like \texttt{harvard}. However,
- the commands described in this and the next sections are defined by
- \thestyle{} and must be used even with those other bibliography styles.
+\thestyle{} 宏包可以与其他陈旧的宏包共同使用，比如 \pkg{harvard} 宏包。
+不过，本节和下一节中描述的命令是 \thestyle{} 宏包定义的。如果你希望将 \thestyle{}
+和其他宏包联用，那么你必须使用 \thestyle{} 宏包提供的这些命令。
 
- \DescribeMacro{\citet}
- \DescribeMacro{\citep}
+\DescribeMacro{\citet}
+\DescribeMacro{\citep}
 
-The \thestyle\ package has two basic citation commands, |\citet| and
-|\citep| for \emph{textual} and \emph{parenthetical} citations, respectively.
-There also exist the starred versions |\citet*| and |\citep*| that print
-the full author list, and not just the abbreviated one.
-All of these may take one or two optional arguments to add some text before
-and after the citation.
+\thestyle{} 宏包提供了两个基本的引用命令：\cs{citet} 和 \cs{citep}。前者生成文本类
+的引用，后者生成解释性的引用。
+带星号的版本 \cs{citet*} 和 \cs{citep*} 意义分别和 \cs{citet} 及 \cs{citep} 类似，
+不过将输出完整作者列表，而不是缩略的作者列表。
+这些命令可以接受一到两个可选参数，这些可选参数可以在引用的前后增加适当的内容。
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-  |\citet{jon90}| & Jones et al. (1990)\\
-  |\citet[chap.~2]{jon90}| & Jones et al. (1990, chap.~2)\\[0.5ex]
-  |\citep{jon90}| & (Jones et al., 1990)\\
-  |\citep[chap.~2]{jon90}| & (Jones et al., 1990, chap.~2)\\
-  |\citep[see][]{jon90}| & (see Jones et al., 1990)\\
-  |\citep[see][chap.~2]{jon90}| & (see Jones et al., 1990, chap.~2)\\[0.5ex]
-  |\citet*{jon90}| & Jones, Baker, and Williams (1990)\\
-  |\citep*{jon90}| & (Jones, Baker, and Williams, 1990)
+  \cs{citet}\Marg{jon90}
+    & Jones et al. (1990)\\
+  \cs{citet}\Oarg{chap.~2}\Marg{jon90}
+    & Jones et al. (1990, chap.~2)\\[0.5ex]
+  \cs{citep}\Marg{jon90}
+    & (Jones et al., 1990)\\
+  \cs{citep}\Oarg{chap.~2}\Marg{jon90}
+    & (Jones et al., 1990, chap.~2)\\
+  \cs{citep}\Oarg{see}\Oarg{}\Marg{jon90}
+    & (see Jones et al., 1990)\\
+  \cs{citep}\Oarg{see}\Oarg{chap.~2}\Marg{jon90}
+    & (see Jones et al., 1990, chap.~2)\\[0.5ex]
+  \cs{citet*}\Marg{jon90}
+    & Jones, Baker, and Williams (1990)\\
+  \cs{citep*}\Marg{jon90}
+    & (Jones, Baker, and Williams, 1990)
 \end{tabular}
 \end{quote}
 
- The starred versions can only list the full authors if the \texttt{.bst}
- file supports this feature; otherwise, the abbreviated list is printed.
+带星号的版本只有在 \file{.bst} 文件支持的情况下才会输出完整的作者列表，
+否则，就只会输出缩略的作者列表。
 
- In standard \LaTeX, the |\cite| command can only take a single optional
- text for a note after the citation; here, a single optional text is a
- post-note, while two are the pre- and post-notes. To have only a pre-note, it
- is necessary to provide an empty post-note text, as shown above.
+标准 \LaTeX{} 中，\cs{cite} 命令只能接受一个可选参数，用于将适当的文本加在引用之后。
+在这里，单个的可选参数将文本加于引用之后；两个可选参数则分别将文本加于引用之前和之后。
+如果只想在引用之前加些内容，那么必须像上面那样，将第二个可选参数留空。
 
- More complex mixtures of text and citations can be generated with the
- all-purpose |\citetext| command in Section~\ref{sec:excite}.
+\ref{sec:excite} 节介绍了功能更为强大的 \cs{citetext} 命令，可以完成更复杂的
+文本和引用风格。
 
+如果你想同时引用多条文献，只需要在 \cs{cite} 命令中输入多个参考文献引用标签。
+\textsl{如果相邻的引用相同作者在不同年份发表的不同文章，那么作者名字只会输出一次。}
 
-Multiple citations may be made by including more than one
-citation key in the |\cite| command argument.
- \textsl{If adjacent citations
- have the same author designation but different years, then the author
- names are not reprinted.}
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-  |\citet{jon90,jam91}| & Jones et al. (1990); James et al. (1991)\\
-  |\citep{jon90,jam91}| & (Jones et al., 1990; James et al. 1991)\\
-  |\citep{jon90,jon91}| & (Jones et al., 1990, 1991)\\
-  |\citep{jon90a,jon90b}| & (Jones et al., 1990a,b)
+  \cs{citet}\Marg{jon90,jam91} & Jones et al. (1990); James et al. (1991)\\
+  \cs{citep}\Marg{jon90,jam91} & (Jones et al., 1990; James et al. 1991)\\
+  \cs{citep}\Marg{jon90,jon91} & (Jones et al., 1990, 1991)\\
+  \cs{citep}\Marg{jon90a,jon90b} & (Jones et al., 1990a,b)
 \end{tabular}
 \end{quote}
 
-
-These examples are for author--year citation mode. In numerical mode, the
-results are different.
+上述是在作者--年份模式下的输出结果。在数字引用模式下，结果稍有不同。
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
   |\citet{jon90}| & Jones et al. [21]\\
@@ -548,40 +548,38 @@ results are different.
 \end{tabular}
 \end{quote}
 
- The authors can only be listed if the \texttt{.bst} file supports
- author--year citations. The standard \texttt{.bst} files, such as
- \texttt{plain.bst} are numerical only and transfer no author--year
- information to \LaTeX. In this case, |\citet| prints ``\textbf{(author?)}
- [21].''
+当且仅当 \file{.bst} 文件支持作者--年份模式时，作者信息才会出现在 \LaTeX{} 输出
+结果汇总。标准的 \file{.bst} 文件（如 \file{plain.bst}）只支持数字格式的引用，
+而不会将作者名字信息传递给 \LaTeX{}。因此，在这种情况下 \cs{citet} 会输出形如
+``\textbf{(author?)} [21].'' 的结果。
 
- \DescribeMacro{\cite}
- In the original versions of \thestyle, the traditional |\cite| command was
- used for both textual and parenthetical citations. The presence of an empty
- optional text in square brackets signalled parenthetical. This syntax has been
- retained for compatibility, but is no longer encouraged.
+\DescribeMacro{\cite}
+在 \thestyle{} 宏包的早期版本中，传统的 \cs{cite} 命令可同时用于文本类的引用
+和解释性的引用。
+^^A 存疑
+^^A The presence of an empty optional text in square brackets
+^^A signalled parenthetical.
+这种情况下，使用一对空的方括号可以生成解释性的引用，即
+\cs{cite}\Oarg{}\Marg{引用标签列表} 的效果等于 \cs{citep}\Marg{引用标签列表}。
+出于兼容性考虑，这种用法依旧可用，但不推荐。
 
- This means that |\cite| (without notes) is the same as |\citet| in
- author--year mode, whereas in numerical mode, it is the same as |\citep|.
- The starred version, as well as the one or two optional notes, may also be
- used.
+也就是说，不带说明信息的 \cs{cite} 命令在作者--年份模式下与 \cs{citet} 的效果相同；
+在数字引用模式下，与 \cs{citep} 的效果相同。
+带星号的版本，以及带有一个或两个说明信息的版本，有类似用法。
 
- It is possible to have multiple citations sorted into the same sequence as
- they appear in the list of references, regardless of their order as
- arguments to the |\cite| commands. The option \texttt{sort} is required for
- this feature. See Section~\ref{sec:sort}.
+同时引用多条文献时，使用 \opt{sort} 选项可以让引用按照参考文献列表中的顺序排列，而不是
+按照 \cs{cite} 命令中的引用标签列表中的顺序排列。参看 \ref{sec:sort} 节。
 
- Some publishers require that the first citation of any given reference be
- given with the full author list, but that all subsequent ones with the
- abbreviated list. Include the option \texttt{longnamesfirst} to enable this for
- \thestyle. See Section~\ref{sec:long}.
+有些出版商要求，在第一次引用某条参考文献时需要给出全部作者的列表，在随后对该文献的引用则只需
+给出缩略的作者列表。使用 \ref{sec:long} 节的 \opt{longnamesfirst} 可以实现该效果。
 
- \subsection{Extended Citation Commands}
- \label{sec:excite}
+\subsection{Extended Citation Commands}
+\label{sec:excite}
 
- \DescribeMacro{\citealt}
- \DescribeMacro{\citealp}
- \DescribeMacro{\citetext}
- \DescribeMacro{\citenum}
+\DescribeMacro{\citealt}
+\DescribeMacro{\citealp}
+\DescribeMacro{\citetext}
+\DescribeMacro{\citenum}
 
 As an alternative form of citation, |\citealt| is the same as |\citet| but
 \emph{without parentheses}. Similarly, |\citealp| is |\citep| without
@@ -591,88 +589,88 @@ The |\citenum| command prints the citation number, without parentheses, even
 in author--year mode, and without raising it in superscript mode. This is
 intended to be able to refer to citation numbers without superscripting them.
 
- Multiple references, notes, and the starred variants
- also exist for these, except for |\citenum|.
+Multiple references, notes, and the starred variants
+also exist for these, except for |\citenum|.
 
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-  |\citealt{jon90}| & Jones et al.\ 1990\\
-  |\citealt*{jon90}| & Jones, Baker, and Williams 1990\\
-  |\citealp{jon90}| & Jones et al., 1990\\
-  |\citealp*{jon90}| & Jones, Baker, and Williams, 1990\\
-  |\citealp{jon90,jam91}| & Jones et al., 1990; James et al., 1991\\
-  |\citealp[pg.~32]{jon90}| & Jones et al., 1990, pg.~32\\
-  |\citenum{jon90}| & 11\\
-  |\citetext{priv.\ comm.}| & (priv.\ comm.)
+|\citealt{jon90}| & Jones et al.\ 1990\\
+|\citealt*{jon90}| & Jones, Baker, and Williams 1990\\
+|\citealp{jon90}| & Jones et al., 1990\\
+|\citealp*{jon90}| & Jones, Baker, and Williams, 1990\\
+|\citealp{jon90,jam91}| & Jones et al., 1990; James et al., 1991\\
+|\citealp[pg.~32]{jon90}| & Jones et al., 1990, pg.~32\\
+|\citenum{jon90}| & 11\\
+|\citetext{priv.\ comm.}| & (priv.\ comm.)
 \end{tabular}
 \end{quote}
 The |\citetext| command
 allows arbitrary text to be placed in the current citation parentheses.
 This may be used in combination with |\citealp|.
- For example,
- \begin{verbatim}
- \citetext{see \citealp{jon90}, or even better \citealp{jam91}}
- \end{verbatim}
- to produce (see Jones et al., 1990, or even better James et al., 1991).
+For example,
+\begin{verbatim}
+\citetext{see \citealp{jon90}, or even better \citealp{jam91}}
+\end{verbatim}
+to produce (see Jones et al., 1990, or even better James et al., 1991).
 
 
 
- \DescribeMacro{\citeauthor}
- \DescribeMacro{\citeyear}
- \DescribeMacro{\citeyearpar}
- \DescribeMacro{\citefullauthor}
+\DescribeMacro{\citeauthor}
+\DescribeMacro{\citeyear}
+\DescribeMacro{\citeyearpar}
+\DescribeMacro{\citefullauthor}
 
 In author--year schemes, it is sometimes desirable to be able to refer to
 the authors without the year, or vice versa. This is provided with the
 extra commands
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-  |\citeauthor{jon90}| & Jones et al.\\
-  |\citeauthor*{jon90}| & Jones, Baker, and Williams\\
-  |\citeyear{jon90}|   & 1990\\
-  |\citeyearpar{jon90}| & (1990)
+|\citeauthor{jon90}| & Jones et al.\\
+|\citeauthor*{jon90}| & Jones, Baker, and Williams\\
+|\citeyear{jon90}|   & 1990\\
+|\citeyearpar{jon90}| & (1990)
 \end{tabular}
 \end{quote}
 
- There also exists a command |\citefullauthor| which is equivalent to
- |\citeauthor*|.
+There also exists a command |\citefullauthor| which is equivalent to
+|\citeauthor*|.
 
- If the full author information is missing, then |\citeauthor*| is
- the same as |\citeauthor|, printing only the abbreviated list.
- This also applies to the starred versions of |\citet| and |\citep|.
+If the full author information is missing, then |\citeauthor*| is
+the same as |\citeauthor|, printing only the abbreviated list.
+This also applies to the starred versions of |\citet| and |\citep|.
 
- If the author or year information is missing (as is the case with the
- standard \LaTeX{} \texttt{.bst} files), these commands issue a warning.
+If the author or year information is missing (as is the case with the
+standard \LaTeX{} \texttt{.bst} files), these commands issue a warning.
 
- \medskip\noindent
- \textbf{Note:}
- these commands may also be used with numerical
- citations, provided an author--year \texttt{.bst} file is being employed.
+\medskip\noindent
+\textbf{Note:}
+these commands may also be used with numerical
+citations, provided an author--year \texttt{.bst} file is being employed.
 
- \medskip\noindent
- \textbf{Note:} all |\cite..| commands have the same
- syntax, allowing multiple citations and up to two notes (there are, however,
- no starred |\citeyear| or |\citenum| variants). It does not really make much sense to add
- notes to |\citeyear| and |\citeauthor|, especially with multiple citations;
- however, this can be done, there will be no error message, but the results
- are sometimes strange. For example, in numerical mode, the notes are fully
- ignored, while in author--year mode, only the post-note is accepted.
- Multiple citations in |\citet| are also not recommended (nor are they in my
- opinion meaningful), but if they are used with notes, the pre-note will
- appear before each year, and the post-note only after the last year. These
- are admittedly bugs, but the effort to remove them is not justified by the
- questionable usefulness of these features.
+\medskip\noindent
+\textbf{Note:} all |\cite..| commands have the same
+syntax, allowing multiple citations and up to two notes (there are, however,
+no starred |\citeyear| or |\citenum| variants). It does not really make much sense to add
+notes to |\citeyear| and |\citeauthor|, especially with multiple citations;
+however, this can be done, there will be no error message, but the results
+are sometimes strange. For example, in numerical mode, the notes are fully
+ignored, while in author--year mode, only the post-note is accepted.
+Multiple citations in |\citet| are also not recommended (nor are they in my
+opinion meaningful), but if they are used with notes, the pre-note will
+appear before each year, and the post-note only after the last year. These
+are admittedly bugs, but the effort to remove them is not justified by the
+questionable usefulness of these features.
 
- In summary, notes are only intended for |\citep| but they may also be used
- with |\citet| in author--year mode, with single citations. In any other
- situation, the results are unpredictable.
+In summary, notes are only intended for |\citep| but they may also be used
+with |\citet| in author--year mode, with single citations. In any other
+situation, the results are unpredictable.
 
- \DescribeMacro{\Citet}
- \DescribeMacro{\Citep}
- \DescribeMacro{\Citealt}
- \DescribeMacro{\Citealp}
- \DescribeMacro{\Citeauthor}
- \subsection{Forcing Upper Cased Name}
+\DescribeMacro{\Citet}
+\DescribeMacro{\Citep}
+\DescribeMacro{\Citealt}
+\DescribeMacro{\Citealp}
+\DescribeMacro{\Citeauthor}
+\subsection{Forcing Upper Cased Name}
 
 If the first author's name contains a \textsl{von} part, such as ``della
 Robbia'', then |\citet{dRob98}| produces ``della Robbia (1998)'', even at the
@@ -680,41 +678,41 @@ beginning of a sentence. One can force the first letter to be in upper case
 with the command |\Citet| instead. Other upper case commands also exist.
 \begin{quote}
 \begin{tabular}{rl@{\quad$\Rightarrow$\quad}l}
-  when & |\citet{dRob98}| & della Robbia (1998) \\
-  then & |\Citet{dRob98}| & Della Robbia (1998) \\
-     &   |\Citep{dRob98}| & (Della Robbia, 1998) \\
-     &   |\Citealt{dRob98}| & Della Robbia 1998 \\
-     &   |\Citealp{dRob98}| & Della Robbia, 1998 \\
-     &   |\Citeauthor{dRob98}| & Della Robbia
+when & |\citet{dRob98}| & della Robbia (1998) \\
+then & |\Citet{dRob98}| & Della Robbia (1998) \\
+   &   |\Citep{dRob98}| & (Della Robbia, 1998) \\
+   &   |\Citealt{dRob98}| & Della Robbia 1998 \\
+   &   |\Citealp{dRob98}| & Della Robbia, 1998 \\
+   &   |\Citeauthor{dRob98}| & Della Robbia
 \end{tabular}
 \end{quote}
 These commands also exist in starred versions for full author names.
 
- \medskip\noindent
- \textbf{Note:} the coding for the upper casing commands is tricky and likely
- buggy. It operates on the names that are stored in the |\bibitem| entry, and
- works even if old style font commands are used; however, \LaTeXe\ commands will
- cause it to crash. Thus\\
- \begin{tabular}[t]{ll}
-   |\bibitem[{\it della Robbia}(1998)]{dRob98}| & is okay, but \\
-   |\bibitem[\textit{della Robbia}(1998)]{dRob98}| & crashes.
- \end{tabular}
- ^^A I hope to improve this situation in future.
+\medskip\noindent
+\textbf{Note:} the coding for the upper casing commands is tricky and likely
+buggy. It operates on the names that are stored in the |\bibitem| entry, and
+works even if old style font commands are used; however, \LaTeXe\ commands will
+cause it to crash. Thus\\
+\begin{tabular}[t]{ll}
+ |\bibitem[{\it della Robbia}(1998)]{dRob98}| & is okay, but \\
+ |\bibitem[\textit{della Robbia}(1998)]{dRob98}| & crashes.
+\end{tabular}
+^^A I hope to improve this situation in future.
 
 
- \subsection{Citation Aliasing}
- \DescribeMacro{\defcitealias}
- \DescribeMacro{\citetalias}
- \DescribeMacro{\citepalias}
+\subsection{Citation Aliasing}
+\DescribeMacro{\defcitealias}
+\DescribeMacro{\citetalias}
+\DescribeMacro{\citepalias}
 
 Sometimes one wants to refer to a reference with a special designation,
 rather than by the authors, i.e. as Paper~I, Paper~II. Such aliases can be
 defined and used, textual and/or parenthetical with:
 \begin{quote}
 \begin{tabular}{lcl}
-  |\defcitealias{jon90}{Paper~I}|\\
-  |\citetalias{jon90}| & $\Rightarrow$ & Paper~I\\
-  |\citepalias{jon90}| & $\Rightarrow$ & (Paper~I)
+|\defcitealias{jon90}{Paper~I}|\\
+|\citetalias{jon90}| & $\Rightarrow$ & Paper~I\\
+|\citepalias{jon90}| & $\Rightarrow$ & (Paper~I)
 \end{tabular}
 \end{quote}
 These citation commands function much like |\citet| and |\citep|: they may
@@ -722,131 +720,131 @@ take multiple keys in the argument, may contain notes, and are marked as
 hyperlinks.
 
 
- A warning is issued if the alias is used before it is defined, or if an alias
- is redefined for a given citation. No warning is issued if an alias is
- defined for a citation key that does not exist; the warning comes when it is
- used!
+A warning is issued if the alias is used before it is defined, or if an alias
+is redefined for a given citation. No warning is issued if an alias is
+defined for a citation key that does not exist; the warning comes when it is
+used!
 
- See Section~\ref{sec:yearless} for an alternative means of citing with
- a code name.
+See Section~\ref{sec:yearless} for an alternative means of citing with
+a code name.
 
- \subsection{Authorless and Yearless References}\label{sec:yearless}
- What does one do about references that do not have authors? This has long
- bothered me but I do have a suggestion. Standard \btx\ styles make use of a
- \texttt{KEY} field in the entries to be used for alphabetizing when the
- authors or editors are missing. The author--year styles go even further and
- insert the \texttt{KEY} field in place of the authors. One can imagine giving
- a code designation for the work at this point. For example,
- \begin{quote}
- \begin{verbatim}
- @MANUAL{handbk98,
-   title = {Assembling Computers},
-   year = 1998,
-   organization = {MacroHard Inc.},
-   key = "MH-MAN"
- }
- \end{verbatim}
- \end{quote}
- With \texttt{plain}, the key text \texttt{MH-MAN} is used only to order the
- reference, but with \texttt{plainnat} and other author--year styles, it is
- used in place of the authors. One can then refer to it as
- |\citeauthor{handbk98}| to get MH-MAN or as |\citetext{\citeauthor{handbk98}}|
- for (MH-MAN), a parenthetical citation.
+\subsection{Authorless and Yearless References}\label{sec:yearless}
+What does one do about references that do not have authors? This has long
+bothered me but I do have a suggestion. Standard \btx\ styles make use of a
+\texttt{KEY} field in the entries to be used for alphabetizing when the
+authors or editors are missing. The author--year styles go even further and
+insert the \texttt{KEY} field in place of the authors. One can imagine giving
+a code designation for the work at this point. For example,
+\begin{quote}
+\begin{verbatim}
+@MANUAL{handbk98,
+ title = {Assembling Computers},
+ year = 1998,
+ organization = {MacroHard Inc.},
+ key = "MH-MAN"
+}
+\end{verbatim}
+\end{quote}
+With \texttt{plain}, the key text \texttt{MH-MAN} is used only to order the
+reference, but with \texttt{plainnat} and other author--year styles, it is
+used in place of the authors. One can then refer to it as
+|\citeauthor{handbk98}| to get MH-MAN or as |\citetext{\citeauthor{handbk98}}|
+for (MH-MAN), a parenthetical citation.
 
- This can be greatly simplified if
- the bibliography style leaves the date blank in the |\bibitem|
- entry, as
- \begin{quote}
- |\bibitem[MH-MAN()]{handbk98}|
- \end{quote}
- for then \thestyle\ suppresses the date, preceding punctuation, and the
- braces for |\citet|. This means that |\citet| and |\citep| behave
- automatically like the two examples above.
- The date still may appear in the text of the reference.
+This can be greatly simplified if
+the bibliography style leaves the date blank in the |\bibitem|
+entry, as
+\begin{quote}
+|\bibitem[MH-MAN()]{handbk98}|
+\end{quote}
+for then \thestyle\ suppresses the date, preceding punctuation, and the
+braces for |\citet|. This means that |\citet| and |\citep| behave
+automatically like the two examples above.
+The date still may appear in the text of the reference.
 
- The \thestyle\ bibliography styles have been modified accordingly to omit
- the date from the |\bibitem| entry when missing authors and/or editors
- are replaced by key text.
+The \thestyle\ bibliography styles have been modified accordingly to omit
+the date from the |\bibitem| entry when missing authors and/or editors
+are replaced by key text.
 
- Similarly, if the year is missing, it will be left blank in the |\bibitem|
- entry; thus citing such a work will only produce the authors' names.
+Similarly, if the year is missing, it will be left blank in the |\bibitem|
+entry; thus citing such a work will only produce the authors' names.
 
- \medskip\noindent
- \textbf{Note:} there are many other possibilities with this feature. One can
- even produce citations like those of the \texttt{alpha} bibliography style,
- by placing the citation code in place of the authors in the |\bibitem| entry
- and leaving the year blank. A second code (or maybe even the authors
- themselves) could be placed where the full author list normally appears, to
- be printed with the starred version of the |\cite| commands. For example,
- \begin{quote}
- |\bibitem[MH-MAN()MacroHard Inc.]{handbk98}|
- \end{quote}
+\medskip\noindent
+\textbf{Note:} there are many other possibilities with this feature. One can
+even produce citations like those of the \texttt{alpha} bibliography style,
+by placing the citation code in place of the authors in the |\bibitem| entry
+and leaving the year blank. A second code (or maybe even the authors
+themselves) could be placed where the full author list normally appears, to
+be printed with the starred version of the |\cite| commands. For example,
+\begin{quote}
+|\bibitem[MH-MAN()MacroHard Inc.]{handbk98}|
+\end{quote}
 
- \subsection{Extra Features in the \texttt{plainnat} Family}\label{sec:url}
+\subsection{Extra Features in the \texttt{plainnat} Family}\label{sec:url}
 
- The special \texttt{.bst} files for \thestyle\ mentioned in
- Section~\ref{sec:plainnat} have a number of extra fields compared to the
- original files: \\
- \begin{tabular}{lp{10.5cm}}
- \texttt{ISBN} & for the ISBN number in books,\\
- \texttt{ISSN} & for the ISSN number in periodicals,\\
- \texttt{URL} & for the Internet address of online documents,\\
- \texttt{DOI} & the \emph{Digital Object Identifier} now being used by many
-         journals as a more robust alternative to URL,\\
- \texttt{EID} & \emph{electronic ID}, a substitute for page numbers for online journals
-         that also appear in print; also known as the \emph{sequence number}
-         within the paper volume.
- \end{tabular}\\
+The special \texttt{.bst} files for \thestyle\ mentioned in
+Section~\ref{sec:plainnat} have a number of extra fields compared to the
+original files: \\
+\begin{tabular}{lp{10.5cm}}
+\texttt{ISBN} & for the ISBN number in books,\\
+\texttt{ISSN} & for the ISSN number in periodicals,\\
+\texttt{URL} & for the Internet address of online documents,\\
+\texttt{DOI} & the \emph{Digital Object Identifier} now being used by many
+       journals as a more robust alternative to URL,\\
+\texttt{EID} & \emph{electronic ID}, a substitute for page numbers for online journals
+       that also appear in print; also known as the \emph{sequence number}
+       within the paper volume.
+\end{tabular}\\
 
- Both the DOI and URL tend to be very long, causing ugly line breaks or
- sticking out into the margin. This can be avoided by loading the \texttt{url}
- package by Donald Arseneau, which allows text to be broken at punctuation
- marks without a hyphen. This package is automatically detected by \thestyle{}
- and appropriate commands redefined. URLs are printed in typewriter font, DOI
- in roman. Without the \texttt{url} package, these numbers are never broken.
+Both the DOI and URL tend to be very long, causing ugly line breaks or
+sticking out into the margin. This can be avoided by loading the \texttt{url}
+package by Donald Arseneau, which allows text to be broken at punctuation
+marks without a hyphen. This package is automatically detected by \thestyle{}
+and appropriate commands redefined. URLs are printed in typewriter font, DOI
+in roman. Without the \texttt{url} package, these numbers are never broken.
 
- As pointed out in Section~\ref{sec:yearless}, the \texttt{KEY} field is
- treated differently by \texttt{plainnat} than in \texttt{plain}. Whereas the
- latter uses this field only to alphabetize entries without authors,
- \texttt{plainnat} actually inserts it in place of the author, both in the
- reference text and in the citation label (|\bibitem| entries). Furthermore,
- the year is left empty in |\bibitem| so that |\citep| prints only the
- ``author'' text, which is now the \texttt{KEY}. This should be some code
- designation for the work.
+As pointed out in Section~\ref{sec:yearless}, the \texttt{KEY} field is
+treated differently by \texttt{plainnat} than in \texttt{plain}. Whereas the
+latter uses this field only to alphabetize entries without authors,
+\texttt{plainnat} actually inserts it in place of the author, both in the
+reference text and in the citation label (|\bibitem| entries). Furthermore,
+the year is left empty in |\bibitem| so that |\citep| prints only the
+``author'' text, which is now the \texttt{KEY}. This should be some code
+designation for the work.
 
- \subsection{Selecting Citation Punctuation}\label{sec:bibpunct}
+\subsection{Selecting Citation Punctuation}\label{sec:bibpunct}
 
- \DescribeMacro{\setcitestyle}
- The above examples have been printed with the default citation style.
- It is possible to change this, as well as to select numerical or
- author--year mode, by means of the |\setcitestyle| command, which takes as argument
- a comma-separated list of keywords. (This command is new to version~8.)
+\DescribeMacro{\setcitestyle}
+The above examples have been printed with the default citation style.
+It is possible to change this, as well as to select numerical or
+author--year mode, by means of the |\setcitestyle| command, which takes as argument
+a comma-separated list of keywords. (This command is new to version~8.)
 
 \begin{itemize}
 \item
-  Citation mode: |authoryear| or |numbers| or |super|
-  (corresponds to fourth argument of |\bibpunct|).
-  %^^A \ifNAT@numbers \ifNAT@super
+Citation mode: |authoryear| or |numbers| or |super|
+(corresponds to fourth argument of |\bibpunct|).
+%^^A \ifNAT@numbers \ifNAT@super
 \item
-  Braces: |round| or |square| or |open={|\emph{char}|},close={|\emph{char}|}|
-  (corresponds to first and second arguments of |\bibpunct|).
-  %^^A \NAT@open \NAT@close
+Braces: |round| or |square| or |open={|\emph{char}|},close={|\emph{char}|}|
+(corresponds to first and second arguments of |\bibpunct|).
+%^^A \NAT@open \NAT@close
 \item
-  Between citations: |semicolon| or |comma| or |citesep={|\emph{char}|}|
-  (corresponds to third argument of |\bibpunct|).
-  %^^A \NAT@sep
+Between citations: |semicolon| or |comma| or |citesep={|\emph{char}|}|
+(corresponds to third argument of |\bibpunct|).
+%^^A \NAT@sep
 \item
-  Between author and year: |aysep={|\emph{char}|}|
-  (corresponds to fifth argument of |\bibpunct|).
-  %^^A \NAT@aysep
+Between author and year: |aysep={|\emph{char}|}|
+(corresponds to fifth argument of |\bibpunct|).
+%^^A \NAT@aysep
 \item
-  Between years with common author: |yysep={|\emph{char}|}|
-  (corresponds to sixth argument of |\bibpunct|).
-  %^^A \NAT@yrsep
+Between years with common author: |yysep={|\emph{char}|}|
+(corresponds to sixth argument of |\bibpunct|).
+%^^A \NAT@yrsep
 \item
-  Text before post-note: |notesep={|\emph{text}|}|
-  (corresponds to optional argument of |\bibpunct|).
-  %^^A \NAT@cmt
+Text before post-note: |notesep={|\emph{text}|}|
+(corresponds to optional argument of |\bibpunct|).
+%^^A \NAT@cmt
 \end{itemize}
 Defaults are |authoryear|, |round|, |comma|, |aysep={;}|, |yysep={,}|,
 |notesep={, }|
@@ -854,214 +852,214 @@ Defaults are |authoryear|, |round|, |comma|, |aysep={;}|, |yysep={,}|,
 Example~1, |\setcitestyle{square,aysep={},yysep={;}}| changes the author--year
 output of
 \begin{quote}
-  |\citep{jon90,jon91,jam92}|
+|\citep{jon90,jon91,jam92}|
 \end{quote}
 into [Jones et al. 1990; 1991, James et al. 1992].
 
 Example~2, |\setcitestyle{notesep={; },round,aysep={},yysep={;}}| changes the output of
 \begin{quote}
-  |\citep[and references therein]{jon90}|
+|\citep[and references therein]{jon90}|
 \end{quote}
 into (Jones et al. 1990; and references therein).
 
- \medskip\noindent
- \textbf{Note}:
- \begin{itemize}
-   \item parameters not specified remain unchanged;
-   \item the order of the keywords is unimportant;
-   \item the punctuation between author and year applies only to author--year
-     citations, not numerical;
-   \item the |yysep| punctuation comes between years when multiple citations
-     have the same, non-repeated authors; a space is always inserted
-     as well; if the years too are same, the citation is printed as `2007a,b',
-     without a space; to include a space, add it with |yysep={,~}|;
-   \item for numerical citations with common authors, e.g,
-     |\citet{jon90,jon91}| produces `Jones et al.\ [21, 22]' with the
-     punctuation between the numbers; a space is automatically included for
-     numbers, but not for superscripts.
-   \item a single character does not really need to be in |{ }|,
-      other than a comma; |yysep=;| is acceptable;
- \end{itemize}
+\medskip\noindent
+\textbf{Note}:
+\begin{itemize}
+ \item parameters not specified remain unchanged;
+ \item the order of the keywords is unimportant;
+ \item the punctuation between author and year applies only to author--year
+   citations, not numerical;
+ \item the |yysep| punctuation comes between years when multiple citations
+   have the same, non-repeated authors; a space is always inserted
+   as well; if the years too are same, the citation is printed as `2007a,b',
+   without a space; to include a space, add it with |yysep={,~}|;
+ \item for numerical citations with common authors, e.g,
+   |\citet{jon90,jon91}| produces `Jones et al.\ [21, 22]' with the
+   punctuation between the numbers; a space is automatically included for
+   numbers, but not for superscripts.
+ \item a single character does not really need to be in |{ }|,
+    other than a comma; |yysep=;| is acceptable;
+\end{itemize}
 
- \DescribeMacro{\bibpunct}
- The older command for setting the citation style is |\bibpunct|, which
- takes one optional and six required arguments:
- \begin{enumerate}
- \item the opening bracket symbol, default = (
- \item the closing bracket symbol, default = )
- \item the punctuation between multiple citations, default = ;
- \item the letter `n' for numerical style, or `s' for numerical superscript
-       style, any other letter for
-       author--year, default = author--year;
- \item the punctuation that comes between the author names and the year
- \item the punctuation that comes between years or numbers when common author
-       lists are suppressed (default = ,);
- \end{enumerate}
+\DescribeMacro{\bibpunct}
+The older command for setting the citation style is |\bibpunct|, which
+takes one optional and six required arguments:
+\begin{enumerate}
+\item the opening bracket symbol, default = (
+\item the closing bracket symbol, default = )
+\item the punctuation between multiple citations, default = ;
+\item the letter `n' for numerical style, or `s' for numerical superscript
+     style, any other letter for
+     author--year, default = author--year;
+\item the punctuation that comes between the author names and the year
+\item the punctuation that comes between years or numbers when common author
+     lists are suppressed (default = ,);
+\end{enumerate}
 
- The optional argument is the character preceding a post-note, default is a
- comma plus space. In redefining this character, one must include a space if
- one is wanted.
+The optional argument is the character preceding a post-note, default is a
+comma plus space. In redefining this character, one must include a space if
+one is wanted.
 
- The above |\setcitestyle| examples can be achieved with
- \begin{quote}
- |\bibpunct{[}{]}{,}{a}{}{;}| and\\
- |\bibpunct[,~]{(}{)}{,}{a}{}{;}|.
- \end{quote}
-
-
- \subsection{Predefining a citation style}\label{sec:predef}
-
- \DescribeMacro{\bibstyle@xxx}
- \DescribeMacro{\citestyle}
-
- If a particular set of citation punctuations is commonly used, it is possible
- to store it in the local \thestyle\texttt{.cfg} and to recall it with
- |\citestyle{|\emph{name}|}|. The
- definition is done by creating a command |\bibstyle@|\emph{name}, which sets
- the desired citation style.
-
- For example, the American Geophysical Union (AGU) demands in its publications
- that citations be made with square brackets and separated by semi-colons.
- There is an \texttt{agu.bst} file to accomplish most of the formatting, but
- such punctuations are not included in it. Instead, \thestyle{} has the
- definition
- \begin{quote}
- |\newcommand{\bibstyle@agu}{\bibpunct{[}{]}{;}{a}{,}{,~}}|
- \end{quote}
- which allows this set to be selected with the command
- \begin{quote}
- |\citestyle{agu}|
- \end{quote}
-
- There is an additional feature to such predefined styles: \thestyle\ attempts
- to execute |\citestyle| at the beginning of the document
- with the name of the bibliography style, as given by
- the |\bibliographystyle| command (and stored in the \texttt{.aux} file).
- This means that a citation style can be
- directly associated with a \texttt{.bst} file. Such implicit styles are
- immediately overwritten by any explicit style specifications, such as package
- options, or by |\setcitestyle|, |\bibpunct|, or |\citestyle| commands.
-
- Predefined citation styles are contained within the \thestyle\ code for the
- following bibliography styles:
- \begin{description}
-   \item[\texttt{plain}] etc. (the 4 base styles): square braces, numerical, commas
-   \item[\texttt{plainnat}] etc.: square braces, author--year, commas
-   \item[\texttt{agu}] (American Geophysical Union): square, author--year, semi-colon
-   \item[\texttt{egu}] (European Geosciences Union): round, author--year, semi-colon
-   \item[\texttt{agms, dcu, kluwer}] (Harvard set): round, author--year
-   \item[\texttt{cospar}] (Committe on Space Research): slashes, numerical, comma
-   \item[\texttt{nature}] (Journal \textsl{Nature}): superscripts
- \end{description}
- There are others but they are mainly for my personal convenience. The above
- represent most of the major variations and can be used as required. The
- automatic association with other bibliography styles can only be achieved by
- putting the definitions into the local \thestyle\texttt{.cfg}.
-
- Note that the predefinitions for |plain| and |plainnat| specify square
- braces, thus changing the normal \thestyle\ default of round parentheses.
-
- The style defining commands may contain more than just |\bibpunct|
- or |\setcitestyle|.
- Some numerical citation scheme require even more changes. For example,
- \textsl{Nature} not only uses superscripted numbers for
- citations, it also prints the numbers in the list of references without
- the normal square brackets. To
- accommodate this, \thestyle{} contains the style definition
- \begin{quote}\begin{verbatim}
- \newcommand{\bibstyle@nature}%
-     {\bibpunct{}{}{,}{s}{}{\textsuperscript{,}}%
-      \renewcommand\bibnumfmt[1]{##1.}}
- \end{verbatim}
- \end{quote}
- The redefined |\bibnumfmt| command specifies how the reference numbers
- are to be formatted in the list of references itself.
-
- \subsection{Priority of Style Commands}\label{sec:priority}
- The citation style (punctuation and mode) can be selected by means of the
- |\setcitestyle|, |\bibpunct|, |\citestyle| commands or via
- |\bibliographystyle{|\textit{bst}|}| with a predefined |\bibstyle@|\textit{bst}.
- They can also be selected by package options
- (Section~\ref{sec:opts}). What happens if there are several conflicting
- selections?
-
- The lowest priority is assigned to the |\bibliographystyle|
- command, since this is implicit and not transparent to the user. The
- package options have the next priority. Finally, any selection by
- |\setcitestyle|,
- |\bibpunct| and/or |\citestyle| overrides those of the other methods.
-
- \subsection{Other Formatting Options}
+The above |\setcitestyle| examples can be achieved with
+\begin{quote}
+|\bibpunct{[}{]}{,}{a}{}{;}| and\\
+|\bibpunct[,~]{(}{)}{,}{a}{}{;}|.
+\end{quote}
 
 
- \DescribeMacro{\bibsection}
- The list of references normally appears as a |\section*| or |\chapter*|,
- depending on the main class. If one wants to redesign one's own heading,
- say as a numbered section with |\section|, then |\bibsection| may be
- redefined by the user accordingly.
+\subsection{Predefining a citation style}\label{sec:predef}
+
+\DescribeMacro{\bibstyle@xxx}
+\DescribeMacro{\citestyle}
+
+If a particular set of citation punctuations is commonly used, it is possible
+to store it in the local \thestyle\texttt{.cfg} and to recall it with
+|\citestyle{|\emph{name}|}|. The
+definition is done by creating a command |\bibstyle@|\emph{name}, which sets
+the desired citation style.
+
+For example, the American Geophysical Union (AGU) demands in its publications
+that citations be made with square brackets and separated by semi-colons.
+There is an \texttt{agu.bst} file to accomplish most of the formatting, but
+such punctuations are not included in it. Instead, \thestyle{} has the
+definition
+\begin{quote}
+|\newcommand{\bibstyle@agu}{\bibpunct{[}{]}{;}{a}{,}{,~}}|
+\end{quote}
+which allows this set to be selected with the command
+\begin{quote}
+|\citestyle{agu}|
+\end{quote}
+
+There is an additional feature to such predefined styles: \thestyle\ attempts
+to execute |\citestyle| at the beginning of the document
+with the name of the bibliography style, as given by
+the |\bibliographystyle| command (and stored in the \texttt{.aux} file).
+This means that a citation style can be
+directly associated with a \texttt{.bst} file. Such implicit styles are
+immediately overwritten by any explicit style specifications, such as package
+options, or by |\setcitestyle|, |\bibpunct|, or |\citestyle| commands.
+
+Predefined citation styles are contained within the \thestyle\ code for the
+following bibliography styles:
+\begin{description}
+ \item[\texttt{plain}] etc. (the 4 base styles): square braces, numerical, commas
+ \item[\texttt{plainnat}] etc.: square braces, author--year, commas
+ \item[\texttt{agu}] (American Geophysical Union): square, author--year, semi-colon
+ \item[\texttt{egu}] (European Geosciences Union): round, author--year, semi-colon
+ \item[\texttt{agms, dcu, kluwer}] (Harvard set): round, author--year
+ \item[\texttt{cospar}] (Committe on Space Research): slashes, numerical, comma
+ \item[\texttt{nature}] (Journal \textsl{Nature}): superscripts
+\end{description}
+There are others but they are mainly for my personal convenience. The above
+represent most of the major variations and can be used as required. The
+automatic association with other bibliography styles can only be achieved by
+putting the definitions into the local \thestyle\texttt{.cfg}.
+
+Note that the predefinitions for |plain| and |plainnat| specify square
+braces, thus changing the normal \thestyle\ default of round parentheses.
+
+The style defining commands may contain more than just |\bibpunct|
+or |\setcitestyle|.
+Some numerical citation scheme require even more changes. For example,
+\textsl{Nature} not only uses superscripted numbers for
+citations, it also prints the numbers in the list of references without
+the normal square brackets. To
+accommodate this, \thestyle{} contains the style definition
+\begin{quote}\begin{verbatim}
+\newcommand{\bibstyle@nature}%
+   {\bibpunct{}{}{,}{s}{}{\textsuperscript{,}}%
+    \renewcommand\bibnumfmt[1]{##1.}}
+\end{verbatim}
+\end{quote}
+The redefined |\bibnumfmt| command specifies how the reference numbers
+are to be formatted in the list of references itself.
+
+\subsection{Priority of Style Commands}\label{sec:priority}
+The citation style (punctuation and mode) can be selected by means of the
+|\setcitestyle|, |\bibpunct|, |\citestyle| commands or via
+|\bibliographystyle{|\textit{bst}|}| with a predefined |\bibstyle@|\textit{bst}.
+They can also be selected by package options
+(Section~\ref{sec:opts}). What happens if there are several conflicting
+selections?
+
+The lowest priority is assigned to the |\bibliographystyle|
+command, since this is implicit and not transparent to the user. The
+package options have the next priority. Finally, any selection by
+|\setcitestyle|,
+|\bibpunct| and/or |\citestyle| overrides those of the other methods.
+
+\subsection{Other Formatting Options}
 
 
-
- \DescribeMacro{\bibpreamble}
- A preamble appearing after the |\bibsection| heading may be inserted before
- the actual list of references by redefining |\bibpreamble|. This will appear in
- the normal text font unless it contains font declarations. The
- |\bibfont| applies to the list of references, not to this preamble.
+\DescribeMacro{\bibsection}
+The list of references normally appears as a |\section*| or |\chapter*|,
+depending on the main class. If one wants to redesign one's own heading,
+say as a numbered section with |\section|, then |\bibsection| may be
+redefined by the user accordingly.
 
 
 
- \DescribeMacro{\bibfont}
- The list of references is normally printed in the same font size and
- style as the main body. However, it is possible to redefine |\bibfont|
- to be font commands that are in effect within the \texttt{thebibliography}
- environment after any preamble. For example,
- \begin{quote}
- |\renewcommand{\bibfont}{\small}|
- \end{quote}
-
-
- \DescribeMacro{\citenumfont}
- Numerical citations may be printed in a different font. Define |\citenumfont|
- to be a font declaration like |\itshape| or even a command taking arguments
- like |\textit|.
- \begin{quote}
- |\renewcommand{\citenumfont}[1]{\textit{#1}}|
- \end{quote}
- The above is better than |\itshape| since it automatically adds italic
- correction.
-
-
- \DescribeMacro{\bibnumfmt}
- The format of the numerical listing in the reference list may also be changed
- from the default [32] by redefining |\bibnumfmt|, for example
- \begin{quote}
- |\renewcommand{\bibnumfmt}[1]{\textbf{#1}:}|
- \end{quote}
- to achieve \textbf{32}: instead.
-
-
- \DescribeMacro{\bibhang}
- The list of references for author--year styles uses a hanging indentation
- format: the first line of each reference is flush left, the following lines
- are set with an indentation from the left margin. This indentation is 1~em
- by default but may be changed by redefining (with |\setlength|) the
- length parameter |\bibhang|.
-
-
- \DescribeMacro{\bibsep}
- The vertical spacing between references in the list, whether author--year
- or numerical, is controlled by the length |\bibsep|. If this is set to
- 0~pt, there is no extra line spacing between references. The default
- spacing depends on the font size selected in |\documentclass|, and is
- almost a full blank line. Change this by redefining |\bibsep| with
- |\setlength| command.
+\DescribeMacro{\bibpreamble}
+A preamble appearing after the |\bibsection| heading may be inserted before
+the actual list of references by redefining |\bibpreamble|. This will appear in
+the normal text font unless it contains font declarations. The
+|\bibfont| applies to the list of references, not to this preamble.
 
 
 
- \subsection{Automatic Indexing of Citations}
+\DescribeMacro{\bibfont}
+The list of references is normally printed in the same font size and
+style as the main body. However, it is possible to redefine |\bibfont|
+to be font commands that are in effect within the \texttt{thebibliography}
+environment after any preamble. For example,
+\begin{quote}
+|\renewcommand{\bibfont}{\small}|
+\end{quote}
 
- \DescribeMacro{\citeindextrue}
- \DescribeMacro{\citeindexfalse}
+
+\DescribeMacro{\citenumfont}
+Numerical citations may be printed in a different font. Define |\citenumfont|
+to be a font declaration like |\itshape| or even a command taking arguments
+like |\textit|.
+\begin{quote}
+|\renewcommand{\citenumfont}[1]{\textit{#1}}|
+\end{quote}
+The above is better than |\itshape| since it automatically adds italic
+correction.
+
+
+\DescribeMacro{\bibnumfmt}
+The format of the numerical listing in the reference list may also be changed
+from the default [32] by redefining |\bibnumfmt|, for example
+\begin{quote}
+|\renewcommand{\bibnumfmt}[1]{\textbf{#1}:}|
+\end{quote}
+to achieve \textbf{32}: instead.
+
+
+\DescribeMacro{\bibhang}
+The list of references for author--year styles uses a hanging indentation
+format: the first line of each reference is flush left, the following lines
+are set with an indentation from the left margin. This indentation is 1~em
+by default but may be changed by redefining (with |\setlength|) the
+length parameter |\bibhang|.
+
+
+\DescribeMacro{\bibsep}
+The vertical spacing between references in the list, whether author--year
+or numerical, is controlled by the length |\bibsep|. If this is set to
+0~pt, there is no extra line spacing between references. The default
+spacing depends on the font size selected in |\documentclass|, and is
+almost a full blank line. Change this by redefining |\bibsep| with
+|\setlength| command.
+
+
+
+\subsection{Automatic Indexing of Citations}
+
+\DescribeMacro{\citeindextrue}
+\DescribeMacro{\citeindexfalse}
 
 If one wishes to have the citations entered in the \texttt{.idx} indexing
 file, it is only necessary to issue |\citeindextrue| at any point in the
@@ -1070,101 +1068,101 @@ the corresponding entry to that file. With |\citeindexfalse|, these
 entries will no longer be made.
 
 
- The |\bibitem| commands in the \texttt{thebibliography} environment will
- also make index entries. If this is not desired, then issue
- |\citeindexfalse| before |\bibliography| or |\begin{thebibliography}|.
+The |\bibitem| commands in the \texttt{thebibliography} environment will
+also make index entries. If this is not desired, then issue
+|\citeindexfalse| before |\bibliography| or |\begin{thebibliography}|.
 
- Of course, |\makeindex| must also be issued in the preamble to activate
- indexing, as usual. Otherwise, no indexing is done at all.
+Of course, |\makeindex| must also be issued in the preamble to activate
+indexing, as usual. Otherwise, no indexing is done at all.
 
- Make sure that the document has been processed at least twice after the
- last \btx\ run before running the \texttt{makeindex} program.
+Make sure that the document has been processed at least twice after the
+last \btx\ run before running the \texttt{makeindex} program.
 
- \DescribeMacro{\NAT@idxtxt}
- The form of the index entries is set by the internal |\NAT@idxtxt|, which
- can be redefined by hackers if wanted (in the \thestyle\texttt{.cfg} file
- please). By default, it prints the short author list plus date or number in the
- current parenthesis style and citation mode.
+\DescribeMacro{\NAT@idxtxt}
+The form of the index entries is set by the internal |\NAT@idxtxt|, which
+can be redefined by hackers if wanted (in the \thestyle\texttt{.cfg} file
+please). By default, it prints the short author list plus date or number in the
+current parenthesis style and citation mode.
 
- The \thestyle\ package can also be used with the \texttt{index} package of
- David~M. Jones. The order in which the packages are loaded is not
- important.
+The \thestyle\ package can also be used with the \texttt{index} package of
+David~M. Jones. The order in which the packages are loaded is not
+important.
 
- \DescribeMacro{\citeindextype}
- In that package, multiple index lists may be made by means of a |\newindex|
- command. For example, it may be desirable to put all the citation indexing
- into a separate list. First that list must be initiated with, e.g.,
- \begin{quote}
-    |\newindex{cite}{ctx}{cnd}{List of Citations}|
- \end{quote}
- and then the automatic citation indexing associated with this list with the
- \thestyle\ command
- \begin{quote}
-    |\renewcommand{\citeindextype}{cite}|
- \end{quote}
- See the documentation for \texttt{index.sty} for details.
+\DescribeMacro{\citeindextype}
+In that package, multiple index lists may be made by means of a |\newindex|
+command. For example, it may be desirable to put all the citation indexing
+into a separate list. First that list must be initiated with, e.g.,
+\begin{quote}
+  |\newindex{cite}{ctx}{cnd}{List of Citations}|
+\end{quote}
+and then the automatic citation indexing associated with this list with the
+\thestyle\ command
+\begin{quote}
+  |\renewcommand{\citeindextype}{cite}|
+\end{quote}
+See the documentation for \texttt{index.sty} for details.
 
- \subsection{Hyper\TeX\ Compatibility}
- The \thestyle\ package is compatible with the \texttt{hyperref}
- package of Sebastian Rahtz and Heiko Oberdiek.
- , for use with
- \LaTeX\ $\rightarrow$ HTML conversions, pdf\TeX, \texttt{pdfmark}.
- The compatibility is of a mutual nature: both packages contain
- coding that interact with that of the other.
+\subsection{Hyper\TeX\ Compatibility}
+The \thestyle\ package is compatible with the \texttt{hyperref}
+package of Sebastian Rahtz and Heiko Oberdiek.
+, for use with
+\LaTeX\ $\rightarrow$ HTML conversions, pdf\TeX, \texttt{pdfmark}.
+The compatibility is of a mutual nature: both packages contain
+coding that interact with that of the other.
 
- There is a special option to the \texttt{hyperref} package: \texttt{breaklinks}
- which allows the link text to be split over to the next
- line, avoiding many overfull line messages. By default, the link text is
- restricted to be on one line. For numerical citations, this may be desirable,
- but for author--year ones with long link texts, it is not.
+There is a special option to the \texttt{hyperref} package: \texttt{breaklinks}
+which allows the link text to be split over to the next
+line, avoiding many overfull line messages. By default, the link text is
+restricted to be on one line. For numerical citations, this may be desirable,
+but for author--year ones with long link texts, it is not.
 
- \subsection{Multiple Bibliographies in One Document}\label{sec:chapbib}
+\subsection{Multiple Bibliographies in One Document}\label{sec:chapbib}
 
 
 The \thestyle\ package is compatible with the \texttt{chapterbib} package
- of Donald Arseneau and Niel Kempson,
+of Donald Arseneau and Niel Kempson,
 which makes it possible to have several bibliographies in one document.
- The usual application is to have bibliographies in each chapter of a book,
- especially if they have been written by different authors.
+The usual application is to have bibliographies in each chapter of a book,
+especially if they have been written by different authors.
 
- The \texttt{chapterbib} package works in a very natural way for the
- author; only the editor who puts all the chapters together into one book
- has to do some extra work.
+The \texttt{chapterbib} package works in a very natural way for the
+author; only the editor who puts all the chapters together into one book
+has to do some extra work.
 
 The package makes use of the |\include| command, and each |\include|d file
 has its own bibliography.
- For large books, it makes very good sense to take advantage of this feature
- in any case.
+For large books, it makes very good sense to take advantage of this feature
+in any case.
 
- To review the use of |\include|, recall that the main file
- \begin{verbatim}
-   \documentclass{...}
-   \includeonly{ch2}
-   \begin{document}
-     \include{ch1}
-     \include{ch2}
-     \include{ch3}
-   \end{document}
- \end{verbatim}
- will process only the file \texttt{ch2.tex} as though the files
- \texttt{ch1.tex} and \texttt{ch3.tex} were also present. That is, all
- counters, especially the page and section numbers, as well as
- cross-referencing definitions, will function as if the whole document
- were processed. The trick is that each |\include|d file has it own
- \texttt{.aux} file containing these definitions, and they are all read
- in every time, even if the corresponding \texttt{.tex} file is not. The
- \texttt{.aux} files also contain the citation information for \btx,
- something that the \texttt{chapterbib} package exploits.
+To review the use of |\include|, recall that the main file
+\begin{verbatim}
+ \documentclass{...}
+ \includeonly{ch2}
+ \begin{document}
+   \include{ch1}
+   \include{ch2}
+   \include{ch3}
+ \end{document}
+\end{verbatim}
+will process only the file \texttt{ch2.tex} as though the files
+\texttt{ch1.tex} and \texttt{ch3.tex} were also present. That is, all
+counters, especially the page and section numbers, as well as
+cross-referencing definitions, will function as if the whole document
+were processed. The trick is that each |\include|d file has it own
+\texttt{.aux} file containing these definitions, and they are all read
+in every time, even if the corresponding \texttt{.tex} file is not. The
+\texttt{.aux} files also contain the citation information for \btx,
+something that the \texttt{chapterbib} package exploits.
 
- If |\usepackage{chapterbib}| has been given, the keys in each |\cite|
- and |\bibitem| command are associated with the current |\include|d file
- and are distinguished from the identical key in a different file. Each of
- these files must contain its own |\bibliography| and |\bibliographystyle|
- commands. One processes \btx\ on each file separately before processing
- it under \LaTeX\ (at least twice).
+If |\usepackage{chapterbib}| has been given, the keys in each |\cite|
+and |\bibitem| command are associated with the current |\include|d file
+and are distinguished from the identical key in a different file. Each of
+these files must contain its own |\bibliography| and |\bibliographystyle|
+commands. One processes \btx\ on each file separately before processing
+it under \LaTeX\ (at least twice).
 
- \subsubsection{Special Considerations for \thestyle\ and
-           \texttt{chapterbib}}
+\subsubsection{Special Considerations for \thestyle\ and
+         \texttt{chapterbib}}
 
 The order in which the \texttt{chapterbib} and \thestyle\ packages are loaded
 is unimportant.
@@ -1174,9 +1172,9 @@ that puts the bibliography in a |\section*| instead of |\chapter*|,
 something that makes sense if there is a bibliography in each chapter.
 This option will not work when \thestyle\ is also loaded; instead, add
 the option to \thestyle.
- (The \texttt{sectionbib} option can always be
- given, but it only has meaning for the \texttt{book} and \texttt{report}
- classes, or for classes derived from them.)
+(The \texttt{sectionbib} option can always be
+given, but it only has meaning for the \texttt{book} and \texttt{report}
+classes, or for classes derived from them.)
 
 Every |\include|d file must contain its own
 |\bibliography| command where the bibliography is to appear. The database
@@ -1186,54 +1184,54 @@ contain a |\bibliographystyle| command, with possibly differing arguments.
 
 As of version~8.0, the citation style, including mode (author--year or
 numerical) may also differ between chapters. The |\setcitestyle| command
- as well as |\bibpunct| and |\citestyle|
+as well as |\bibpunct| and |\citestyle|
 can be issued at any point in the document, in particular in different
 chapters.
 (And this is the only time it would make sense to do so.)
 
 
 
- \subsection{Sorting and Compressing Numerical Citations}
- \label{sec:sort}
+\subsection{Sorting and Compressing Numerical Citations}
+\label{sec:sort}
 
- Another package by Donald Arseneau, \texttt{cite.sty}, reimplements the
- entire (numerical) citation system such that one can control the
- punctuation and citation format, all of which is done by \thestyle\ as
- well. However, it also can sort and compress numerical citations,
- something that is required by some journals.
+Another package by Donald Arseneau, \texttt{cite.sty}, reimplements the
+entire (numerical) citation system such that one can control the
+punctuation and citation format, all of which is done by \thestyle\ as
+well. However, it also can sort and compress numerical citations,
+something that is required by some journals.
 
- What this means is that when multiple citations are given with a single
- |\cite| command, the normal order of the numbers is in the sequence
- given. This is usually a wild list of numbers, such as [4,2,8,3]. With
- the \texttt{cite} package, this list becomes [2--4,8].
+What this means is that when multiple citations are given with a single
+|\cite| command, the normal order of the numbers is in the sequence
+given. This is usually a wild list of numbers, such as [4,2,8,3]. With
+the \texttt{cite} package, this list becomes [2--4,8].
 
- It is impossible to make the \texttt{cite} and \thestyle\ packages
- compatible, since both reimplement |\cite| from scratch. Instead, I have
- taken over some of the coding from \texttt{cite.sty}, modifying it for
- \thestyle{}. This coding is activated by including one of the options
- \texttt{sort} or \texttt{sort\&compress} in the |\usepackage| command.
+It is impossible to make the \texttt{cite} and \thestyle\ packages
+compatible, since both reimplement |\cite| from scratch. Instead, I have
+taken over some of the coding from \texttt{cite.sty}, modifying it for
+\thestyle{}. This coding is activated by including one of the options
+\texttt{sort} or \texttt{sort\&compress} in the |\usepackage| command.
 
- For author--year citations, the option \texttt{sort} orders the citations in
- a single |\citep| or |\citet| command into the sequence in which they appear
- in the list of references. This is normally alphabetical first, year second.
- This should avoid citations of the type: ``James et~al.\ (1994b,a)''. For
- author--year mode, the \texttt{sort\&compress} option is identical to
- \texttt{sort}.
-
-
-
- \subsection{Merged Numerical References}
- \label{sec:merge}
+For author--year citations, the option \texttt{sort} orders the citations in
+a single |\citep| or |\citet| command into the sequence in which they appear
+in the list of references. This is normally alphabetical first, year second.
+This should avoid citations of the type: ``James et~al.\ (1994b,a)''. For
+author--year mode, the \texttt{sort\&compress} option is identical to
+\texttt{sort}.
 
 
- \begin{quote}
- \textbf{Note:} the |merge| coding was contributed by
- Arthur Ogawa for the American Physical Society.
- \end{quote}
 
- Thorsten Ohl's \texttt{mcite} package cannot be used together with
- \thestyle. Instead, one must invoke the package option
- \texttt{merge} with the |\usepackage| statement.
+\subsection{Merged Numerical References}
+\label{sec:merge}
+
+
+\begin{quote}
+\textbf{Note:} the |merge| coding was contributed by
+Arthur Ogawa for the American Physical Society.
+\end{quote}
+
+Thorsten Ohl's \texttt{mcite} package cannot be used together with
+\thestyle. Instead, one must invoke the package option
+\texttt{merge} with the |\usepackage| statement.
 
 
 With this option in effect, citation keys within a multiple |\citep| command
@@ -1243,27 +1241,27 @@ number. For example, |\citep{feynmann,*salam,*epr}| produces a single number,
 and all three references are listed in the bibliography under one entry with
 that number.
 
- Certain restrictions of Thorsten Ohl's \texttt{mcite} package are lifted: a *
- prefix can be used with any citation key, and Ohl's restrictions on syntax do
- not apply.
+Certain restrictions of Thorsten Ohl's \texttt{mcite} package are lifted: a *
+prefix can be used with any citation key, and Ohl's restrictions on syntax do
+not apply.
 
- An additional feature allows text to be inserted inside the bibliography entry:
- within the argument of \verb+\citep+, a cite key may be preceded by two optional arguements, e.g.,
- \verb+\citep{[+\emph{pre}\verb+][+\emph{post}\verb+]+\emph{key}\verb+}+,
- where \emph{pre} represents text to be prepended to the reference (\verb+\bibitem+ content),
- with \emph{post} appended thereto.
+An additional feature allows text to be inserted inside the bibliography entry:
+within the argument of \verb+\citep+, a cite key may be preceded by two optional arguements, e.g.,
+\verb+\citep{[+\emph{pre}\verb+][+\emph{post}\verb+]+\emph{key}\verb+}+,
+where \emph{pre} represents text to be prepended to the reference (\verb+\bibitem+ content),
+with \emph{post} appended thereto.
 
- Thus it is possible for the user to mark up the document:
- \begin{verbatim}
- text \citep{*[{See, e.g., }][ for a simpler explanation]ablebaker}
- \end{verbatim}
- The above example illustrates the use of the star-form and both optional arguments.
+Thus it is possible for the user to mark up the document:
+\begin{verbatim}
+text \citep{*[{See, e.g., }][ for a simpler explanation]ablebaker}
+\end{verbatim}
+The above example illustrates the use of the star-form and both optional arguments.
 
- \medskip\noindent
- \textbf{Caution:} Because the comma (,) character is part of the syntax of \verb+\citep+,
- and because the bracket delimiters ([]) are mere text characters and not true delimiters (like the braces),
- you must enclose the optional argument in braces (\verb+{}+) if a comma is present in the
- argument (that goes for brackets, too, of course).
+\medskip\noindent
+\textbf{Caution:} Because the comma (,) character is part of the syntax of \verb+\citep+,
+and because the bracket delimiters ([]) are mere text characters and not true delimiters (like the braces),
+you must enclose the optional argument in braces (\verb+{}+) if a comma is present in the
+argument (that goes for brackets, too, of course).
 
 The \texttt{elide} option also activates the merging features, but also sees
 to it that common parts of the merged references (e.g., authors) are not
@@ -1280,345 +1278,345 @@ They also require special \texttt{.bst} files, as provided for example by the
 American Physical Society for their REV\TeX\ class.
 
 
- \subsection{Long Author List on First Citation}\label{sec:long}
+\subsection{Long Author List on First Citation}\label{sec:long}
 
- A feature that has often been requested by otherwise happy users of
- \thestyle\ is one that is found in the \texttt{harvard} package as
- standard: with the first citation of any reference, the full author list is
- printed, and afterwards only the abbreviated list. One can control this
- with |\citet*| for the first citation, and |\citet| or |\citep| thereafter.
- However, the automatic feature is very desired.
+A feature that has often been requested by otherwise happy users of
+\thestyle\ is one that is found in the \texttt{harvard} package as
+standard: with the first citation of any reference, the full author list is
+printed, and afterwards only the abbreviated list. One can control this
+with |\citet*| for the first citation, and |\citet| or |\citep| thereafter.
+However, the automatic feature is very desired.
 
- This can be activated with the option
- \texttt{longnamesfirst}.
-
-
-
- \DescribeMacro{\shortcites}
- Some references have so many authors that you want to suppress the
- automatic long list only for them. In this case, issue
- \begin{quote}
-   |\shortcites|\marg{key-list}
- \end{quote}
- before the first citations, and those included in \emph{key-list} will have
- a short list on their first citation.
-
- Full author lists can still be forced at any time with the starred
- variants.
-
- \section{Numerical Citations with Author--Year Styles}\label{sec:6.0}
-
- It is possible to produce numerical citations with any author-year
- \texttt{.bst} file, with minimal change to the text. The commands |\citet|
- and |\citep| will produce sensible results in both modes, without any special
- editing. Obviously, the opposite is not possible; a \texttt{.bst} file
- intended for numerical citation can never produce author--year citations,
- simply because the information is not transferred to the auxiliary file.
-
- \subsection{Selecting Numerical Mode}
- By default, \thestyle{} is in author--year mode. This can be changed by
- \begin{enumerate}
-   \item selecting a numerical bibliography style with predefined
-         citation style, defined either in the package or in the local
-         configuration file;
-
-   \item giving options \texttt{numbers} or \texttt{super} to the
-         |\usepackage| command;
-
-   \item issuing |\setcitestyle{numbers}|;
-
-   \item issuing |\citestyle| with the name of a predefined numerical
-         bibliography style (like \texttt{plain} and use it with \texttt{plainnat}).
- \end{enumerate}
-
- The \thestyle{} package will automatically switch to numerical mode if
- any one of the |\bibitem| entries fails to conform to the possible
- author--year formats. There is no way to override this, since such an
- entry would cause trouble in the author--year mode.
-
- There are certain special `numerical' styles, like that of the standard
- \texttt{alpha.bst}, which include a non-numerical label in place of the
- number, in the form
- \begin{quote} |\bibitem[ABC95]{able95}| \end{quote}
- As far as \thestyle\ is concerned, this label does not conform to the
- author--year possibilities and is therefore considered to be numerical.
- The citation mode switches to numerical, and |\cite{able95}| prints
- [ABC95].
-
- See however, the end of Section~\ref{sec:yearless} for another possibility.
- The above result can be achieved with
- \begin{quote} |\bibitem[ABC95()]{able95}| \end{quote}
-
- \section{Local Configuration}
- It is possible to add a local configuration file
- \thestyle\texttt{.cfg}, which is read in, if it exists, at
- the end of the package. It may thus contain coding to supecede that in
- the package, although its main purpose is to allow the user to add his or her
- own |\bibstyle@|\textit{bst} definitions to couple citation punctuation
- with local bibliography styles or for use with |\citestyle|.
+This can be activated with the option
+\texttt{longnamesfirst}.
 
 
 
- \section{Package Options}\label{sec:opts}
- When a package is loaded with |\usepackage|, one can add options to select
- different features, as
- \begin{quote}
- |\usepackage[|\emph{options}|]{|\thestyle|}|
- \end{quote}
+\DescribeMacro{\shortcites}
+Some references have so many authors that you want to suppress the
+automatic long list only for them. In this case, issue
+\begin{quote}
+ |\shortcites|\marg{key-list}
+\end{quote}
+before the first citations, and those included in \emph{key-list} will have
+a short list on their first citation.
 
- The options available provide another means of specifying the
- punctuation for citations:
+Full author lists can still be forced at any time with the starred
+variants.
+
+\section{Numerical Citations with Author--Year Styles}\label{sec:6.0}
+
+It is possible to produce numerical citations with any author-year
+\texttt{.bst} file, with minimal change to the text. The commands |\citet|
+and |\citep| will produce sensible results in both modes, without any special
+editing. Obviously, the opposite is not possible; a \texttt{.bst} file
+intended for numerical citation can never produce author--year citations,
+simply because the information is not transferred to the auxiliary file.
+
+\subsection{Selecting Numerical Mode}
+By default, \thestyle{} is in author--year mode. This can be changed by
+\begin{enumerate}
+ \item selecting a numerical bibliography style with predefined
+       citation style, defined either in the package or in the local
+       configuration file;
+
+ \item giving options \texttt{numbers} or \texttt{super} to the
+       |\usepackage| command;
+
+ \item issuing |\setcitestyle{numbers}|;
+
+ \item issuing |\citestyle| with the name of a predefined numerical
+       bibliography style (like \texttt{plain} and use it with \texttt{plainnat}).
+\end{enumerate}
+
+The \thestyle{} package will automatically switch to numerical mode if
+any one of the |\bibitem| entries fails to conform to the possible
+author--year formats. There is no way to override this, since such an
+entry would cause trouble in the author--year mode.
+
+There are certain special `numerical' styles, like that of the standard
+\texttt{alpha.bst}, which include a non-numerical label in place of the
+number, in the form
+\begin{quote} |\bibitem[ABC95]{able95}| \end{quote}
+As far as \thestyle\ is concerned, this label does not conform to the
+author--year possibilities and is therefore considered to be numerical.
+The citation mode switches to numerical, and |\cite{able95}| prints
+[ABC95].
+
+See however, the end of Section~\ref{sec:yearless} for another possibility.
+The above result can be achieved with
+\begin{quote} |\bibitem[ABC95()]{able95}| \end{quote}
+
+\section{Local Configuration}
+It is possible to add a local configuration file
+\thestyle\texttt{.cfg}, which is read in, if it exists, at
+the end of the package. It may thus contain coding to supecede that in
+the package, although its main purpose is to allow the user to add his or her
+own |\bibstyle@|\textit{bst} definitions to couple citation punctuation
+with local bibliography styles or for use with |\citestyle|.
+
+
+
+\section{Package Options}\label{sec:opts}
+When a package is loaded with |\usepackage|, one can add options to select
+different features, as
+\begin{quote}
+|\usepackage[|\emph{options}|]{|\thestyle|}|
+\end{quote}
+
+The options available provide another means of specifying the
+punctuation for citations:
 \begin{description}
 \item[\ttfamily round] (default) for round parentheses;
 \item[\ttfamily square] for square brackets;
 \item[\ttfamily curly] for curly braces;
 \item[\ttfamily angle] for angle brackets;
 \item[\ttfamily semicolon] (default) to separate multiple citations with
-     semi-colons;
+   semi-colons;
 \item[\ttfamily colon] the same as \texttt{semicolon}, an earlier mistake in
-     terminology;
+   terminology;
 \item[\ttfamily comma] to use commas as separators;
 \item[\ttfamily authoryear] (default) for author--year citations;
 \item[\ttfamily numbers] for numerical citations;
 \item[\ttfamily super] for superscripted numerical citations, as in
-     \textsl{Nature};
+   \textsl{Nature};
 \item[\ttfamily sort] orders multiple citations into the sequence in
-     which they appear in the list of references;
+   which they appear in the list of references;
 \item[\ttfamily sort\&compress] as \texttt{sort} but in addition multiple
-     numerical citations are compressed if possible (as 3--6, 15);
+   numerical citations are compressed if possible (as 3--6, 15);
 \item[\ttfamily compress] to compress without sorting, so compression only
-     occurs when the given citations would produce an ascending sequence of
-     numbers;
+   occurs when the given citations would produce an ascending sequence of
+   numbers;
 \item[\ttfamily longnamesfirst] makes the first citation of any reference
-     the equivalent of the starred variant (full author list) and subsequent
-     citations normal (abbreviated list);
+   the equivalent of the starred variant (full author list) and subsequent
+   citations normal (abbreviated list);
 \item[\ttfamily sectionbib] redefines |\thebibliography| to issue
-     |\section*| instead of |\chapter*|; valid only for classes with a
-     |\chapter| command; to be used with the \texttt{chapterbib} package;
+   |\section*| instead of |\chapter*|; valid only for classes with a
+   |\chapter| command; to be used with the \texttt{chapterbib} package;
 \item[\ttfamily nonamebreak] keeps all the authors' names in a citation on
-     one line; causes overfull hboxes but helps with some \texttt{hyperref}
-     problems;
+   one line; causes overfull hboxes but helps with some \texttt{hyperref}
+   problems;
 \item[\ttfamily merge] to allow the * prefix to the citation key,
-     and to merge such a citation's reference with that of the previous
-     citation;
+   and to merge such a citation's reference with that of the previous
+   citation;
 \item[\ttfamily elide] to elide common elements of merged references, like
-     the authors or year;
+   the authors or year;
 \item[\ttfamily mcite] to recognize (and ignore) the merging syntax.
 \end{description}
- The options \texttt{curly} and \texttt{angle} are not really serious; I only
- added them because that completes the normal list of bracket types. The only
- other citation possibilities I know have really encountered are solidus, e.g. /21/,
- or something like (Ref. 21). These must be set with |\setcitestyle{open={/},close={/}}|.
+The options \texttt{curly} and \texttt{angle} are not really serious; I only
+added them because that completes the normal list of bracket types. The only
+other citation possibilities I know have really encountered are solidus, e.g. /21/,
+or something like (Ref. 21). These must be set with |\setcitestyle{open={/},close={/}}|.
 
 
- The package options are overwritten by any explicit |\setcitestyle|, |\bibpunct|,
- or |\citestyle| commands. And both these commands and the package options
- turn off the automatic setting with |\bibliographystyle|, if effective.
+The package options are overwritten by any explicit |\setcitestyle|, |\bibpunct|,
+or |\citestyle| commands. And both these commands and the package options
+turn off the automatic setting with |\bibliographystyle|, if effective.
 
- \section{Reference Sheet}
+\section{Reference Sheet}
 
- A summary of the main points on using \thestyle\ can be obtained by
- \LaTeX{}ing the file \texttt{natnotes.tex}, which is extracted from the main
- source file \thestyle\texttt{.tex} with the \texttt{docstrip} option
- \texttt{notes}. This is intended to act as a handy reference sheet.
+A summary of the main points on using \thestyle\ can be obtained by
+\LaTeX{}ing the file \texttt{natnotes.tex}, which is extracted from the main
+source file \thestyle\texttt{.tex} with the \texttt{docstrip} option
+\texttt{notes}. This is intended to act as a handy reference sheet.
 
- This file should be extracted automatically by the supplied installation file,
- \thestyle\texttt{.ins}.
+This file should be extracted automatically by the supplied installation file,
+\thestyle\texttt{.ins}.
 
 ^^A The following is a summary that goes into the .sty file
 ^^A It is not printed in the documentation, since the Reference Sheet exists
 
- \section{Options with \texttt{docstrip}}
- The source \texttt{.tex} file is meant to be processed with
- \texttt{docstrip}, for which a number of options are available:
- \begin{description}
- \item[\ttfamily all] includes all of the other interfaces;
+\section{Options with \texttt{docstrip}}
+The source \texttt{.tex} file is meant to be processed with
+\texttt{docstrip}, for which a number of options are available:
+\begin{description}
+\item[\ttfamily all] includes all of the other interfaces;
 
- \item[\ttfamily apalike] allows interpretation of minimal \texttt{apalike}
-    form of |\bibitem|;
+\item[\ttfamily apalike] allows interpretation of minimal \texttt{apalike}
+  form of |\bibitem|;
 
- \item[\ttfamily newapa] allows |\citeauthoryear| to be in the optional
-    argument of |\bibitem| along with the punctuation commands of
-    \texttt{newapa.sty};
+\item[\ttfamily newapa] allows |\citeauthoryear| to be in the optional
+  argument of |\bibitem| along with the punctuation commands of
+  \texttt{newapa.sty};
 
- \item[\ttfamily chicago] is the same as \texttt{newapa};
+\item[\ttfamily chicago] is the same as \texttt{newapa};
 
- \item[\ttfamily harvard] includes interpretation of |\harvarditem|;
+\item[\ttfamily harvard] includes interpretation of |\harvarditem|;
 
- \item[\ttfamily astron] allows |\astroncite| to appear in the optional
-    argument of |\bibitem|;
+\item[\ttfamily astron] allows |\astroncite| to appear in the optional
+  argument of |\bibitem|;
 
- \item[\ttfamily authordate] adds the syntax of the |\citename| command.
+\item[\ttfamily authordate] adds the syntax of the |\citename| command.
 
- \end{description}
+\end{description}
 
- The remaining options are:
- \begin{description}
- \item[\ttfamily package] to produce a \texttt{.sty} package file with most
-     comments removed;
+The remaining options are:
+\begin{description}
+\item[\ttfamily package] to produce a \texttt{.sty} package file with most
+   comments removed;
 
- \item[\ttfamily notes] extracts a summary of usage to be used as a
-     reference sheet; the resulting file is to be \LaTeX{}ed;
+\item[\ttfamily notes] extracts a summary of usage to be used as a
+   reference sheet; the resulting file is to be \LaTeX{}ed;
 
- \item[\ttfamily driver] to produce a driver \texttt{.ltx} file that will
-     print out the documentation when \LaTeX'd. This file can be modified
-     to produce various alternatives (page size, fonts, manual only, or with
-     annotated code). The \thestyle\texttt{.tex} file is itself such a driver
-     but it should never, ever be edited by a user.
+\item[\ttfamily driver] to produce a driver \texttt{.ltx} file that will
+   print out the documentation when \LaTeX'd. This file can be modified
+   to produce various alternatives (page size, fonts, manual only, or with
+   annotated code). The \thestyle\texttt{.tex} file is itself such a driver
+   but it should never, ever be edited by a user.
 
- \end{description}
- The source file \texttt{\filename.tex} is itself a driver file and can
- be processed directly by \LaTeX.
+\end{description}
+The source file \texttt{\filename.tex} is itself a driver file and can
+be processed directly by \LaTeX.
 
 
- \section{Other Author--Year Solutions}
- \begin{quote}\slshape
- This section is of historical interest only.
- \end{quote}
+\section{Other Author--Year Solutions}
+\begin{quote}\slshape
+This section is of historical interest only.
+\end{quote}
 
- Before \thestyle{} was published in 1993, there were several other attempts
- to provide author--year citations, some of which inspired \thestyle. A few of
- these are still maintained and used, and for that reason, \thestyle{} has
- attempted to include their |\bibitem| syntaxes, to be compatible with those
- \texttt{.bst} files.
+Before \thestyle{} was published in 1993, there were several other attempts
+to provide author--year citations, some of which inspired \thestyle. A few of
+these are still maintained and used, and for that reason, \thestyle{} has
+attempted to include their |\bibitem| syntaxes, to be compatible with those
+\texttt{.bst} files.
 
- Most of these `packages' are really \LaTeX~2.09 style files, so do not have
- features available with the modern \LaTeXe.
+Most of these `packages' are really \LaTeX~2.09 style files, so do not have
+features available with the modern \LaTeXe.
 
- \subsection{The \texttt{natsci.bst} Style}
- What gave me my first inspiration was Stephen Gildea's \texttt{natsci.bst}
- for use with his \texttt{agujgr.sty} file. This showed me that the problem
- was solvable. However, Gildea's formats |\bibitem| with just
- the abbreviated
- authors and year. Thus only parenthetical citations can be accommodated.
+\subsection{The \texttt{natsci.bst} Style}
+What gave me my first inspiration was Stephen Gildea's \texttt{natsci.bst}
+for use with his \texttt{agujgr.sty} file. This showed me that the problem
+was solvable. However, Gildea's formats |\bibitem| with just
+the abbreviated
+authors and year. Thus only parenthetical citations can be accommodated.
 
- The name \texttt{natsci} stands for \emph{natural sciences}, and it was this
- that led to the name \thestyle. (This is admittedly an ugly name, but it is
- now established and cannot be changed so easily.)
+The name \texttt{natsci} stands for \emph{natural sciences}, and it was this
+that led to the name \thestyle. (This is admittedly an ugly name, but it is
+now established and cannot be changed so easily.)
 
- \subsection{The \texttt{apalike.bst} Style}
- Oren Patashnik, the originator of \btx{} and the standard \texttt{.bst}
- files, has also worked on an author--year style, called \texttt{apalike.bst}
- with a corresponding \texttt{apalike.sty} to support it. Again, only the
- parenthetical citation is provided. Its functionality is identical to that
- of the \texttt{natsci} files.
+\subsection{The \texttt{apalike.bst} Style}
+Oren Patashnik, the originator of \btx{} and the standard \texttt{.bst}
+files, has also worked on an author--year style, called \texttt{apalike.bst}
+with a corresponding \texttt{apalike.sty} to support it. Again, only the
+parenthetical citation is provided. Its functionality is identical to that
+of the \texttt{natsci} files.
 
- The form of the \texttt{thebibliography} entries in this system is
- \begin{quote}
- |\bibitem[Jones et al., 1990]{jon90}...|
- \end{quote}
- This is the most minimal form that can
- be given. I name it the \texttt{apalike} variant, after Patashnik's
- \texttt{apalike.bst} and \texttt{apalike.sty}. However, there could be many
- independent \texttt{.bst} files that follow this line, such as the
- \texttt{natsci} styles.
+The form of the \texttt{thebibliography} entries in this system is
+\begin{quote}
+|\bibitem[Jones et al., 1990]{jon90}...|
+\end{quote}
+This is the most minimal form that can
+be given. I name it the \texttt{apalike} variant, after Patashnik's
+\texttt{apalike.bst} and \texttt{apalike.sty}. However, there could be many
+independent \texttt{.bst} files that follow this line, such as the
+\texttt{natsci} styles.
 
- The bibliography style files belonging to this group include:
- \begin{quote}
- \texttt{apalike}, \texttt{apalike2}, \texttt{cea}, \texttt{cell},
- \texttt{jmb}, \texttt{phapalik}, \texttt{phppcf}, \texttt{phrmp}
- \end{quote}
+The bibliography style files belonging to this group include:
+\begin{quote}
+\texttt{apalike}, \texttt{apalike2}, \texttt{cea}, \texttt{cell},
+\texttt{jmb}, \texttt{phapalik}, \texttt{phppcf}, \texttt{phrmp}
+\end{quote}
 
- \subsection{The \texttt{newapa} Style}
- A major improvement was achieved with \texttt{newapa.bst} and the
- accompanying \texttt{newapa.sty} files by Stephen N. Spencer and Young U.
- Ryu. Under their system, three separate items of information are included
- in the |\bibitem| label, to be used as required. These are: the full
- author list, the abbreviated list, and the year. This is accomplished by
- means of a |\citeauthoryear| command included in the label, as
- \begin{quote}
- |\bibitem[\protect\citeauthoryear{Jones, Barker,|\\
- |  and Williams}{Jones et al.}{1990}]{jon90}...|
- \end{quote}
- Actually, this only illustrates the basic structure of |\citeauthoryear|;
- the \texttt{newapa} files go even further to replace some words and
- punctuation
- with commands. For example, the word `and' above is really
- |\betweenauthors|, something that must be defined in the \texttt{.sty} file.
- Of course, |\citeauthoryear| is also defined in that file. A
- number of different |\cite| commands are available to print out the
- citation with complete author list, with the short list, with or without
- the date, the textual or parenthetical form.
+\subsection{The \texttt{newapa} Style}
+A major improvement was achieved with \texttt{newapa.bst} and the
+accompanying \texttt{newapa.sty} files by Stephen N. Spencer and Young U.
+Ryu. Under their system, three separate items of information are included
+in the |\bibitem| label, to be used as required. These are: the full
+author list, the abbreviated list, and the year. This is accomplished by
+means of a |\citeauthoryear| command included in the label, as
+\begin{quote}
+|\bibitem[\protect\citeauthoryear{Jones, Barker,|\\
+|  and Williams}{Jones et al.}{1990}]{jon90}...|
+\end{quote}
+Actually, this only illustrates the basic structure of |\citeauthoryear|;
+the \texttt{newapa} files go even further to replace some words and
+punctuation
+with commands. For example, the word `and' above is really
+|\betweenauthors|, something that must be defined in the \texttt{.sty} file.
+Of course, |\citeauthoryear| is also defined in that file. A
+number of different |\cite| commands are available to print out the
+citation with complete author list, with the short list, with or without
+the date, the textual or parenthetical form.
 
- Thus the |\citeauthoryear| entry in |\bibitem| is very flexible,
- permitting the style file to generate every citation form that one might
- want. It is used by a number of other styles, with corresponding
- \texttt{.sty} files. They all appear to have been inspired by
- \texttt{newapa.bst}, although they lack the extra punctuation commands.
+Thus the |\citeauthoryear| entry in |\bibitem| is very flexible,
+permitting the style file to generate every citation form that one might
+want. It is used by a number of other styles, with corresponding
+\texttt{.sty} files. They all appear to have been inspired by
+\texttt{newapa.bst}, although they lack the extra punctuation commands.
 
- Bibliographic style files belonging to the \texttt{newapa} group include
- \begin{quote}
- \texttt{newapa}, \texttt{chicago}, \texttt{chicagoa}, \texttt{jas99},
- \texttt{named}
- \end{quote}
+Bibliographic style files belonging to the \texttt{newapa} group include
+\begin{quote}
+\texttt{newapa}, \texttt{chicago}, \texttt{chicagoa}, \texttt{jas99},
+\texttt{named}
+\end{quote}
 
- \noindent
- \textbf{Note:} the last of these, \texttt{named.bst}, uses |\citeauthoryear| in a
- slightly different manner, with only two arguments: the short list and
- year.
+\noindent
+\textbf{Note:} the last of these, \texttt{named.bst}, uses |\citeauthoryear| in a
+slightly different manner, with only two arguments: the short list and
+year.
 
- \subsection{The Harvard Family}
- The same effect is achieved by a different approach in the Harvard family
- of bibliographic styles. Here a substitute for |\bibitem| is used, as
- \begin{quote}
- |\harvarditem[Jones et al.]{Jones, Baker, and|\\
- |   Williams}{1990}{jon90}...|
- \end{quote}
- The accompanying interface package file is called \texttt{harvard.sty}
- and is written by Peter Williams and Thorsten Schnier. It
- defines |\harvarditem| as well as the citation commands |\cite|, for
- parenthentical, and |\citeasnoun|, for textual citations. The first
- citation uses the long author list, following ones the shorter list, if
- it has been given in the optional argument to |\harvarditem|.
+\subsection{The Harvard Family}
+The same effect is achieved by a different approach in the Harvard family
+of bibliographic styles. Here a substitute for |\bibitem| is used, as
+\begin{quote}
+|\harvarditem[Jones et al.]{Jones, Baker, and|\\
+|   Williams}{1990}{jon90}...|
+\end{quote}
+The accompanying interface package file is called \texttt{harvard.sty}
+and is written by Peter Williams and Thorsten Schnier. It
+defines |\harvarditem| as well as the citation commands |\cite|, for
+parenthentical, and |\citeasnoun|, for textual citations. The first
+citation uses the long author list, following ones the shorter list, if
+it has been given in the optional argument to |\harvarditem|.
 
- Bibliography styles belonging to the Harvard family are
- \begin{quote}
- \texttt{agsm}, \texttt{dcu}, \texttt{kluwer}
- \end{quote}
+Bibliography styles belonging to the Harvard family are
+\begin{quote}
+\texttt{agsm}, \texttt{dcu}, \texttt{kluwer}
+\end{quote}
 
- This package has been updated for \LaTeXe, with many additions to
- add flexibility. The result is a powerful interface that should meet most
- citation needs. (It does not suppress repeated authors, though,
- as \thestyle{} does.)
+This package has been updated for \LaTeXe, with many additions to
+add flexibility. The result is a powerful interface that should meet most
+citation needs. (It does not suppress repeated authors, though,
+as \thestyle{} does.)
 
- \subsection{The Astronomy Style}
- Apparently realizing the limitations of his \texttt{apalike} system, Oren
- Patashnik went on to develop a `true' \texttt{apa} bibliographic style,
- making use of the method already employed by an astronomy journal. This
- is actually very similar to the \texttt{newapa} label but with only the
- short list of authors:
- \begin{quote}
- |\bibitem[\protect\astroncite{Jones et al.}{1990}]{jon90}|\\
- |   ...|
- \end{quote}
- It requires the package file \texttt{astron.sty}
- or any other style that defines |\astroncite| appropriately.
+\subsection{The Astronomy Style}
+Apparently realizing the limitations of his \texttt{apalike} system, Oren
+Patashnik went on to develop a `true' \texttt{apa} bibliographic style,
+making use of the method already employed by an astronomy journal. This
+is actually very similar to the \texttt{newapa} label but with only the
+short list of authors:
+\begin{quote}
+|\bibitem[\protect\astroncite{Jones et al.}{1990}]{jon90}|\\
+|   ...|
+\end{quote}
+It requires the package file \texttt{astron.sty}
+or any other style that defines |\astroncite| appropriately.
 
- Bibliographic styles belonging to the astronomy group are
- \begin{quote}
- \texttt{apa}, \texttt{astron}, \texttt{bbs}, \texttt{cbe},
- \texttt{humanbio}, \texttt{humannat}, \texttt{jtb}
- \end{quote}
+Bibliographic styles belonging to the astronomy group are
+\begin{quote}
+\texttt{apa}, \texttt{astron}, \texttt{bbs}, \texttt{cbe},
+\texttt{humanbio}, \texttt{humannat}, \texttt{jtb}
+\end{quote}
 
- This is as good as the |\citeauthoryear| command, although not as
- flexible since the full list of authors is missing.
+This is as good as the |\citeauthoryear| command, although not as
+flexible since the full list of authors is missing.
 
- \subsection{The \texttt{authordate} Style}
- Finally, I also found some packages making use of a label command
- called |\citename| in the form
- \begin{quote}
- |\bibitem[\protect\citename{Jones et al., }1990]{jon90}|\\
- |    ...|
- \end{quote}
+\subsection{The \texttt{authordate} Style}
+Finally, I also found some packages making use of a label command
+called |\citename| in the form
+\begin{quote}
+|\bibitem[\protect\citename{Jones et al., }1990]{jon90}|\\
+|    ...|
+\end{quote}
 
- This is not a good system since the author list and date are not cleanly
- separated as individual arguments, and since the punctuation is included
- in the label text. It is better to keep the punctuation fully removed, as
- part of the definitions in the \texttt{.sty} file, for complete flexibility.
+This is not a good system since the author list and date are not cleanly
+separated as individual arguments, and since the punctuation is included
+in the label text. It is better to keep the punctuation fully removed, as
+part of the definitions in the \texttt{.sty} file, for complete flexibility.
 
- Bibliographic styles belonging to this group are
- \begin{quote}
- \texttt{authordate1}, \texttt{authordate2}, \texttt{authordate3},
- \texttt{authordate4}, \texttt{aaai-named}
- \end{quote}
- with accompanying style file \texttt{authordate1-4.sty}.
+Bibliographic styles belonging to this group are
+\begin{quote}
+\texttt{authordate1}, \texttt{authordate2}, \texttt{authordate3},
+\texttt{authordate4}, \texttt{aaai-named}
+\end{quote}
+with accompanying style file \texttt{authordate1-4.sty}.
