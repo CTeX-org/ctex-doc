@@ -573,97 +573,84 @@
 有些出版商要求，在第一次引用某条参考文献时需要给出全部作者的列表，在随后对该文献的引用则只需
 给出缩略的作者列表。使用 \ref{sec:long} 节的 \opt{longnamesfirst} 可以实现该效果。
 
-\subsection{Extended Citation Commands}
+\subsection{高级引用命令}
 \label{sec:excite}
 
 \DescribeMacro{\citealt}
 \DescribeMacro{\citealp}
-\DescribeMacro{\citetext}
+
+\cs{citealt} 和 \cs{citealp} 命令分别是 \cs{citet} 和 \cs{citep} 的另一种形式，
+他们输出的模式和格式相同，仅在风格上有不同。\cs{citealt} 和 \cs{citealp} 不会输出用于
+解释说明的括号。
+
 \DescribeMacro{\citenum}
+\cs{citenum} 命令输出参考文献在文献列表中的编号数字，但不输出括号（在作者年份--模式下也
+是如此），也不输出上标形式。也就是说，这个命令可以将参考文献编号以正常文本的形式输出。
 
-As an alternative form of citation, |\citealt| is the same as |\citet| but
-\emph{without parentheses}. Similarly, |\citealp| is |\citep| without
-parentheses.
-
-The |\citenum| command prints the citation number, without parentheses, even
-in author--year mode, and without raising it in superscript mode. This is
-intended to be able to refer to citation numbers without superscripting them.
-
-Multiple references, notes, and the starred variants
-also exist for these, except for |\citenum|.
-
-\begin{quote}
-\begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-|\citealt{jon90}| & Jones et al.\ 1990\\
-|\citealt*{jon90}| & Jones, Baker, and Williams 1990\\
-|\citealp{jon90}| & Jones et al., 1990\\
-|\citealp*{jon90}| & Jones, Baker, and Williams, 1990\\
-|\citealp{jon90,jam91}| & Jones et al., 1990; James et al., 1991\\
-|\citealp[pg.~32]{jon90}| & Jones et al., 1990, pg.~32\\
-|\citenum{jon90}| & 11\\
-|\citetext{priv.\ comm.}| & (priv.\ comm.)
-\end{tabular}
-\end{quote}
-The |\citetext| command
-allows arbitrary text to be placed in the current citation parentheses.
-This may be used in combination with |\citealp|.
-For example,
+\DescribeMacro{\citetext}
+\cs{citetext} 命令可以在当前引用的括号内插入任意的补充信息。这个命令可以与 \cs{citealp}
+联用，比如：
 \begin{verbatim}
 \citetext{see \citealp{jon90}, or even better \citealp{jam91}}
 \end{verbatim}
-to produce (see Jones et al., 1990, or even better James et al., 1991).
+产生的效果是：(see Jones et al., 1990, or even better James et al., 1991)。
 
+除了 \cs{citenum} 之外，这些命令均支持：同时引用多条文献、添加说明信息以及带星号的版本。
 
+\begin{quote}
+\begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
+  \cs{citealt}\Marg{jon90} & Jones et al.\ 1990\\
+  \cs{citealt*}\Marg{jon90} & Jones, Baker, and Williams 1990\\
+  \cs{citealp}\Marg{jon90} & Jones et al., 1990\\
+  \cs{citealp*}\Marg{jon90} & Jones, Baker, and Williams, 1990\\
+  \cs{citealp}\Marg{jon90,jam91} & Jones et al., 1990; James et al., 1991\\
+  \cs{citealp}\Oarg{pg.~32}\Marg{jon90} & Jones et al., 1990, pg.~32\\
+  \cs{citenum}\Marg{jon90} & 11\\
+  \cs{citetext}\Marg{priv.\ comm.} & (priv.\ comm.)
+\end{tabular}
+\end{quote}
 
 \DescribeMacro{\citeauthor}
 \DescribeMacro{\citeyear}
 \DescribeMacro{\citeyearpar}
-\DescribeMacro{\citefullauthor}
 
-In author--year schemes, it is sometimes desirable to be able to refer to
-the authors without the year, or vice versa. This is provided with the
-extra commands
+在作者--年份模式下，有时也会需要只引用作者而不显示年份，或者反过来只显示年份而不显示作者。
+你可以用到这些命令：
 \begin{quote}
 \begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-|\citeauthor{jon90}| & Jones et al.\\
-|\citeauthor*{jon90}| & Jones, Baker, and Williams\\
-|\citeyear{jon90}|   & 1990\\
-|\citeyearpar{jon90}| & (1990)
+  \cs{citeauthor}\Marg{jon90} & Jones et al.\\
+  \cs{citeauthor}*\Marg{jon90} & Jones, Baker, and Williams\\
+  \cs{citeyear}\Marg{jon90}   & 1990\\
+  \cs{citeyearpar}\Marg{jon90} & (1990)
 \end{tabular}
 \end{quote}
 
-There also exists a command |\citefullauthor| which is equivalent to
-|\citeauthor*|.
+\DescribeMacro{\citefullauthor}
+同时，也有定义命令 \cs{citefullauthor}，其作用与 \cs{citeauthor*} 相同。
 
-If the full author information is missing, then |\citeauthor*| is
-the same as |\citeauthor|, printing only the abbreviated list.
-This also applies to the starred versions of |\citet| and |\citep|.
+如果 \cs{bibitem} 中缺少完整的作者列表，那么 \cs{citeauthor*} 的效果与
+\cs{citeauthor} 的效果相同，也就是说只会输出缩略的作者列表。
+\cs{citet} 和 \cs{citep} 的相应版本与此同理。
 
-If the author or year information is missing (as is the case with the
-standard \LaTeX{} \texttt{.bst} files), these commands issue a warning.
+如果缺少作者或年份信息（比如使用标准的 \LaTeX{} \file{.bst} 文件），这些命令会
+产生警告（Warning）信息。
 
-\medskip\noindent
-\textbf{Note:}
+\rmk
+
 these commands may also be used with numerical
 citations, provided an author--year \texttt{.bst} file is being employed.
 
-\medskip\noindent
-\textbf{Note:} all |\cite..| commands have the same
-syntax, allowing multiple citations and up to two notes (there are, however,
-no starred |\citeyear| or |\citenum| variants). It does not really make much sense to add
-notes to |\citeyear| and |\citeauthor|, especially with multiple citations;
-however, this can be done, there will be no error message, but the results
-are sometimes strange. For example, in numerical mode, the notes are fully
-ignored, while in author--year mode, only the post-note is accepted.
-Multiple citations in |\citet| are also not recommended (nor are they in my
-opinion meaningful), but if they are used with notes, the pre-note will
-appear before each year, and the post-note only after the last year. These
-are admittedly bugs, but the effort to remove them is not justified by the
-questionable usefulness of these features.
+\rmk
+所有的 \cs{cite..} 命令都有相似的语法，可以同时引用多条文献，也都有两个补充信息的参数
+（不过 \cs{citeyear} 和 \cs{citenum} 没有带星号的版本）。虽然通常没必要给 \cs{citeyear}
+和 \cs{citeauthor} 添加补充信息，尤其是在同时引用多条文献的时候；但是确实可以通过两个
+可选参数给他们添加上补充信息——虽然看起来会怪怪的。例如，在数字引用模式下，补充信息将被直接
+忽略；在作者--年份模式下，只有引用标记后的补充信息才会被接受。
+此外，我也不推荐用 \cs{citet} 命令引用多条文献。在使用 \cs{citet} 引用多条文献时，
+补充信息将会被加在整个引用标记的前后。这确实是个问题，但是没必要花精力修复这种无所谓的事情。
 
-In summary, notes are only intended for |\citep| but they may also be used
-with |\citet| in author--year mode, with single citations. In any other
-situation, the results are unpredictable.
+总而言之，补充信息最好只用于 \cs{citep} 命令；或者在作者--年份模式下用于引用单一文献的
+\cs{citet} 命令。其他情况下，使用补充信息可能造成各种奇怪的问题。
 
 \DescribeMacro{\Citet}
 \DescribeMacro{\Citep}
